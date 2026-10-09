@@ -1,9 +1,11 @@
 name: Fetch source data
 
-# Downloads every URL listed in data/fetch.tsv on GitHub's runners and
-# attaches the files, plus REPORT.txt (status, size, first lines), to a draft
-# release named "source-data". Draft releases aren't public. Used to pull
-# source files from hosts a development environment can't reach.
+# Runs on GitHub's runners and attaches the results to a draft release named
+# "source-data" (draft releases aren't public):
+#   - the full USGS DOWDB 2026 table, paged from its public API as CSV
+#   - every URL in data/fetch.tsv; zipped shapefiles also converted to CSV
+#   - REPORT.txt with status, size, and first lines of each file
+# Used to pull source files from hosts a development environment can't reach.
 on:
   push:
     paths: [data/fetch.tsv, .github/workflows/fetch-data.yml]
@@ -15,32 +17,58 @@ permissions:
 jobs:
   fetch:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
-      - name: Download
+      - name: USGS DOWDB 2026 from API
         run: |
           mkdir -p out
-          : > out/REPORT.txt
+          api=https://energy.usgs.gov/api/dowdb/v1/wells
+          total=$(curl -sS -I -H 'Prefer: count=exact' -H 'Range: 0-0' "$api" | tr -d '\r' | awk -F/ 'tolower($0) ~ /^content-range/ {print $2}')
+          echo "USGS total rows: $total"
+          : > out/usgs_dowdb_2026.csv
+          step=10000
+          for ((off=0; off<total; off+=step)); do
+            curl -sSf --retry 3 -H 'Accept: text/csv' "$api?order=record_key.asc&offset=$off&limit=$step" -o page.csv
+            if [ "$off" -eq 0 ]; then cat page.csv; else tail -n +2 page.csv; fi >> out/usgs_dowdb_2026.csv
+          done
+          rows=$(python3 -c "import csv,sys; print(sum(1 for _ in csv.DictReader(open('out/usgs_dowdb_2026.csv', newline=''))))")
+          echo "=== usgs_dowdb_2026.csv: $rows rows (API reported $total)" | tee out/REPORT.txt
+          [ "$rows" = "$total" ] || { echo "row count mismatch"; exit 1; }
+          head -c 1500 out/usgs_dowdb_2026.csv >> out/REPORT.txt; echo >> out/REPORT.txt
+      - name: Download listed files
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq gdal-bin >/dev/null
           grep -v '^#' data/fetch.tsv | while IFS=$'\t' read -r name url; do
             [ -n "$name" ] || continue
-            code=$(curl -sSL --retry 3 --max-time 900 -A "orphaned-well-map/1.0" -o "out/$name" -w '%{http_code} %{content_type} %{url_effective}' "$url" 2>&1) || true
+            code=$(curl -sSL --retry 3 --max-time 1200 -A "orphaned-well-map/1.0" -o "out/$name" -w '%{http_code} %{content_type}' "$url" 2>&1) || true
             {
               echo "=== $name"
               echo "url: $url"
               echo "result: $code"
               echo "size: $(stat -c %s "out/$name" 2>/dev/null || echo 0)"
               file -b "out/$name" 2>/dev/null || true
-              if file -b "out/$name" | grep -qi zip; then unzip -l "out/$name" | head -40; fi
+              if file -b "out/$name" | grep -qi zip; then
+                unzip -l "out/$name" | head -40
+                shp=$(unzip -Z1 "out/$name" | grep -i '\.shp$' | head -1)
+                if [ -n "$shp" ]; then
+                  ogr2ogr -f CSV -t_srs EPSG:4326 -lco GEOMETRY=AS_XY "out/${name%.zip}.csv" "/vsizip/out/$name/$shp" && \
+                    echo "converted $shp -> ${name%.zip}.csv" && head -c 1500 "out/${name%.zip}.csv" && echo
+                fi
+              fi
               if file -b "out/$name" | grep -qiE 'text|csv'; then head -c 1500 "out/$name"; echo; fi
             } >> out/REPORT.txt
           done
           cat out/REPORT.txt
+      - name: Compress large files
+        run: |
+          find out -type f -size +20M ! -name '*.zip' ! -name '*.gz' -exec gzip -9 {} \;
+          ls -la out
       - name: Attach to draft release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release view source-data >/dev/null 2>&1 || \
             gh release create source-data --draft --title "Source data cache" \
-              --notes "Raw downloads from data/fetch.tsv. Not a product release."
+              --notes "Raw downloads from data/fetch.tsv and the USGS DOWDB API. Not a product release."
           gh release upload source-data out/* --clobber

@@ -1,8 +1,5 @@
-# name<TAB>url — fetched by .github/workflows/fetch-data.yml on GitHub runners into the draft release "source-data"
-usgs_named.csv	https://www.sciencebase.gov/catalog/file/get/6aad481a1ba49ba9a487439b?name=US_orphaned_wells_2026.csv
-usgs_all.zip	https://www.sciencebase.gov/catalog/file/get/6aad481a1ba49ba9a487439b
-usgs_dowdb_apidoc.html	https://energy.usgs.gov/dowdb/api-doc/
-usgs_agol_item.json	https://www.arcgis.com/sharing/rest/content/items/a7563a390a7147e0bda205e45e3067bd?f=json
-page_ok_occ.html	https://oklahoma.gov/occ/divisions/oil-gas/oil-gas-data.html
-page_ky_kgs.html	https://kygs.uky.edu/data/oilgas
-page_pa_dep.html	https://www.pa.gov/agencies/dep/data-and-tools/reports/oil-and-gas-reports.html
+# name<TAB>url — fetched by .github/workflows/fetch-data.yml on GitHub runners into the draft release "source-data".
+# Zipped shapefiles are also converted to <name>.csv (WGS84, X/Y columns). The USGS file is fetched separately from its API.
+OK_rbdms-wells.csv	https://oklahoma.gov/content/dam/ok/en/occ/documents/og/ogdatafiles/rbdms-wells.csv
+OK_rbdms-wells-data-dictionary.xlsx	https://oklahoma.gov/content/dam/ok/en/occ/documents/og/ogdatafiles/rbdms-wells-data-dictionary.xlsx
+KY_kyog_dd.zip	https://kgs.uky.edu/ogdata/kyog_dd.zip
