@@ -45,3 +45,12 @@ def test_grid_within_matches_bruteforce():
     want = sorted((haversine_m(*q, *p), i) for i, p in enumerate(pts) if haversine_m(*q, *p) <= 1609)
     assert got == [i for _, i in want]
     assert got  # fixture should produce hits
+
+
+def test_read_table_gzip(tmp_path):
+    import gzip
+    from owm.util import read_table
+    p = tmp_path / "x.csv.gz"
+    with gzip.open(p, "wt") as f:
+        f.write("a,b\n1,2\n")
+    assert list(read_table(p)) == [{"a": "1", "b": "2"}]

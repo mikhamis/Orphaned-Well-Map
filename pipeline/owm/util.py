@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import csv
-import io
+import gzip
 import json
 import math
 import re
@@ -179,16 +179,21 @@ class GridIndex:
 
 
 def read_table(path: Path, encoding: str = "utf-8-sig", delimiter: str | None = None) -> Iterator[dict]:
-    """Yield rows from CSV/TSV/TXT or GeoJSON as dicts.
+    """Yield rows from CSV/TSV/TXT or GeoJSON (optionally .gz) as dicts.
 
     GeoJSON point features get synthetic ``__lon``/``__lat`` keys. Other
     formats (shapefile, file geodatabase, xlsx) should be converted first,
     e.g. ``ogr2ogr -f CSV out.csv in.gdb -lco GEOMETRY=AS_XY``.
     """
     path = Path(path)
-    suffix = path.suffix.lower()
+    gz = path.suffix.lower() == ".gz"
+    suffix = (path.with_suffix("") if gz else path).suffix.lower()
+
+    def opener(**kw):
+        return gzip.open(path, "rt", **kw) if gz else path.open(**kw)
+
     if suffix in (".geojson", ".json"):
-        with path.open(encoding=encoding) as f:
+        with opener(encoding=encoding) as f:
             data = json.load(f)
         for feat in data.get("features", []):
             props = dict(feat.get("properties") or {})
@@ -197,7 +202,7 @@ def read_table(path: Path, encoding: str = "utf-8-sig", delimiter: str | None = 
                 props["__lon"], props["__lat"] = geom["coordinates"][:2]
             yield props
         return
-    with path.open(encoding=encoding, errors="replace", newline="") as f:
+    with opener(encoding=encoding, errors="replace", newline="") as f:
         sample = f.read(65536)
         f.seek(0)
         if delimiter is None:
