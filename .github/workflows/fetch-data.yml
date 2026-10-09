@@ -31,7 +31,7 @@ jobs:
           for ((off=0; off<total; off+=step)); do
             curl -sSf --retry 3 -H 'Accept: text/csv' "$api?order=record_key.asc&offset=$off&limit=$step" -o page.csv
             # PostgREST CSV has no trailing newline; add one so pages don't merge rows
-            sed -i -e '$a\\' page.csv
+            sed -i -e '$a\' page.csv
             if [ "$off" -eq 0 ]; then cat page.csv; else tail -n +2 page.csv; fi >> out/usgs_dowdb_2026.csv
           done
           rows=$(python3 -c "import csv,sys; print(sum(1 for _ in csv.DictReader(open('out/usgs_dowdb_2026.csv', newline=''))))")
