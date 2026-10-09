@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Orphaned Well Map</title>
+  <meta name="description" content="130,121 unplugged orphaned oil and gas wells from the USGS 2026 database, joined to state records to show each well's last operator and active wells nearby.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <h1>Orphaned Well Map</h1>
+      <p class="sub" id="headline">Loading data…</p>
+    </div>
+    <button class="ghost" id="about-btn" type="button">About the data</button>
+  </header>
+
+  <div id="banner" class="banner" hidden></div>
+
+  <main class="layout">
+    <aside class="panel" id="sidebar">
+      <section>
+        <label class="field">
+          <span>State</span>
+          <select id="state-select"><option value="">All states</option></select>
+        </label>
+        <form class="field" id="search-form">
+          <span>Find a well by API or ID</span>
+          <div class="row">
+            <input id="search" type="search" placeholder="e.g. 42-123-45678" autocomplete="off">
+            <button type="submit">Go</button>
+          </div>
+          <small id="search-msg" class="muted" aria-live="polite"></small>
+        </form>
+      </section>
+
+      <section>
+        <h2>What the color means</h2>
+        <ul class="legend" id="legend"></ul>
+      </section>
+
+      <section id="operator-filter" hidden>
+        <div class="chip">
+          <span>Showing wells last operated by <strong id="operator-name"></strong></span>
+          <button class="ghost small" id="operator-clear" type="button">Clear</button>
+        </div>
+      </section>
+
+      <section>
+        <h2>Most orphaned wells, by last operator</h2>
+        <p class="muted small">Counts only wells matched to a state record that names a real operator. Click one to map its wells.</p>
+        <ol class="operators" id="operators"></ol>
+      </section>
+
+      <section>
+        <h2>By state</h2>
+        <div class="table-wrap">
+          <table class="states" id="states-table">
+            <thead><tr><th>State</th><th class="num">Orphans</th><th class="num">Operator found</th><th class="num">Active well ≤ <span class="radius"></span></th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </aside>
+
+    <div class="map-wrap">
+      <div id="map" role="region" aria-label="Map of orphaned wells"></div>
+      <div id="map-empty" class="map-empty" hidden></div>
+    </div>
+
+    <aside class="panel detail" id="detail" hidden aria-live="polite">
+      <button class="ghost close" id="detail-close" type="button" aria-label="Close details">×</button>
+      <div id="detail-body"></div>
+    </aside>
+  </main>
+
+  <dialog id="about">
+    <form method="dialog"><button class="ghost close" aria-label="Close">×</button></form>
+    <h2>About the data</h2>
+    <div id="about-body"></div>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

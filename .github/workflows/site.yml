@@ -1,0 +1,76 @@
+name: Test, build data, deploy site
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      usgs_url:
+        description: Direct download URL for the USGS DOWDB 2026 file (CSV, GeoJSON, ZIP, or GDB/SHP in a ZIP). Defaults to the USGS_URL repo variable.
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pytest
+      - run: pytest -q tests
+
+  build:
+    needs: test
+    if: github.event_name != 'pull_request' && (inputs.usgs_url != '' || vars.USGS_URL != '')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download USGS file
+        env:
+          URL: ${{ inputs.usgs_url || vars.USGS_URL }}
+        run: |
+          mkdir -p data/usgs && cd data/usgs
+          curl -fsSL "$URL" -o download
+          if unzip -tq download >/dev/null 2>&1; then unzip -q download; rm download; fi
+          ls -laR
+      - name: Convert to CSV if needed
+        run: |
+          cd data/usgs
+          f=$(find . -iname '*.csv' -o -iname '*.geojson' | head -1)
+          if [ -z "$f" ]; then
+            sudo apt-get update -qq && sudo apt-get install -y -qq gdal-bin
+            src=$(find . -iname '*.gdb' -type d -o -iname '*.shp' -o -iname '*.gpkg' | head -1)
+            [ -n "$src" ] || { echo "No CSV/GeoJSON/GDB/SHP/GPKG found"; exit 1; }
+            ogr2ogr -f CSV -t_srs EPSG:4326 -lco GEOMETRY=AS_XY usgs.csv "$src"
+            f=usgs.csv
+          fi
+          echo "USGS_FILE=data/usgs/$f" >> "$GITHUB_ENV"
+      - name: Build site data
+        run: |
+          cd pipeline
+          python -m owm.build --inspect "../$USGS_FILE"
+          python -m owm.build --usgs "../$USGS_FILE"
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

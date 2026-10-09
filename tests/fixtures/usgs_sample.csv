@@ -1,0 +1,7 @@
+API Number,Well Name,Well Type,Well Status,State,County,Latitude,Longitude
+42-001-00001,SYNTH A 1,Oil,Orphan,Texas,Anderson,31.0000,-97.0000
+42-001-00002,SYNTH B 1,Gas,Orphan,Texas,Anderson,31.0100,97.0100
+,SYNTH C 1,Oil,Orphan,Texas,Anderson,31.0200,-97.0200
+42-001-00004,SYNTH D 1,Oil,Orphan,Texas,Anderson,31.0300,-97.0300
+42-001-00005,SYNTH E 1,Oil,Orphan,Texas,Anderson,0,0
+35-001-00001,SYNTH F 1,Oil,Orphan,Oklahoma,Adair,35.5000,-97.5000

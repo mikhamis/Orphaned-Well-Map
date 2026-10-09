@@ -1,0 +1,24 @@
+{
+  "state": "XX",
+  "verified": false,
+  "source": {
+    "name": "Agency name - dataset name",
+    "url": "https://direct-download-url/wells.csv",
+    "docs_url": "https://landing-page-for-humans",
+    "member": null,
+    "encoding": "utf-8-sig",
+    "delimiter": null
+  },
+  "columns": {
+    "api": "API_NUMBER",
+    "operator": "OPERATOR_NAME",
+    "status": "WELL_STATUS",
+    "lat": "LATITUDE",
+    "lon": "LONGITUDE",
+    "lease": "LEASE_NAME",
+    "well_name": "WELL_NAME",
+    "date": "STATUS_DATE"
+  },
+  "active_status": ["^active$", "^producing$"],
+  "notes": "Coordinates must be decimal degrees (NAD83/WGS84). Copy to XX.json, fill in, run --inspect on the file to check column names, then set verified=true once you've spot-checked matches against the agency's own well lookup."
+}
