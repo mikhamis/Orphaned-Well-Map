@@ -3,7 +3,9 @@
 (() => {
   "use strict";
 
-  const BASEMAP = "https://tiles.openfreemap.org/styles/positron";
+  // Set window.OWM_BASEMAP = null before this script to skip the tile basemap
+  // (e.g. where the page can't reach tile servers); state outlines are used instead.
+  const BASEMAP = window.OWM_BASEMAP === undefined ? "https://tiles.openfreemap.org/styles/positron" : window.OWM_BASEMAP;
   const DATA = "data/";
 
   // join codes (must match build.py)
@@ -38,7 +40,20 @@
     return r.json();
   }
 
+  function outlineStyle() {
+    return {
+      version: 8,
+      sources: { states: { type: "geojson", data: "us-states.geojson" } },
+      layers: [
+        { id: "bg", type: "background", paint: { "background-color": css("--page") } },
+        { id: "states-fill", type: "fill", source: "states", paint: { "fill-color": css("--surface") } },
+        { id: "states-line", type: "line", source: "states", paint: { "line-color": css("--muted"), "line-width": 0.6, "line-opacity": 0.6 } },
+      ],
+    };
+  }
+
   async function loadBasemap() {
+    if (!BASEMAP) return outlineStyle();
     try {
       const ctl = new AbortController();
       const t = setTimeout(() => ctl.abort(), 6000);
@@ -51,8 +66,8 @@
       state.hasGlyphs = Boolean(style.glyphs && state.font);
       return style;
     } catch (e) {
-      console.warn("Basemap unavailable, using plain background", e);
-      return { version: 8, sources: {}, layers: [{ id: "bg", type: "background", paint: { "background-color": css("--page") } }] };
+      console.warn("Basemap unavailable, using state outlines", e);
+      return outlineStyle();
     }
   }
 
@@ -169,6 +184,11 @@
     if (!map || !map.getLayer("wells")) return;
     map.setPaintProperty("wells", "circle-color", colorExpr());
     map.setPaintProperty("clusters", "circle-color", css("--c-cluster"));
+    if (map.getLayer("states-fill")) {
+      map.setPaintProperty("bg", "background-color", css("--page"));
+      map.setPaintProperty("states-fill", "fill-color", css("--surface"));
+      map.setPaintProperty("states-line", "line-color", css("--muted"));
+    }
     renderLegend();
   }
 
