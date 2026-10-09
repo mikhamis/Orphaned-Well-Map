@@ -53,8 +53,8 @@ environment that can't reach the agency sites.
 
 | State | USGS wells | Source | Join | Matched | Operator named | Notes |
 | --- | ---: | --- | --- | ---: | ---: | --- |
-| Oklahoma | 19,981 | OCC RBDMS wells (nightly CSV) | API | 97% | 61% | ~42% of OCC orphan records say "OTC/OCC NOT ASSIGNED". Active = status `AC`. |
-| Kentucky | 15,638 | KGS well shapefile (monthly) | KY permit no. | 95% | 78% | Operator is the **original** operator at completion, not the last; no current status, so no nearby-active search. Kept out of the national ranking. |
+| Oklahoma | 19,981 | OCC RBDMS wells (nightly CSV) | API (97%), location (1.6%) | 99% | 61% | ~42% of OCC orphan records say "OTC/OCC NOT ASSIGNED". Active = status `AC`. |
+| Kentucky | 15,638 | KGS well shapefile (monthly) | permit no. (95%), location (1.5%) | 97% | 78% | Operator is the **original** operator at completion, not the last; no current status, so no nearby-active search. Kept out of the national ranking. |
 
 Largest states not yet joined: Ohio (22,759), Pennsylvania (21,262), Texas (8,998), New York (7,600).
 
