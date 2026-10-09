@@ -8,7 +8,7 @@
 
   // join codes (must match build.py)
   const CATS = [
-    { j: 3, key: "operator", label: "Last operator found", desc: "Matched to a state record that names a company." },
+    { j: 3, key: "operator", label: "Operator found", desc: "Matched to a state record that names a company." },
     { j: 2, key: "placeholder", label: "State record names no operator", desc: "Matched, but the record says unknown, orphan, or similar." },
     { j: 1, key: "unmatched", label: "No matching state record", desc: "State data was joined, but this well wasn't found in it." },
     { j: 0, key: "noconfig", label: "State not joined yet", desc: "Only the USGS record is available for this state so far." },
@@ -158,7 +158,7 @@
       const f = e.features[0];
       const cat = CATS.find((c) => c.j === f.properties.j);
       hover.setLngLat(f.geometry.coordinates)
-        .setHTML(`${esc(cat.label)}${f.properties.j > 0 ? ` · ${fmt(f.properties.a)} active within ${miles(state.manifest.params.radius_m)}` : ""}<br><span class="muted">Click for details</span>`)
+        .setHTML(`${esc(cat.label)}${f.properties.j > 0 && stateOf(f.id).nearby ? ` · ${fmt(f.properties.a)} active within ${miles(state.manifest.params.radius_m)}` : ""}<br><span class="muted">Click for details</span>`)
         .addTo(map);
     });
     map.on("mouseleave", "wells", () => hover.remove());
@@ -200,18 +200,18 @@
     } else if (!d.m) {
       opHtml = `<p class="note">No record with this API number in ${esc(s.source || "the state file")}, and no well within ${m.params.loc_tolerance_m} m of this location.</p>`;
     } else {
-      const how = d.m === "api"
-        ? "Matched on API number."
+      const how = d.m === "api" ? "Matched on API number."
+        : d.m === "id" ? "Matched on the state's well ID (permit number)."
         : `Matched by location: the nearest state record, ${d.md} m away. Treat this as a lead, not a confirmed match.`;
       opHtml = `
         <div class="op">${d.opp ? `<span class="muted">${esc(d.op || "Blank")}</span>` : esc(d.op)}</div>
         ${d.opp ? `<p class="note">The state record lists no real operator.</p>` : ""}
-        <p class="note">${esc(how)} State status: ${esc(d.ss || "–")}${d.ls ? ` · Lease: ${esc(d.ls)}` : ""}${d.sa && d.sa !== d.id ? ` · State API: ${esc(d.sa)}` : ""}</p>
+        <p class="note">${esc(how)} ${esc(s.status_label || "State status")}: ${esc(d.ss || "–")}${d.ls ? ` · Lease: ${esc(d.ls)}` : ""}${d.sa && d.sa !== d.id ? ` · State API: ${esc(d.sa)}` : ""}</p>
         <p class="note">Source: ${s.source_url ? `<a href="${esc(s.source_url)}" target="_blank" rel="noopener">${esc(s.source || "state records")}</a>` : esc(s.source || "state records")}${s.verified ? "" : ' <span class="pill">unverified source</span>'}</p>`;
     }
 
     let nearHtml = "";
-    if (s.configured) {
+    if (s.configured && s.nearby) {
       if (!d.na) {
         nearHtml = `<p class="note">No active wells within ${radius} in the state file.</p>`;
       } else {
@@ -228,8 +228,8 @@
       <h3>${esc(d.n || d.id || "Unnamed well")}</h3>
       <div class="muted">${esc(s.name)} · USGS orphaned well</div>
       <dl>${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>
-      <h2>Last operator of record</h2>${opHtml}
-      ${s.configured ? `<h2 style="margin-top:16px">Active wells nearby</h2>${nearHtml}` : ""}`;
+      <h2>${esc(s.operator_label || "Last operator of record")}</h2>${opHtml}
+      ${s.configured ? `<h2 style="margin-top:16px">Active wells nearby</h2>${nearHtml || `<p class="note">${esc(s.name)}'s well file has no current status, so active wells can't be identified.</p>`}` : ""}`;
     $("#detail").hidden = false;
     state.map.resize();
   }
@@ -261,13 +261,19 @@
 
   function renderOperators() {
     const m = state.manifest;
-    let ops = m.operators.map((op, i) => ({ ...op, i }));
-    if (state.stateFilter) {
-      // recount within the state from points
-      const si = m.state_codes.indexOf(state.stateFilter);
-      const n = new Map();
-      state.pts.o.forEach((oi, k) => { if (oi >= 0 && state.pts.s[k] === si) n.set(oi, (n.get(oi) || 0) + 1); });
-      ops = [...n].map(([oi, cnt]) => ({ ...m.operators[oi], count: cnt, i: oi })).sort((a, b) => b.count - a.count);
+    const sf = state.stateFilter && m.states.find((s) => s.code === state.stateFilter);
+    let ops;
+    if (sf) {
+      ops = m.operators.map((op, i) => ({ ...op, i, count: (op.by_state || {})[sf.code] || 0 }))
+        .filter((op) => op.count > 0).sort((a, b) => b.count - a.count);
+      $("#operators-title").textContent = sf.configured ? `Most orphaned wells, by ${(sf.operator_label || "last operator").toLowerCase()}` : "Most orphaned wells, by operator";
+      $("#operators-note").textContent = "Click one to map its wells.";
+    } else {
+      ops = m.operators.map((op, i) => ({ ...op, i })).filter((op) => op.count > 0);
+      const other = m.states.filter((s) => s.configured && s.operator_kind && s.operator_kind !== "last");
+      $("#operators-title").textContent = "Most orphaned wells, by last operator";
+      $("#operators-note").textContent = "Counts wells matched to a state record that names a real operator. Click one to map its wells." +
+        (other.length ? ` Not included: ${other.map((s) => s.name).join(", ")}, whose records give a different operator (select the state to see it).` : "");
     }
     const el = $("#operators");
     if (!ops.length) {
@@ -276,7 +282,7 @@
     }
     el.innerHTML = ops.slice(0, 15).map((op) => `
       <li><button type="button" data-op="${op.i}" aria-pressed="${state.operatorFilter === op.i}">
-        <span>${esc(op.name)}<span class="st">${esc(op.states.join(", "))}</span></span>
+        <span>${esc(op.name)}<span class="st">${esc((sf ? op.states : op.states.filter((c) => { const s = m.states.find((x) => x.code === c); return !s || (s.operator_kind || "last") === "last"; })).join(", "))}</span></span>
         <span class="n">${fmt(op.count)}</span>
       </button></li>`).join("");
   }
@@ -289,7 +295,7 @@
         <td>${esc(s.name)}${s.configured ? (s.verified ? "" : '<span class="tag">unverified</span>') : '<span class="tag">not joined</span>'}</td>
         <td class="num">${fmt(s.count)}</td>
         <td class="num">${s.configured ? pct(st.with_operator || 0, s.count) : "–"}</td>
-        <td class="num">${s.configured ? pct(st.with_nearby_active || 0, s.count) : "–"}</td></tr>`;
+        <td class="num">${s.configured && s.nearby ? pct(st.with_nearby_active || 0, s.count) : "–"}</td></tr>`;
     }).join("");
     document.querySelectorAll(".radius").forEach((e) => (e.textContent = miles(m.params.radius_m)));
   }
@@ -300,7 +306,7 @@
     const joined = m.states.filter((s) => s.configured);
     const withOp = joined.reduce((a, s) => a + ((s.stats || {}).with_operator || 0), 0);
     $("#headline").textContent = `${fmt(total)} unplugged orphaned wells in ${m.states.length} states (USGS, 2026)` +
-      (joined.length ? ` · last operator identified for ${fmt(withOp)} so far` : "");
+      (joined.length ? ` · operator identified for ${fmt(withOp)} so far` : "");
     const notes = [];
     if (m.demo) notes.push("<strong>Synthetic demo data.</strong> These points are test fixtures, not real wells.");
     if (!joined.length) notes.push("No state records have been joined yet, so the map shows USGS locations only.");
@@ -378,7 +384,7 @@
         if (state.operatorFilter >= 0 && state.pts.o[i] !== state.operatorFilter) setOperator(-1);
         refresh(false);
         state.map.flyTo({ center: [state.pts.lon[i], state.pts.lat[i]], zoom: 13 });
-        state.map.once("idle", () => select(i));
+        select(i);
         return;
       }
     }

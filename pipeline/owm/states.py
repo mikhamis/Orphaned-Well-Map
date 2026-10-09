@@ -13,14 +13,15 @@ import zipfile
 from dataclasses import dataclass
 from pathlib import Path
 
-from .util import is_placeholder_operator, normalize_api, parse_float, read_table, valid_lonlat
+from .util import is_placeholder_operator, normalize_api, normalize_id, parse_float, read_table, valid_lonlat
 
-FIELDS = ("api", "operator", "status", "lat", "lon", "lease", "well_name", "date")
+FIELDS = ("api", "id", "operator", "status", "lat", "lon", "lease", "well_name", "date")
 
 
 @dataclass
 class StateWell:
     api: str | None
+    alt_id: str | None
     operator: str
     status: str
     lon: float | None
@@ -84,9 +85,8 @@ def fetch(cfg: dict, cache_dir: Path, local_file: Path | None = None) -> Path | 
 
 def load_records(cfg: dict, path: Path) -> tuple[list[StateWell], dict]:
     cols = cfg["columns"]
-    for k in ("api", "operator"):
-        if not cols.get(k):
-            raise SystemExit(f"{cfg['state']}: columns.{k} is required")
+    if not cols.get("operator") or not (cols.get("api") or cols.get("id")):
+        raise SystemExit(f"{cfg['state']}: columns.operator and columns.api or columns.id are required")
     src = cfg.get("source") or {}
     active_res = [re.compile(p, re.I) for p in cfg.get("active_status", [])]
     st = cfg["state"].upper()
@@ -112,26 +112,27 @@ def load_records(cfg: dict, path: Path) -> tuple[list[StateWell], dict]:
         active = bool(status) and any(r.search(status) for r in active_res)
         stats["active"] += active
         out.append(StateWell(
-            api=api, operator=g("operator"), status=status,
+            api=api, alt_id=normalize_id(g("id")), operator=g("operator"), status=status,
             lon=parse_float(g("lon")), lat=parse_float(g("lat")),
             lease=g("lease"), well_name=g("well_name"), date=g("date"), active=active,
         ))
     return out, stats
 
 
-def latest_by_api(records: list[StateWell]) -> dict[str, StateWell]:
-    """One record per API: prefer the latest date, then a real operator name.
+def latest_by_api(records: list[StateWell], key: str = "api") -> dict[str, StateWell]:
+    """One record per API (or ``key``): prefer a real operator name, then the latest date.
 
     Dates are compared as normalized strings, so configs should point
     ``date`` at an ISO-like (YYYY-MM-DD) column where one exists.
     """
     best: dict[str, StateWell] = {}
     for r in records:
-        if r.api is None:
+        k = getattr(r, key)
+        if k is None:
             continue
-        cur = best.get(r.api)
+        cur = best.get(k)
         if cur is None or _rank(r) >= _rank(cur):
-            best[r.api] = r
+            best[k] = r
     return best
 
 

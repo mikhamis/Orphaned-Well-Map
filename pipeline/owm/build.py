@@ -76,6 +76,10 @@ def build(args) -> dict:
                 "configured": False, "verified": False}
         if cfg:
             info.update(verified=bool(cfg.get("verified")),
+                        operator_label=cfg.get("operator_label") or "Last operator of record",
+                        operator_kind=cfg.get("operator_kind", "last"),
+                        status_label=cfg.get("status_label") or "State status",
+                        nearby=bool(cfg.get("active_status")),
                         source=(cfg.get("source") or {}).get("name"),
                         source_url=(cfg.get("source") or {}).get("docs_url") or (cfg.get("source") or {}).get("url"))
             path = None
@@ -94,21 +98,24 @@ def build(args) -> dict:
                 info["error"] = "no source URL or --state-file"
         state_rows.append(info)
 
-    # operator table (orphans counted by last operator)
+    # operator table. "count" only includes states whose records give the last
+    # operator; states recording e.g. the original operator (operator_kind
+    # "original") are kept per state in by_state so they aren't mixed in.
+    last_kind = {r["code"] for r in state_rows if r.get("operator_kind", "last") == "last"}
     op_counts: Counter = Counter()
     op_names: dict[str, Counter] = defaultdict(Counter)
-    op_states: dict[str, set] = defaultdict(set)
+    op_by_state: dict[str, Counter] = defaultdict(Counter)
     for w in wells:
         e = w.extra
         if e.get("operator") and not e.get("operator_placeholder"):
             k = operator_key(e["operator"])
-            op_counts[k] += 1
+            op_counts[k] += w.state in last_kind
             op_names[k][e["operator"]] += 1
-            op_states[k].add(w.state)
-    op_list = [k for k, _ in op_counts.most_common()]
+            op_by_state[k][w.state] += 1
+    op_list = sorted(op_names, key=lambda k: (-op_counts[k], -sum(op_by_state[k].values()), k))
     op_index = {k: i for i, k in enumerate(op_list)}
     operators = [{"name": op_names[k].most_common(1)[0][0], "count": op_counts[k],
-                  "states": sorted(op_states[k])} for k in op_list]
+                  "states": sorted(op_by_state[k]), "by_state": dict(op_by_state[k])} for k in op_list]
 
     pts = {"lon": [], "lat": [], "s": [], "j": [], "o": [], "a": []}
     state_codes = [r["code"] for r in state_rows]
@@ -140,7 +147,7 @@ def build(args) -> dict:
                 d.update(m=e["match"], md=e.get("match_dist_m"), sa=e.get("state_api"),
                          op=e.get("operator"), opp=e.get("operator_placeholder"),
                          ss=e.get("state_status"), ls=e.get("lease"))
-            if info["configured"]:
+            if info["configured"] and info["nearby"]:
                 d.update(na=e.get("nearby_active", 0), nn=e.get("nearby", []),
                          no=e.get("nearby_operators", []))
             detail.append({k: v for k, v in d.items() if v not in ("", None, [])})

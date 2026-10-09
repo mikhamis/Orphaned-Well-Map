@@ -1,0 +1,21 @@
+{
+  "state": "OK",
+  "verified": false,
+  "source": {
+    "name": "Oklahoma Corporation Commission, RBDMS well data (nightly)",
+    "url": "https://oklahoma.gov/content/dam/ok/en/occ/documents/og/ogdatafiles/rbdms-wells.csv",
+    "docs_url": "https://oklahoma.gov/occ/divisions/oil-gas/oil-gas-data.html",
+    "encoding": "latin-1"
+  },
+  "columns": {
+    "api": "API",
+    "operator": "OPERATOR",
+    "status": "WELLSTATUS",
+    "lat": "SH_LAT",
+    "lon": "SH_LON",
+    "well_name": "WELL_NAME"
+  },
+  "active_status": ["^AC$"],
+  "operator_label": "Operator of record (OCC)",
+  "notes": "Status codes from rbdms-wells-data-dictionary.xlsx: AC = Active, open wellbore (includes UIC injection wells); OR = orphaned; PA* = plugged. The OCC keeps the last operator on many OR wells; about 42% show 'OTC/OCC NOT ASSIGNED', treated as no operator. There is no date column, so the operator shown is the one on the current record."
+}

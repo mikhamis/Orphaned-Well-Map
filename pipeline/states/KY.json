@@ -1,0 +1,26 @@
+{
+  "state": "KY",
+  "verified": false,
+  "source": {
+    "name": "Kentucky Geological Survey, oil and gas well shapefile (KYOG, monthly)",
+    "url": null,
+    "docs_url": "https://kygs.uky.edu/data/oilgas",
+    "download": "https://kgs.uky.edu/ogdata/kyog_dd.zip"
+  },
+  "columns": {
+    "api": "API",
+    "id": "KGS_Permit",
+    "operator": "Org_Oper",
+    "status": "Org_Result",
+    "lat": "Y",
+    "lon": "X",
+    "lease": "Org_Farm",
+    "well_name": "Org_WellNo",
+    "date": "Cmpl_Date"
+  },
+  "active_status": [],
+  "operator_label": "Original operator (KGS completion record)",
+  "operator_kind": "original",
+  "status_label": "Completion result",
+  "notes": "USGS Kentucky rows carry Kentucky permit numbers (primary_identifier_type KYPermit), joined to KGS_Permit. KGS records the operator at completion (Org_Oper) and the completion result (Org_Result: OIL, GAS, D&A...), not current operator or status, so the operator may not be the last one and active wells can't be identified. The download is a zipped shapefile: convert with ogr2ogr -f CSV -t_srs EPSG:4326 -lco GEOMETRY=AS_XY (the fetch workflow does this) and pass it with --state-file KY=..."
+}

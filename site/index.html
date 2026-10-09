@@ -43,14 +43,14 @@
 
       <section id="operator-filter" hidden>
         <div class="chip">
-          <span>Showing wells last operated by <strong id="operator-name"></strong></span>
+          <span>Showing wells whose operator of record is <strong id="operator-name"></strong></span>
           <button class="ghost small" id="operator-clear" type="button">Clear</button>
         </div>
       </section>
 
       <section>
-        <h2>Most orphaned wells, by last operator</h2>
-        <p class="muted small">Counts only wells matched to a state record that names a real operator. Click one to map its wells.</p>
+        <h2 id="operators-title">Most orphaned wells, by last operator</h2>
+        <p class="muted small" id="operators-note"></p>
         <ol class="operators" id="operators"></ol>
       </section>
 

@@ -1,6 +1,9 @@
 """Join USGS orphaned wells to state records.
 
 1. API match: USGS API (10-digit) == state record API (10-digit).
+1b. ID match: for states whose USGS rows carry a state-specific ID (e.g.
+   Kentucky permit numbers), USGS primary_identifier == the config's
+   ``columns.id``, both stripped of punctuation and leading zeros.
 2. Location fallback: nearest state record within ``loc_tolerance_m`` when
    the USGS row has no usable API or the API isn't in the state file. These
    matches are weaker and are labelled as such in the output.
@@ -13,7 +16,7 @@ from dataclasses import dataclass
 
 from .states import StateWell, latest_by_api
 from .usgs import OrphanWell
-from .util import GridIndex, is_placeholder_operator
+from .util import GridIndex, is_placeholder_operator, normalize_id
 
 
 @dataclass
@@ -25,6 +28,7 @@ class JoinParams:
 
 def join_state(orphans: list[OrphanWell], records: list[StateWell], p: JoinParams) -> dict:
     by_api = latest_by_api(records)
+    by_id = latest_by_api(records, key="alt_id")
 
     loc_idx = GridIndex(0.01)
     loc_recs: list[StateWell] = []
@@ -42,8 +46,11 @@ def join_state(orphans: list[OrphanWell], records: list[StateWell], p: JoinParam
     stats = Counter()
     for w in orphans:
         rec, method, dist = None, None, None
+        wid = normalize_id(w.raw_id) if by_id else None
         if w.api and w.api in by_api:
             rec, method = by_api[w.api], "api"
+        elif wid and wid in by_id:
+            rec, method = by_id[wid], "id"
         else:
             hits = loc_idx.within(w.lon, w.lat, p.loc_tolerance_m)
             if hits:

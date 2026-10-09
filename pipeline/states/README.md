@@ -22,9 +22,12 @@ ogr2ogr -f CSV -t_srs EPSG:4326 -lco GEOMETRY=AS_XY wells.csv wells.shp   # adds
 
 `-t_srs EPSG:4326` also reprojects state-plane coordinates, which this pipeline does not handle itself.
 
+Other keys: `columns.id` joins on a state-specific ID (e.g. Kentucky permit numbers) when the
+USGS row has no API number; `source.download` is a zipped shapefile the deploy workflow converts;
+`operator_label`, `operator_kind` (`last` or `original`) and `status_label` set how the site
+describes the operator and status.
+
 ## Status
 
-No state configs ship yet. The pipeline was written in an environment that couldn't reach
-state agency sites, and the URLs and column names here are filled in only after checking
-them against the real file. Start with the states holding the most USGS orphan wells
-(the build prints per-state counts).
+`OK.json` and `KY.json` were written against the actual downloaded files (October 9, 2026).
+The template lists the keys. Next by well count: OH, PA, TX, NY.

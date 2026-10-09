@@ -45,6 +45,8 @@ PLACEHOLDER_OPERATORS = (
     "unknown", "unk", "orphan", "orphaned", "orphan well", "orphan well program",
     "abandoned", "none", "na", "n a", "no operator", "operator unknown",
     "state of", "plugging fund", "abandoned well program",
+    "otc occ not assigned",  # Oklahoma RBDMS: no operator of record
+    "state fund plugging",   # Oklahoma RBDMS: state plugging program
 )
 
 
@@ -98,6 +100,14 @@ def normalize_api(raw: str | None, state: str | None = None) -> str | None:
     if set(api10[2:]) == {"0"}:
         return None
     return api10
+
+
+def normalize_id(raw: str | None) -> str | None:
+    """State-specific well IDs (permit numbers etc.): digits/letters, no leading zeros."""
+    if raw is None:
+        return None
+    s = re.sub(r"[^0-9A-Za-z]", "", str(raw)).upper().lstrip("0")
+    return s or None
 
 
 def normalize_name(s: str | None) -> str:

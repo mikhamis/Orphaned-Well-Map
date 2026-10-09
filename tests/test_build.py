@@ -70,3 +70,18 @@ def test_usgs_api_rules():
     assert usgs_api("1234567890", "KYPermit", "", "KY", True) is None
     assert usgs_api("1234567890", "", "", "TX", True) is None          # wrong state prefix
     assert usgs_api("", "", "4200100009", "TX", True) == "4200100009"  # untyped secondary
+
+
+def test_original_operator_states_excluded_from_national_count(tmp_path):
+    import shutil
+    states = tmp_path / "states"
+    shutil.copytree(FIX / "states", states)
+    cfg = json.loads((states / "TX.json").read_text())
+    cfg["operator_kind"] = "original"
+    (states / "TX.json").write_text(json.dumps(cfg))
+    build.main(["--usgs", str(FIX / "usgs_2026_sample.csv"), "--states-dir", str(states),
+                "--state-file", f"TX={FIX / 'tx_wells.csv'}", "--out", str(tmp_path / "out")])
+    m = json.loads((tmp_path / "out" / "manifest.json").read_text())
+    acme = next(o for o in m["operators"] if o["name"] == "Acme Oil Co.")
+    assert acme["count"] == 0 and acme["by_state"] == {"TX": 1}
+    assert next(s for s in m["states"] if s["code"] == "TX")["operator_kind"] == "original"

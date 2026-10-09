@@ -23,9 +23,11 @@ tests/               pytest, with synthetic fixtures
 
 ## Run it
 
+The USGS table comes from the public DOWDB API (`https://energy.usgs.gov/api/dowdb/v1/wells`,
+PostgREST, CSV via `Accept: text/csv`); see the paging loop in `.github/workflows/site.yml`.
+The same data is on ScienceBase as `US_orphaned_wells_2026.csv`.
+
 ```sh
-# 1. Get the USGS 2026 file from the DOI above. Convert GDB/SHP to CSV first if needed:
-#    ogr2ogr -f CSV -t_srs EPSG:4326 -lco GEOMETRY=AS_XY usgs.csv <file>
 cd pipeline
 python -m owm.build --inspect /path/to/usgs.csv      # check the detected columns
 python -m owm.build --usgs /path/to/usgs.csv         # writes ../site/data
@@ -41,9 +43,20 @@ attributes, colored "state not joined yet."
 
 ## Deploy
 
-`.github/workflows/site.yml` runs the tests on every push and pull request. To publish to GitHub
-Pages, set the repo variable `USGS_URL` to a direct download link for the USGS file (or pass it to
-a manual run), and set Pages → Source to "GitHub Actions."
+`.github/workflows/site.yml` runs the tests, downloads the USGS table and every configured state
+file, builds the data, and on `main` deploys to GitHub Pages (set Settings → Pages → Source to
+"GitHub Actions"). `.github/workflows/fetch-data.yml` downloads the files listed in
+`data/fetch.tsv` into a draft release named `source-data`, for inspecting sources from an
+environment that can't reach the agency sites.
+
+## States joined so far
+
+| State | USGS wells | Source | Join | Matched | Operator named | Notes |
+| --- | ---: | --- | --- | ---: | ---: | --- |
+| Oklahoma | 19,981 | OCC RBDMS wells (nightly CSV) | API | 97% | 61% | ~42% of OCC orphan records say "OTC/OCC NOT ASSIGNED". Active = status `AC`. |
+| Kentucky | 15,638 | KGS well shapefile (monthly) | KY permit no. | 95% | 78% | Operator is the **original** operator at completion, not the last; no current status, so no nearby-active search. Kept out of the national ranking. |
+
+Largest states not yet joined: Ohio (22,759), Pennsylvania (21,262), Texas (8,998), New York (7,600).
 
 ## How the join works and where it can go wrong
 
@@ -67,5 +80,6 @@ Open issues to settle before publishing:
   or dissolved companies, and liability depends on state law.
 - **The USGS ownership fields are estimates.** USGS says its surface/mineral ownership comes
   from land-ownership maps and isn't official.
-- **No state configs ship yet.** URLs and column names go in only once someone has checked them
-  against the real file. See `pipeline/states/README.md`.
+- **Joins are marked unverified** until someone spot-checks a sample against each agency's own
+  well lookup. Automated checks so far: an Oklahoma sample matched API, name, and coordinates by
+  hand, and 99% of matched Kentucky wells share a name token with the KGS lease name.
