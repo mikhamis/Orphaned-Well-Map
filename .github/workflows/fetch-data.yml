@@ -1,15 +1,16 @@
 name: Fetch source data
 
-# Downloads every URL listed in data/fetch.tsv and uploads the files as a
-# workflow artifact, with a report of status, size, and first lines. Used to
-# pull source files from hosts that a development environment can't reach.
+# Downloads every URL listed in data/fetch.tsv on GitHub's runners and
+# attaches the files, plus REPORT.txt (status, size, first lines), to a draft
+# release named "source-data". Draft releases aren't public. Used to pull
+# source files from hosts a development environment can't reach.
 on:
   push:
     paths: [data/fetch.tsv, .github/workflows/fetch-data.yml]
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   fetch:
@@ -23,7 +24,6 @@ jobs:
           : > out/REPORT.txt
           grep -v '^#' data/fetch.tsv | while IFS=$'\t' read -r name url; do
             [ -n "$name" ] || continue
-            mkdir -p "out/$(dirname "$name")"
             code=$(curl -sSL --retry 3 --max-time 900 -A "orphaned-well-map/1.0" -o "out/$name" -w '%{http_code} %{content_type} %{url_effective}' "$url" 2>&1) || true
             {
               echo "=== $name"
@@ -36,8 +36,11 @@ jobs:
             } >> out/REPORT.txt
           done
           cat out/REPORT.txt
-      - uses: actions/upload-artifact@v4
-        with:
-          name: source-data
-          path: out
-          retention-days: 3
+      - name: Attach to draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view source-data >/dev/null 2>&1 || \
+            gh release create source-data --draft --title "Source data cache" \
+              --notes "Raw downloads from data/fetch.tsv. Not a product release."
+          gh release upload source-data out/* --clobber
