@@ -4,8 +4,9 @@ Release: U.S. Geological Survey, "United States Documented Orphaned Well
 Database 2026", https://doi.org/10.5066/P13FHBYG (supersedes Grove & Merrill
 2022, https://doi.org/10.5066/P91PJETI).
 
-The exact column names of the 2026 file were not verifiable when this was
-written, so columns are detected from a list of likely spellings. Run
+Column names below come first from the 2026 release's FGDC metadata
+(US_orphaned_wells_2026.xml, entity ``US_Orphaned_Wells_2026``); older
+spellings follow so the 2022 file also loads. Run
 ``python -m owm.build --inspect FILE`` to see what was detected, and pass
 ``--usgs-columns '{"api": "My Column"}'`` to override.
 """
@@ -14,20 +15,28 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from .util import find_column, normalize_api, parse_float, read_table, state_code, valid_lonlat
+from .util import API_STATE_CODES, find_column, normalize_api, parse_float, read_table, state_code, valid_lonlat
 
 CANDIDATES = {
-    "api": ["API", "API Number", "API_Number", "API_NUM", "APINumber", "API_No", "API14", "API12", "API10", "UWI"],
+    "record_key": ["record_key"],
+    "id_type": ["primary_identifier_type"],
+    "secondary_id": ["secondary_identifier"],
+    "well_number": ["well_number"],
+    "source": ["source"],
+    "data_date": ["data_file_date"],
+    "surface_agency": ["surface_fed_agency"],
+    "subsurface_rights": ["subsurface_fed_rights"],
+    "api": ["primary_identifier", "API", "API Number", "API_Number", "API_NUM", "APINumber", "API_No", "API14", "API12", "API10", "UWI"],
     "well_id": ["Well ID", "Well_ID", "WellID", "ID Number", "Permit", "Permit Number", "Well Number"],
-    "name": ["Well Name", "Well_Name", "WellName", "Name", "Lease Name"],
-    "type": ["Well Type", "Well_Type", "WellType", "Type"],
-    "status": ["Well Status", "Well_Status", "WellStatus", "Status"],
+    "name": ["well_name", "Well Name", "Well_Name", "WellName", "Name", "Lease Name"],
+    "type": ["type", "Well Type", "Well_Type", "WellType", "Type"],
+    "status": ["status", "Well Status", "Well_Status", "WellStatus", "Status"],
     "state": ["State", "State Name", "State_Name", "STATE_ABBR", "ST"],
     "county": ["County", "County Name", "County_Name", "COUNTY_NAME"],
     "lat": ["Latitude", "LAT", "Lat_Dec", "LatitudeDD", "Y", "__lat"],
     "lon": ["Longitude", "LONG", "LON", "Lon_Dec", "LongitudeDD", "X", "__lon"],
-    "surface_owner": ["Surface Ownership", "Surface_Owner", "Surface Owner", "Land Ownership", "Surface"],
-    "mineral_owner": ["Subsurface Ownership", "Mineral Ownership", "Mineral_Owner", "Subsurface"],
+    "surface_owner": ["surface_owner_fed_dept", "Surface Ownership", "Surface_Owner", "Surface Owner", "Land Ownership", "Surface"],
+    "mineral_owner": ["subsurface_owner_fed", "Subsurface Ownership", "Mineral Ownership", "Mineral_Owner", "Subsurface"],
 }
 
 REQUIRED = ("state", "lat", "lon")
@@ -47,6 +56,8 @@ class OrphanWell:
     county: str = ""
     surface_owner: str = ""
     mineral_owner: str = ""
+    source: str = ""
+    data_date: str = ""
     # populated by join
     extra: dict = field(default_factory=dict)
 
@@ -62,6 +73,32 @@ def detect_columns(headers, overrides: dict | None = None) -> dict[str, str | No
             "Pass --usgs-columns to map them."
         )
     return cols
+
+
+def usgs_api(primary: str, id_type: str, secondary: str, state: str, has_type: bool) -> str | None:
+    """API number for a USGS row, or None.
+
+    Rows typed as a state-specific ID (IGSID, KYPermit, ILRefNo...) are not
+    API numbers. For untyped rows, either identifier is accepted only if it
+    normalizes to an API whose state prefix matches the row's state, so a
+    permit number that happens to have 10 digits isn't mistaken for an API.
+    """
+    prefix = API_STATE_CODES.get(state)
+    t = id_type.strip().upper()
+    if has_type and t and t != "API":
+        candidates = [secondary]
+    elif t == "API":
+        api = normalize_api(primary, state)
+        if api:
+            return api
+        candidates = [secondary]
+    else:
+        candidates = [primary, secondary]
+    for c in candidates:
+        api = normalize_api(c, state)
+        if api and api[:2] == prefix:
+            return api
+    return None
 
 
 def load(path: Path, overrides: dict | None = None) -> tuple[list[OrphanWell], dict]:
@@ -89,13 +126,16 @@ def load(path: Path, overrides: dict | None = None) -> tuple[list[OrphanWell], d
             stats["bad_location"] += 1
             continue
         raw_id = g("api") or g("well_id")
-        api = normalize_api(g("api"), st) if cols.get("api") else None
+        api = usgs_api(g("api"), g("id_type"), g("secondary_id"), st, has_type=bool(cols.get("id_type")))
         if api is None:
             stats["no_api"] += 1
         wells.append(OrphanWell(
             idx=len(wells), state=st, lon=lon, lat=lat, api=api, raw_id=raw_id,
-            name=g("name"), type=g("type"), status=g("status"), county=g("county"),
-            surface_owner=g("surface_owner"), mineral_owner=g("mineral_owner"),
+            name=" ".join(x for x in (g("name"), g("well_number")) if x),
+            type=g("type"), status=g("status"), county=g("county"),
+            surface_owner=" / ".join(x for x in (g("surface_owner"), g("surface_agency")) if x),
+            mineral_owner=" / ".join(x for x in (g("mineral_owner"), g("subsurface_rights")) if x),
+            source=g("source"), data_date=g("data_date"),
         ))
     stats["columns"] = cols or {}
     stats["loaded"] = len(wells)

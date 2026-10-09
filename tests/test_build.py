@@ -6,9 +6,9 @@ from owm import build
 FIX = Path(__file__).parent / "fixtures"
 
 
-def run(tmp_path):
+def run(tmp_path, usgs="usgs_2026_sample.csv"):
     build.main([
-        "--usgs", str(FIX / "usgs_sample.csv"),
+        "--usgs", str(FIX / usgs),
         "--states-dir", str(FIX / "states"),
         "--state-file", f"TX={FIX / 'tx_wells.csv'}",
         "--cache", str(tmp_path / "cache"),
@@ -45,6 +45,10 @@ def test_build_end_to_end(tmp_path):
     assert "m" not in d
 
     assert pts["j"] == [0, 3, 2, 3, 1]
+    assert b["so"] == "DOI / NPS" and b["mo"] == "federal / oil and gas"
+    assert a["n"] == "SYNTH A 1" and a["src"] == "Synthetic Commission"
+    ok_rows = json.loads((tmp_path / "out" / "states" / "OK.json").read_text())
+    assert ok_rows[0]["id"] == "12345"          # KY-style permit kept as ID, not an API
     ops = manifest["operators"]
     assert {o["name"] for o in ops} == {"Acme Oil Co.", "Beta Energy Inc"}
     assert pts["o"][1] == [o["name"] for o in ops].index("Acme Oil Co.")
@@ -53,3 +57,16 @@ def test_build_end_to_end(tmp_path):
 def test_operator_key_merges_suffixes():
     assert build.operator_key("Acme Oil Co.") == build.operator_key("ACME OIL COMPANY")
     assert build.operator_key("Smith & Sons, LLC") == build.operator_key("Smith and Sons")
+
+
+def test_legacy_2022_style_columns(tmp_path):
+    manifest, pts, tx = run(tmp_path, "usgs_sample.csv")
+    assert len(pts["lon"]) == 5 and tx[0]["op"] == "Acme Oil Co."
+
+
+def test_usgs_api_rules():
+    from owm.usgs import usgs_api
+    assert usgs_api("42-001-00001", "API", "", "TX", True) == "4200100001"
+    assert usgs_api("1234567890", "KYPermit", "", "KY", True) is None
+    assert usgs_api("1234567890", "", "", "TX", True) is None          # wrong state prefix
+    assert usgs_api("", "", "4200100009", "TX", True) == "4200100009"  # untyped secondary

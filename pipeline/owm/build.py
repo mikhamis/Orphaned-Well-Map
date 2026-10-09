@@ -134,7 +134,8 @@ def build(args) -> dict:
             pts["o"].append(oi)
             pts["a"].append(min(e.get("nearby_active", 0), 999))
             d = {"id": w.api or w.raw_id, "n": w.name, "t": w.type, "st": w.status,
-                 "c": w.county, "so": w.surface_owner, "mo": w.mineral_owner}
+                 "c": w.county, "so": w.surface_owner, "mo": w.mineral_owner,
+                 "src": w.source, "sd": w.data_date}
             if e.get("match"):
                 d.update(m=e["match"], md=e.get("match_dist_m"), sa=e.get("state_api"),
                          op=e.get("operator"), opp=e.get("operator_placeholder"),
@@ -150,6 +151,10 @@ def build(args) -> dict:
         "built_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "usgs": {
             "title": "United States Documented Orphaned Well Database 2026",
+            "citation": "Merrill, M.D., Varela, B.A., and Gianoutsos, N.J., 2026, United States Documented "
+                        "Orphaned Well Database 2026: U.S. Geological Survey data release, "
+                        "https://doi.org/10.5066/P13FHBYG.",
+            "license": "CC0-1.0",
             "doi": "10.5066/P13FHBYG",
             "file": Path(args.usgs).name,
             "rows": ustats["rows"], "loaded": ustats["loaded"],

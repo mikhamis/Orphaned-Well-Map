@@ -190,7 +190,8 @@
       ["API / ID", d.id], ["Name", d.n], ["Type", d.t], ["USGS status", d.st],
       ["County", d.c ? `${d.c}, ${s.code}` : s.name],
       ["Coordinates", `${p.lat[i].toFixed(5)}, ${p.lon[i].toFixed(5)}`],
-      ["Surface owner (est.)", d.so], ["Mineral owner (est.)", d.mo],
+      ["Surface owner (USGS est.)", d.so], ["Mineral owner (USGS est.)", d.mo],
+      ["Reported by", d.src], ["State data as of", d.sd],
     ].filter(([, v]) => v);
 
     let opHtml;
@@ -309,8 +310,8 @@
 
     const states = m.states.filter((s) => s.configured);
     $("#about-body").innerHTML = `
-      <p><strong>Wells:</strong> U.S. Geological Survey, <em>${esc(m.usgs.title)}</em>,
-      <a href="https://doi.org/${esc(m.usgs.doi)}" target="_blank" rel="noopener">doi:${esc(m.usgs.doi)}</a>.
+      <p><strong>Wells:</strong> ${esc(m.usgs.citation || m.usgs.title)}
+      (<a href="https://doi.org/${esc(m.usgs.doi)}" target="_blank" rel="noopener">doi:${esc(m.usgs.doi)}</a>, public domain).
       ${fmt(m.usgs.loaded)} of ${fmt(m.usgs.rows)} rows mapped. The USGS file has no operator data, and its surface and mineral ownership figures are estimates, not official records.</p>
       <p><strong>Last operator:</strong> each USGS well is matched to state well records by its 10-digit API number
       (state + county + well), ignoring sidetrack suffixes. If a well has no usable API number, the nearest state record within

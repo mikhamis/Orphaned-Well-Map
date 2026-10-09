@@ -1,0 +1,43 @@
+name: Fetch source data
+
+# Downloads every URL listed in data/fetch.tsv and uploads the files as a
+# workflow artifact, with a report of status, size, and first lines. Used to
+# pull source files from hosts that a development environment can't reach.
+on:
+  push:
+    paths: [data/fetch.tsv, .github/workflows/fetch-data.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download
+        run: |
+          mkdir -p out
+          : > out/REPORT.txt
+          grep -v '^#' data/fetch.tsv | while IFS=$'\t' read -r name url; do
+            [ -n "$name" ] || continue
+            mkdir -p "out/$(dirname "$name")"
+            code=$(curl -sSL --retry 3 --max-time 900 -A "orphaned-well-map/1.0" -o "out/$name" -w '%{http_code} %{content_type} %{url_effective}' "$url" 2>&1) || true
+            {
+              echo "=== $name"
+              echo "url: $url"
+              echo "result: $code"
+              echo "size: $(stat -c %s "out/$name" 2>/dev/null || echo 0)"
+              file -b "out/$name" 2>/dev/null || true
+              if file -b "out/$name" | grep -qi zip; then unzip -l "out/$name" | head -40; fi
+              if file -b "out/$name" | grep -qiE 'text|csv'; then head -c 1500 "out/$name"; echo; fi
+            } >> out/REPORT.txt
+          done
+          cat out/REPORT.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: source-data
+          path: out
+          retention-days: 3
