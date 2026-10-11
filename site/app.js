@@ -148,9 +148,15 @@
     return ["match", ["get", field], ...pairs, css("--c-noconfig")];
   }
 
-  // In the ownership view the heat map shows only wells on federal land or minerals.
-  function heatFilter() {
-    return state.lens === "owner" ? [">=", ["get", "w"], 3] : true;
+  // Two heat layers, toggled by visibility: all wells, and (ownership view) only wells
+  // on federal land or minerals. A heatmap layer doesn't redraw reliably when its
+  // filter or data-driven weight changes after creation, so each gets a fixed filter.
+  const HEAT_LAYERS = { heat: "match", "heat-fed": "owner" };
+
+  function syncHeatLayers() {
+    for (const [id, lens] of Object.entries(HEAT_LAYERS)) {
+      state.map.setLayoutProperty(id, "visibility", state.lens === lens ? "visible" : "none");
+    }
   }
 
   // Heat map below POINTS_ZOOM, individual wells above it, cross-faded.
@@ -168,19 +174,22 @@
 
   function addLayers(map) {
     map.addSource("wells", { type: "geojson", data: featureCollection() });
-    map.addLayer({
-      id: "heat", type: "heatmap", source: "wells", maxzoom: POINTS_ZOOM + 2,
-      paint: {
-        // Tuned so dense basins (SE Ohio, W Pennsylvania, central Oklahoma) still separate
-        // from sparse areas at national zoom instead of saturating into one blob.
-        "heatmap-weight": 1,
-        "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 3, 0.04, 5, 0.1, POINTS_ZOOM, 0.22, POINTS_ZOOM + 2, 0.6],
-        "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 3, 4, 5, 7, POINTS_ZOOM, 12, POINTS_ZOOM + 2, 18],
-        "heatmap-color": heatColorExpr(),
-        "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], POINTS_ZOOM, 0.92, POINTS_ZOOM + 1.5, 0],
-      },
-      filter: heatFilter(),
-    });
+    for (const [id, lens] of Object.entries(HEAT_LAYERS)) {
+      map.addLayer({
+        id, type: "heatmap", source: "wells", maxzoom: POINTS_ZOOM + 2,
+        ...(lens === "owner" ? { filter: [">=", ["get", "w"], 3] } : {}),
+        layout: { visibility: state.lens === lens ? "visible" : "none" },
+        paint: {
+          // Tuned so dense basins (SE Ohio, W Pennsylvania, central Oklahoma) still separate
+          // from sparse areas at national zoom instead of saturating into one blob.
+          "heatmap-weight": 1,
+          "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 3, 0.04, 5, 0.1, POINTS_ZOOM, 0.22, POINTS_ZOOM + 2, 0.6],
+          "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 3, 4, 5, 7, POINTS_ZOOM, 12, POINTS_ZOOM + 2, 18],
+          "heatmap-color": heatColorExpr(),
+          "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], POINTS_ZOOM, 0.92, POINTS_ZOOM + 1.5, 0],
+        },
+      });
+    }
     map.addLayer({
       id: "wells", type: "circle", source: "wells", minzoom: POINTS_ZOOM - 0.5,
       paint: {
@@ -227,8 +236,8 @@
     const map = state.map;
     if (!map || !map.getLayer("wells")) return;
     map.setPaintProperty("wells", "circle-color", colorExpr());
-    map.setPaintProperty("heat", "heatmap-color", heatColorExpr());
-    map.setFilter("heat", heatFilter());
+    for (const id of Object.keys(HEAT_LAYERS)) map.setPaintProperty(id, "heatmap-color", heatColorExpr());
+    syncHeatLayers();
     if (map.getLayer("states-fill")) {
       map.setPaintProperty("bg", "background-color", css("--page"));
       map.setPaintProperty("states-fill", "fill-color", css("--surface"));

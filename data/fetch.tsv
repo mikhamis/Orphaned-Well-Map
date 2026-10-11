@@ -1,12 +1,11 @@
 # name<TAB>url — fetched by .github/workflows/fetch-data.yml on GitHub runners into the draft release "source-data".
 # Zipped shapefiles are also converted to <name>.csv (WGS84, X/Y columns). The USGS file is fetched separately from its API.
+PA_wells_2026_10.zip	https://www.pasda.psu.edu/download/dep/OilGasLocations_ConventionalUnconventional2026_10.zip
+PA_wells_metadata.xml	https://www.pasda.psu.edu/uci/FullMetadataDisplay.aspx?file=OilGasLocations_ConventionalUnconventional2026_10.xml
+PA_abandoned_orphan.csv	http://cedatareporting.pa.gov/ReportServer?/Public/DEP/OG/SSRS/Abandoned_Orphan_Web&rs:Format=CSV
+OH_wells_statewide.zip	https://gis.ohiodnr.gov/geodata/Statewide/OGWells_statewide.zip
+TX_orphanwells-09-26.zip	https://www.rrc.texas.gov/media/atxlqy5q/orphanwells-09-26.zip
+NY_wells_meta.json	https://data.ny.gov/api/views/szye-wmt3.json
+NY_orphaned_meta.json	https://data.ny.gov/api/views/vgue-bamz.json
 NY_wells.csv	https://data.ny.gov/api/views/szye-wmt3/rows.csv?accessType=DOWNLOAD
 NY_orphaned.csv	https://data.ny.gov/api/views/vgue-bamz/rows.csv?accessType=DOWNLOAD
-PA_pasda_1088.html	https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=1088
-PA_abandoned_orphan.csv	http://cedatareporting.pa.gov/ReportServer?/Public/DEP/OG/SSRS/Abandoned_Orphan_Web&rs:Format=CSV
-PA_prod_status.csv	http://cedatareporting.pa.gov/ReportServer?/Public/DEP/OG/SSRS/OG_Well_Prod_Status&rs:Format=CSV
-OH_hub_item.json	https://www.arcgis.com/sharing/rest/content/items/3dce2c55a9e1486b9483db25710ae588?f=json
-OH_wells.zip	https://www.arcgis.com/sharing/rest/content/items/3dce2c55a9e1486b9483db25710ae588/data
-TX_orphan_page.html	https://www.rrc.texas.gov/oil-and-gas/research-and-statistics/well-information/orphan-wells-12-months/
-TX_wellbore_query.bin	https://mft.rrc.texas.gov/link/650649b7-e019-4d77-a8e0-d118d6455381
-TX_wellbore_manual.pdf	https://rrc.texas.gov/media/di1mm5or/og_wellbore_ewadefinitionmanual2013-10-30_subscription.pdf
