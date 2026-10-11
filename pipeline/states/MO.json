@@ -1,0 +1,33 @@
+{
+  "state": "MO",
+  "verified": false,
+  "source": {
+    "name": "Missouri DNR, Oil and Gas Wells (Missouri Geological Survey map service)",
+    "arcgis": "https://gis.dnr.mo.gov/host/rest/services/geology/oil_gas_wells/MapServer/0",
+    "docs_url": "https://gis.dnr.mo.gov/host/rest/services/geology/oil_gas_wells/MapServer/0"
+  },
+  "columns": {
+    "api": "API_NUMBER",
+    "operator": "OPERATOR",
+    "status": "STATUS",
+    "lat": "Y",
+    "lon": "X",
+    "lease": "LEASE",
+    "well_name": "WELL_NAME"
+  },
+  "active_status": [
+    "^Active Well$"
+  ],
+  "operator_label": "Operator of record (Missouri DNR)",
+  "at_risk": {
+    "status": [
+      "^Shut in",
+      "^Temporarily Abandoned",
+      "^Inactive"
+    ],
+    "require_operator": true,
+    "definition": "Missouri DNR status Shut in, Temporarily Abandoned (Idle) or Inactive, with an operator named."
+  },
+  "verification_note": "Not cross-checked yet: the DNR map service is the only operator source found so far. All 4,816 USGS Missouri wells match by API number.",
+  "notes": "API_NUMBER is county + well (e.g. 037-20070); prefix 24 is added. Only wells not under confidentiality are published."
+}

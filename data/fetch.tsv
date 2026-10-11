@@ -1,11 +1,3 @@
 # name<TAB>url — fetched by .github/workflows/fetch-data.yml on GitHub runners into the draft release "source-data".
-# Zipped shapefiles are also converted to <name>.csv (WGS84, X/Y columns). The USGS file is fetched separately from its API.
-PA_wells_2026_10.zip	https://www.pasda.psu.edu/download/dep/OilGasLocations_ConventionalUnconventional2026_10.zip
-PA_wells_metadata.xml	https://www.pasda.psu.edu/uci/FullMetadataDisplay.aspx?file=OilGasLocations_ConventionalUnconventional2026_10.xml
-PA_abandoned_orphan.csv	http://cedatareporting.pa.gov/ReportServer?/Public/DEP/OG/SSRS/Abandoned_Orphan_Web&rs:Format=CSV
-OH_wells_statewide.zip	https://gis.ohiodnr.gov/geodata/Statewide/OGWells_statewide.zip
-TX_orphanwells-09-26.zip	https://www.rrc.texas.gov/media/atxlqy5q/orphanwells-09-26.zip
-NY_wells_meta.json	https://data.ny.gov/api/views/szye-wmt3.json
-NY_orphaned_meta.json	https://data.ny.gov/api/views/vgue-bamz.json
-NY_wells.csv	https://data.ny.gov/api/views/szye-wmt3/rows.csv?accessType=DOWNLOAD
-NY_orphaned.csv	https://data.ny.gov/api/views/vgue-bamz/rows.csv?accessType=DOWNLOAD
+# "arcgis:<layer url>[|<where>]" pages through an ArcGIS REST layer into a gzipped CSV (owm.arcgis).
+# Add lines here to pull a source; pushing a change to this file runs the workflow.

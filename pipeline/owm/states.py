@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 import re
 import shutil
+import sys
 import urllib.request
 import zipfile
 from dataclasses import dataclass
@@ -56,6 +57,39 @@ def fetch(cfg: dict, cache_dir: Path, local_file: Path | None = None) -> Path | 
     if local_file:
         return Path(local_file)
     src = cfg.get("source") or {}
+    if src.get("arcgis"):
+        from .arcgis import download
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        dest = cache_dir / f"{cfg['state'].upper()}_arcgis.csv.gz"
+        if not dest.exists():
+            layers = src["arcgis"] if isinstance(src["arcgis"], list) else [src["arcgis"]]
+            if len(layers) == 1:
+                # "arcgis_mirrors": other URLs serving the same layer, tried in order on failure
+                for i, url in enumerate([layers[0]] + list(src.get("arcgis_mirrors") or [])):
+                    try:
+                        download(url, str(dest))
+                        break
+                    except Exception as e:
+                        if i == len(src.get("arcgis_mirrors") or []):
+                            raise
+                        print(f"{cfg['state']}: {url} failed ({e}); trying mirror", file=sys.stderr)
+            else:  # several layers with the same schema (e.g. one per well type): concatenate
+                import csv
+                import gzip
+                parts = []
+                for i, layer in enumerate(layers):
+                    part = cache_dir / f"{cfg['state'].upper()}_arcgis_{i}.csv.gz"
+                    download(layer, str(part))
+                    parts.append(part)
+                with gzip.open(dest, "wt", newline="", encoding="utf-8") as out:
+                    w = None
+                    for part in parts:
+                        for row in csv.DictReader(gzip.open(part, "rt", newline="", encoding="utf-8")):
+                            if w is None:
+                                w = csv.DictWriter(out, fieldnames=list(row), extrasaction="ignore")
+                                w.writeheader()
+                            w.writerow(row)
+        return dest
     url = src.get("url")
     if not url:
         return None
@@ -86,8 +120,8 @@ def fetch(cfg: dict, cache_dir: Path, local_file: Path | None = None) -> Path | 
 
 def load_records(cfg: dict, path: Path) -> tuple[list[StateWell], dict]:
     cols = cfg["columns"]
-    if not cols.get("operator") or not (cols.get("api") or cols.get("id")):
-        raise SystemExit(f"{cfg['state']}: columns.operator and columns.api or columns.id are required")
+    if not (cols.get("api") or cols.get("id")):
+        raise SystemExit(f"{cfg['state']}: columns.api or columns.id is required")
     src = cfg.get("source") or {}
     active_res = [re.compile(p, re.I) for p in cfg.get("active_status", [])]
     active_where = cfg.get("active_where") or []

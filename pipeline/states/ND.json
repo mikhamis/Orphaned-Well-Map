@@ -1,0 +1,32 @@
+{
+  "state": "ND",
+  "verified": false,
+  "source": {
+    "name": "North Dakota DMR, Oil and Gas Division wells (OGD_Wells)",
+    "url": null,
+    "download": "https://gis.dmr.nd.gov/downloads/oilgas/shapefile/OGD_Wells.zip",
+    "docs_url": "https://gis.dmr.nd.gov/gisdownload.asp"
+  },
+  "columns": {
+    "api": "api",
+    "operator": "operator",
+    "status": "status",
+    "lat": "Y",
+    "lon": "X",
+    "well_name": "well_name"
+  },
+  "active_status": [
+    "^A$"
+  ],
+  "operator_label": "Operator of record (NDIC)",
+  "status_label": "NDIC status code",
+  "at_risk": {
+    "status": [
+      "^IA$",
+      "^TA$"
+    ],
+    "require_operator": true,
+    "definition": "NDIC status IA (inactive) or TA (temporarily abandoned), with an operator named."
+  },
+  "verification_note": "Not cross-checked. Note: North Dakota's USGS rows are wells NDIC marked AB (abandoned, shut in over 12 months), and many still have major operators on record; 113 now show as active and 103 as plugged. These are not orphans in the 'no responsible operator' sense."
+}

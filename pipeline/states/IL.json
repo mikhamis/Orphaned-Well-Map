@@ -1,0 +1,25 @@
+{
+  "state": "IL",
+  "verified": false,
+  "source": {
+    "name": "Illinois State Geological Survey, Wells and Borings location points (weekly)",
+    "url": null,
+    "download": "https://clearinghouse.isgs.illinois.edu/sites/clearinghouse.isgs/files/Clearinghouse/data/ISGS/Geology/zips/IL_WELLS_Borings_Location_Pt.zip",
+    "docs_url": "https://clearinghouse.isgs.illinois.edu/data/geology/location-points-isgs-wells-and-borings-database"
+  },
+  "columns": {
+    "api": "API_NUMBER",
+    "status": "STATUSTEXT",
+    "lat": "Y",
+    "lon": "X"
+  },
+  "active_status": [
+    "^Oil Producer$",
+    "^Gas Producer$",
+    "^Oil and Gas Producer$",
+    "Injection Well$"
+  ],
+  "operator_label": "Operator (not in the ISGS public file)",
+  "status_label": "ISGS well type/status",
+  "verification_note": "Operator not available: the ISGS public well file has API number, status and location but no operator. 3,657 of 3,986 USGS Illinois wells match by API number (the other 319 carry Illinois reference numbers)."
+}

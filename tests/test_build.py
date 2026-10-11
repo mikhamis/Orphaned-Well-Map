@@ -108,3 +108,16 @@ def test_at_risk_layer_excludes_usgs_orphans(tmp_path):
 def test_operator_key_expands_agency_abbreviations():
     assert build.operator_key("DIVERSIFIED PROD LLC") == build.operator_key("Diversified Production, LLC")
     assert build.operator_key("COMPASS DEV, INC") == build.operator_key("COMPASS DEVELOPMENT CO, INC")
+
+
+def test_location_match_with_name_requirement():
+    from owm.join import JoinParams, join_state
+    from owm.states import StateWell
+    from owm.usgs import OrphanWell
+    w = OrphanWell(idx=0, state="KS", lon=-95.0, lat=38.0, api=None, raw_id="", name="ARN")
+    near_wrong = StateWell(api="1500100001", alt_id=None, operator="Other Co", status="", lon=-95.0005, lat=38.0,
+                           lease="SMITH", well_name="1", date="", active=False)
+    far_right = StateWell(api="1500100002", alt_id=None, operator="Arn Oil", status="", lon=-95.002, lat=38.0,
+                          lease="Arn", well_name="2", date="", active=False)
+    join_state([w], [near_wrong, far_right], JoinParams(), {"tolerance_m": 300, "name_match": True})
+    assert w.extra["match"] == "location" and w.extra["operator"] == "Arn Oil"

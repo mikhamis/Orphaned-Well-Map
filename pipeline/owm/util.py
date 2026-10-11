@@ -49,6 +49,7 @@ PLACEHOLDER_OPERATORS = (
     "state fund plugging",   # Oklahoma RBDMS: state plugging program
     "historic owner", "unregistered owner", "unknown owner",  # Ohio ODNR
     "pa dep ofc oil & gas mgmt", "unknown opr",              # Pennsylvania DEP
+    "unavailable",                                           # Kansas KGS
 )
 
 

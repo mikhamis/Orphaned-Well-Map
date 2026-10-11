@@ -1,0 +1,31 @@
+{
+  "state": "AL",
+  "verified": false,
+  "source": {
+    "name": "Alabama State Oil and Gas Board, Wells (map service)",
+    "arcgis": "https://gis.ogb.state.al.us/arcgis/rest/services/OGB/OGBOnlineMap/MapServer/0",
+    "docs_url": "https://gis.ogb.state.al.us/arcgis/rest/services/OGB/OGBOnlineMap/MapServer"
+  },
+  "columns": {
+    "api": "API",
+    "operator": "Operator",
+    "status": "StatusDesc",
+    "lat": "Y",
+    "lon": "X",
+    "well_name": "WellName"
+  },
+  "active_status": [
+    "^Producing$",
+    "^Active$"
+  ],
+  "operator_label": "Operator of record (OGB)",
+  "at_risk": {
+    "status": [
+      "^Temporarily Abandoned$",
+      "^Shut In$"
+    ],
+    "require_operator": true,
+    "definition": "OGB status Temporarily Abandoned or Shut In, with an operator named."
+  },
+  "verification_note": "Not cross-checked yet: the state file is the only operator source found so far."
+}

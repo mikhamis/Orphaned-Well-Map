@@ -4,6 +4,7 @@
     python -m owm.verify ky-kgs-reports DIR_OF_KGS_WELL_REPORT_HTML ../site/data
     python -m owm.verify pa-dep-report PA_abandoned_orphan.csv ../site/data
     python -m owm.verify ny-orphan-list NY_orphaned.csv ../site/data
+    python -m owm.verify nm-ocd-layers DIR_WITH_NM_ocd_CSVs ../site/data
 
 Prints a JSON summary to paste into the state's config under "verification".
 """
@@ -145,14 +146,25 @@ def ny_orphan_list(csv_path: Path, data: Path) -> dict:
                     "Orphaned Wells dataset (data.ny.gov vgue-bamz), for every USGS New York well on that list.")
 
 
+def nm_ocd_layers(csv_dir: Path, data: Path) -> dict:
+    """OCD's own well layers (mercator.env.nm.gov ocd_wells 0,1,3, fetched as NM_ocd_*.csv.gz) vs GO-TECH operator."""
+    ref = {}
+    for f in sorted(Path(csv_dir).glob("NM_ocd_*.csv.gz")):
+        ref.update(_api_map(f, "API", "ogrid_name", "NM"))
+    return _compare("NM", ref, data,
+                    "Compared the operator joined from the GO-TECH AllWells copy of OCD data with the operator "
+                    "(ogrid_name) on OCD's own oil, gas and injection well map layers. Differences are mostly "
+                    "recent operator transfers that the GO-TECH copy hadn't picked up.")
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("check", choices=["ok-orphan-list", "ky-kgs-reports", "pa-dep-report", "ny-orphan-list"])
+    ap.add_argument("check", choices=["ok-orphan-list", "ky-kgs-reports", "pa-dep-report", "ny-orphan-list", "nm-ocd-layers"])
     ap.add_argument("source")
     ap.add_argument("data")
     a = ap.parse_args(argv)
     fn = {"ok-orphan-list": ok_orphan_list, "ky-kgs-reports": ky_kgs_reports,
-          "pa-dep-report": pa_dep_report, "ny-orphan-list": ny_orphan_list}[a.check]
+          "pa-dep-report": pa_dep_report, "ny-orphan-list": ny_orphan_list, "nm-ocd-layers": nm_ocd_layers}[a.check]
     print(json.dumps(fn(Path(a.source), Path(a.data)), indent=2))
 
 

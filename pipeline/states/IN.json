@@ -1,0 +1,32 @@
+{
+  "state": "IN",
+  "verified": false,
+  "source": {
+    "name": "Indiana DNR / Indiana Geological and Water Survey, Oil and Gas Wells (map service)",
+    "arcgis": "https://gisdata.in.gov/server/rest/services/Hosted/OilAndGasWells/FeatureServer/0",
+    "docs_url": "https://gisdata.in.gov/server/rest/services/Hosted/OilAndGasWells/FeatureServer"
+  },
+  "columns": {
+    "id": "igs_id",
+    "operator": "operator_name",
+    "status": "status",
+    "lat": "Y",
+    "lon": "X",
+    "lease": "lease_name",
+    "well_name": "well_number"
+  },
+  "active_status": [
+    "^Active$"
+  ],
+  "operator_label": "Operator of record (Indiana DNR)",
+  "at_risk": {
+    "status": [
+      "^Inactive$",
+      "^TA$",
+      "^Other Inactive$"
+    ],
+    "require_operator": true,
+    "definition": "Indiana status Inactive, TA or Other Inactive, with an operator named."
+  },
+  "verification_note": "Not cross-checked. USGS Indiana rows carry IGS well IDs, matched to igs_id (946 of 946). The state layer leaves the operator blank on these wells."
+}

@@ -1,0 +1,36 @@
+{
+  "state": "UT",
+  "verified": false,
+  "source": {
+    "name": "Utah Division of Oil, Gas and Mining, well data download",
+    "url": "https://oilgas.ogm.utah.gov/pub/Database/Wells.zip",
+    "member": "Wells.csv",
+    "encoding": "latin-1",
+    "docs_url": "https://oilgas.ogm.utah.gov/oilgasweb/data-center/dc-main.xhtml"
+  },
+  "columns": {
+    "api": "API",
+    "operator": "Operator",
+    "status": "wellstatus",
+    "lat": "Latitude",
+    "lon": "Longitude",
+    "well_name": "WellName",
+    "date": "AbandonDate"
+  },
+  "active_status": [
+    "^P$",
+    "^A$"
+  ],
+  "operator_label": "Operator of record (DOGM)",
+  "status_label": "DOGM status code",
+  "at_risk": {
+    "status": [
+      "^S$",
+      "^TA$",
+      "^I$"
+    ],
+    "require_operator": true,
+    "definition": "DOGM status S (shut in), TA (temporarily abandoned) or I (inactive), with an operator named."
+  },
+  "verification_note": "Not cross-checked. DOGM lists 87 of Utah's 90 USGS wells under 'Orphan-No Responsible Operator'."
+}

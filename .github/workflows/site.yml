@@ -52,8 +52,17 @@ jobs:
             st=$(basename "$cfg" .json)
             url=$(python3 -c "import json,sys; print((json.load(open(sys.argv[1])).get('source') or {}).get('download') or '')" "$cfg")
             [ -n "$url" ] || continue
-            curl -sSfL --retry 3 -o "data/raw/$st.zip" "$url"
-            (cd pipeline && python -m owm.shp2csv "../data/raw/$st.zip" "../data/raw/$st.csv.gz")
+            table=$(python3 -c "import json,sys; print((json.load(open(sys.argv[1])).get('source') or {}).get('mdb_table') or '')" "$cfg")
+            curl -sSfL --retry 3 -A "Mozilla/5.0 (X11; Linux x86_64) orphaned-well-map/1.0" -o "data/raw/$st.zip" "$url"
+            if [ -n "$table" ]; then
+              # Access database: export one table with mdbtools
+              command -v mdb-export >/dev/null || { sudo apt-get update -qq && sudo apt-get install -y -qq mdbtools >/dev/null; }
+              mdb=$(unzip -Z1 "data/raw/$st.zip" | grep -iE '\.(mdb|accdb)$' | head -1)
+              unzip -o -q "data/raw/$st.zip" "$mdb" -d "data/raw/$st-mdb"
+              mdb-export "data/raw/$st-mdb/$mdb" "$table" | gzip > "data/raw/$st.csv.gz"
+            else
+              (cd pipeline && python -m owm.shp2csv "../data/raw/$st.zip" "../data/raw/$st.csv.gz")
+            fi
             echo "--state-file $st=../data/raw/$st.csv.gz" >> state-files.txt
           done
           cat state-files.txt

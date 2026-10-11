@@ -1,0 +1,31 @@
+{
+  "state": "AK",
+  "verified": false,
+  "source": {
+    "name": "Alaska Oil and Gas Conservation Commission, well surface holes (map service)",
+    "arcgis": [
+      "https://maps.commerce.alaska.gov/server/rest/services/AOGCC/AOGCC_SQL_Test/MapServer/1",
+      "https://maps.commerce.alaska.gov/server/rest/services/AOGCC/AOGCC_SQL_Test/MapServer/5",
+      "https://maps.commerce.alaska.gov/server/rest/services/AOGCC/AOGCC_SQL_Test/MapServer/9",
+      "https://maps.commerce.alaska.gov/server/rest/services/AOGCC/AOGCC_SQL_Test/MapServer/13",
+      "https://maps.commerce.alaska.gov/server/rest/services/AOGCC/AOGCC_SQL_Test/MapServer/17"
+    ],
+    "docs_url": "https://commerce.alaska.gov/web/aogcc/Data"
+  },
+  "columns": {
+    "api": "API",
+    "status": "WellStatus",
+    "lat": "Y",
+    "lon": "X",
+    "well_name": "WellName"
+  },
+  "active_status": [
+    "^1-OIL$",
+    "^1-GAS$",
+    "^2-OIL$",
+    "^2-GAS$"
+  ],
+  "operator_label": "Operator (not in the AOGCC map service)",
+  "status_label": "AOGCC status",
+  "verification_note": "Operator not available: the AOGCC map layers carry API, status and location but no operator."
+}

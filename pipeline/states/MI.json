@@ -1,0 +1,33 @@
+{
+  "state": "MI",
+  "verified": false,
+  "source": {
+    "name": "Michigan EGLE, Oil & Gas Test Well Surface Hole Locations (map service, nightly)",
+    "arcgis": "https://gisagocss.state.mi.us/arcgis/rest/services/OpenData/geology/MapServer/3",
+    "docs_url": "https://www.michigan.gov/egle/about/organization/geologic-resources-management/oil-and-gas/database-downloads"
+  },
+  "columns": {
+    "api": "api_wellno",
+    "operator": "co_name",
+    "status": "well_stat",
+    "lat": "Y",
+    "lon": "X",
+    "lease": "lease_name",
+    "well_name": "well_no"
+  },
+  "active_status": [
+    "^Producing$",
+    "^Active$"
+  ],
+  "operator_label": "Operator of record (EGLE)",
+  "at_risk": {
+    "status": [
+      "^Shut_In$",
+      "^Temporarily Abandoned$",
+      "^Injection Suspended$"
+    ],
+    "require_operator": true,
+    "definition": "EGLE status Shut In, Temporarily Abandoned or Injection Suspended, with an operator named."
+  },
+  "verification_note": "Not cross-checked yet: the state file is the only operator source found so far."
+}

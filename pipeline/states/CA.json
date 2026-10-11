@@ -1,0 +1,30 @@
+{
+  "state": "CA",
+  "verified": false,
+  "source": {
+    "name": "CalGEM WellSTAR, Oil and Gas Wells (map service)",
+    "arcgis": "https://gis.conservation.ca.gov/server/rest/services/WellSTAR/Wells/MapServer/0",
+    "docs_url": "https://data.ca.gov/dataset/wellstar-oil-and-gas-wells"
+  },
+  "columns": {
+    "api": "API",
+    "operator": "OperatorName",
+    "status": "WellStatus",
+    "lat": "Y",
+    "lon": "X",
+    "lease": "LeaseName",
+    "well_name": "WellNumber"
+  },
+  "active_status": [
+    "^Active$"
+  ],
+  "operator_label": "Operator of record (CalGEM)",
+  "at_risk": {
+    "status": [
+      "^Idle$"
+    ],
+    "require_operator": true,
+    "definition": "CalGEM status Idle (no production or injection for 24 months or more), with an operator named."
+  },
+  "verification_note": "Not cross-checked yet: the state file is the only operator source found so far. All 2,940 USGS California wells match by API number."
+}

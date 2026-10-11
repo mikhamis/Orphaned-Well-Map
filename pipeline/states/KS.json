@@ -1,0 +1,40 @@
+{
+  "state": "KS",
+  "verified": false,
+  "source": {
+    "name": "Kansas Geological Survey, oil and gas wells (ks_wells)",
+    "url": "https://www.kgs.ku.edu/PRS/Ora_Archive/ks_wells.zip",
+    "member": "ks_wells.txt",
+    "docs_url": "https://www.kgs.ku.edu/PRS/petroDB.html",
+    "encoding": "latin-1"
+  },
+  "columns": {
+    "api": "API_NUM_NODASH",
+    "operator": "CURR_OPERATOR",
+    "status": "STATUS2",
+    "lat": "LATITUDE",
+    "lon": "LONGITUDE",
+    "lease": "LEASE",
+    "well_name": "WELL",
+    "date": "MODIFIED"
+  },
+  "location_match": {
+    "tolerance_m": 300,
+    "name_match": true
+  },
+  "active_status": [
+    "^Producing$",
+    "^Authorized Injection Well$"
+  ],
+  "operator_label": "Current operator of the matching lease (KGS)",
+  "operator_kind": "lease",
+  "at_risk": {
+    "status": [
+      "^Inactive Well$"
+    ],
+    "require_operator": true,
+    "definition": "KGS status 'Inactive Well', with a current operator named."
+  },
+  "verification_note": "Not cross-checked. USGS Kansas rows (from the Kansas Corporation Commission) carry no well IDs, so they are matched by location: the nearest KGS well within 300 m whose lease name shares a word with the USGS well name. That identifies the lease, not necessarily the exact well.",
+  "notes": "CURR_OPERATOR is 'unavailable' for most old wells, treated as no operator. ORIG_OPERATOR (operator at drilling) is not used."
+}

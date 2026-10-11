@@ -44,7 +44,12 @@ jobs:
           set +e   # one failed URL shouldn't stop the rest; failures show in REPORT.txt
           grep -v '^#' data/fetch.tsv | while IFS=$'\t' read -r name url; do
             [ -n "$name" ] || continue
-            code=$(curl -sSL --retry 3 --max-time 300 -A "orphaned-well-map/1.0" -o "out/$name" -w '%{http_code} %{content_type}' "$url" 2>&1) || true
+            if [[ "$url" == arcgis:* ]]; then
+              # ArcGIS REST layer: page through every feature into a gzipped CSV
+              code=$(cd pipeline && timeout 1200 python3 -m owm.arcgis "${url#arcgis:}" "../out/$name" 2>&1 | tail -2) || true
+            else
+              code=$(curl -sSL --retry 3 --max-time 300 -A "Mozilla/5.0 (X11; Linux x86_64) orphaned-well-map/1.0" -o "out/$name" -w '%{http_code} %{content_type}' "$url" 2>&1) || true
+            fi
             {
               echo "=== $name"
               echo "url: $url"
@@ -54,19 +59,32 @@ jobs:
               file -b "out/$name" 2>/dev/null || true
               if file -b "out/$name" | grep -qi zip; then
                 unzip -l "out/$name" | head -40
-                shp=$(unzip -Zl "out/$name" | awk 'tolower($NF) ~ /\.shp$/ {print $4, $NF}' | sort -n | tail -1 | cut -d' ' -f2)
+                mdb=$(unzip -Z1 "out/$name" | grep -iE '\.(mdb|accdb)$' | head -1)
+                if [ -n "$mdb" ]; then
+                  # Access database: export every table to gzipped CSV with mdbtools
+                  command -v mdb-export >/dev/null || sudo apt-get install -y -qq mdbtools >/dev/null
+                  unzip -o -q "out/$name" "$mdb" -d mdbtmp
+                  mdb-tables -1 "mdbtmp/$mdb" | while read -r t; do
+                    mdb-export "mdbtmp/$mdb" "$t" | gzip > "out/${name%.zip}__${t// /_}.csv.gz"
+                    echo "exported table $t: $(zcat "out/${name%.zip}__${t// /_}.csv.gz" | wc -l) lines"
+                    zcat "out/${name%.zip}__${t// /_}.csv.gz" | head -c 600; echo
+                  done
+                  rm -rf mdbtmp "out/$name"
+                fi
+                shp=$(unzip -Zl "out/$name" 2>/dev/null | awk 'tolower($NF) ~ /\.shp$/ {print $4, $NF}' | sort -n | tail -1 | cut -d' ' -f2)
                 if [ -n "$shp" ]; then
                   ogr2ogr -f CSV -t_srs EPSG:4326 -lco GEOMETRY=AS_XY "out/${name%.zip}.csv" "/vsizip/out/$name/$shp" && \
                     echo "converted $shp -> ${name%.zip}.csv" && head -c 1500 "out/${name%.zip}.csv" && echo
                 fi
               fi
               if file -b "out/$name" | grep -qiE 'csv'; then head -c 1500 "out/$name"; echo; fi
+              if [[ "$name" == *.csv.gz ]]; then zcat "out/$name" | head -c 1500; echo; echo "rows: $(zcat "out/$name" | wc -l)"; fi
             } >> out/REPORT.txt
           done
           cat out/REPORT.txt
       - name: Compress large files
         run: |
-          find out -type f -size +20M ! -name '*.zip' ! -name '*.gz' -exec gzip -9 {} \;
+          find out -type f -size +20M ! -name '*.zip' ! -name '*.gz' ! -name '*.mdb' ! -name '*.accdb' -exec gzip -9 {} \;
           ls -la out
       - name: Attach to draft release
         env:

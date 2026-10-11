@@ -77,6 +77,7 @@ def build(args) -> dict:
 
     state_rows = []
     at_risk_rows: list = []
+    fetch_failures: list[str] = []
     for code in sorted(by_state):
         orphans = by_state[code]
         cfg = configs.get(code)
@@ -89,18 +90,20 @@ def build(args) -> dict:
                         status_label=cfg.get("status_label") or "State status",
                         verification=cfg.get("verification"),
                         verification_note=cfg.get("verification_note"),
+                        location_match=cfg.get("location_match"),
                         nearby=bool(cfg.get("active_status")),
                         source=(cfg.get("source") or {}).get("name"),
                         source_url=(cfg.get("source") or {}).get("docs_url") or (cfg.get("source") or {}).get("url"))
             path = None
             try:
                 path = st_mod.fetch(cfg, Path(args.cache), local.get(code))
-            except Exception as e:  # network/HTTP errors: keep building other states
+            except Exception as e:  # network/HTTP errors: keep building other states, fail at the end
                 print(f"{code}: fetch failed: {e}", file=sys.stderr)
                 info["error"] = f"fetch failed: {type(e).__name__}"
+                fetch_failures.append(code)
             if path:
                 records, rstats = st_mod.load_records(cfg, path)
-                jstats = join_state(orphans, records, params)
+                jstats = join_state(orphans, records, params, cfg.get("location_match"))
                 info["configured"] = True
                 info["stats"] = {**rstats, **jstats}
                 risk = atrisk.select(cfg, records, orphans)
@@ -224,6 +227,9 @@ def build(args) -> dict:
     write_json(out / "atrisk.json", risk)
     write_json(out / "points.json", pts)
     write_json(out / "manifest.json", manifest, compact=False)
+    if fetch_failures and not args.allow_fetch_failures:
+        raise SystemExit(f"source download failed for {', '.join(fetch_failures)}; "
+                         "rerun, or pass --allow-fetch-failures to publish without them")
     return manifest
 
 
@@ -240,6 +246,8 @@ def main(argv=None):
     ap.add_argument("--radius-m", type=float, default=1609.344)
     ap.add_argument("--loc-tolerance-m", type=float, default=30.0)
     ap.add_argument("--demo", action="store_true", help=argparse.SUPPRESS)
+    ap.add_argument("--allow-fetch-failures", action="store_true",
+                    help="write output even if a configured state's source could not be downloaded")
     args = ap.parse_args(argv)
     if args.inspect:
         return inspect(Path(args.inspect))
