@@ -1,3 +1,6 @@
 # name<TAB>url — fetched by .github/workflows/fetch-data.yml on GitHub runners into the draft release "source-data".
-# Round 6: Louisiana wells.
-LA_wells.csv.gz	arcgis:https://sonris-gis.dnr.la.gov/arcgis/rest/services/DNRSvc/OC/MapServer/0
+# "arcgis:<layer url>[|<where>]" pages through an ArcGIS REST layer into a gzipped CSV (owm.arcgis).
+# Round 7: HIFLD national wells layer (schema + TN/NE/NV/MS), NM OCD official wells service.
+HIFLD_layer.json	https://maps.nccs.nasa.gov/mapping/rest/services/hifld_open/energy/FeatureServer/15?f=json
+HIFLD_TN_NE_NV_MS.csv.gz	arcgis:https://maps.nccs.nasa.gov/mapping/rest/services/hifld_open/energy/FeatureServer/15|STATE IN ('TN','NE','NV','MS')
+NM_ocd_layers.json	https://mercator.env.nm.gov/server/rest/services/emnrd/ocd_wells/MapServer/layers?f=json

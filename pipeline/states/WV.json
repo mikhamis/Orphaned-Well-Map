@@ -1,0 +1,32 @@
+{
+  "state": "WV",
+  "verified": false,
+  "source": {
+    "name": "West Virginia DEP, All DEP Wells (TAGIS map service)",
+    "arcgis": "https://tagis.dep.wv.gov/arcgis/rest/services/WVDEP_enterprise/oil_gas/MapServer/7",
+    "docs_url": "https://tagis.dep.wv.gov/home/Downloads"
+  },
+  "columns": {
+    "api": "api",
+    "operator": "respparty",
+    "status": "wellstatus",
+    "lat": "Y",
+    "lon": "X",
+    "lease": "farmname",
+    "well_name": "wellnumber",
+    "date": "issuedate"
+  },
+  "active_status": [
+    "^Active Well$"
+  ],
+  "operator_label": "Responsible party of record (WVDEP)",
+  "at_risk": {
+    "status": [
+      "^Shutin$",
+      "^Abandoned Well$"
+    ],
+    "require_operator": true,
+    "definition": "WVDEP status Shutin or Abandoned Well (not in the USGS count), with a responsible party named."
+  },
+  "verification_note": "Not cross-checked. All 3,789 USGS West Virginia wells match by API number; WVDEP lists 'OPERATOR UNKNOWN' as responsible party on 3,702 of them."
+}

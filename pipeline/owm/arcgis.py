@@ -76,4 +76,6 @@ def download(layer: str, dst: str, where: str = "1=1", batch: int | None = None)
 
 
 if __name__ == "__main__":
-    print(download(sys.argv[1], sys.argv[2]), "features")
+    # optional filter: "<layer url>|<where clause>"
+    layer, _, where = sys.argv[1].partition("|")
+    print(download(layer, sys.argv[2], where or "1=1"), "features")
