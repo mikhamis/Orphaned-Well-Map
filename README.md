@@ -51,24 +51,46 @@ environment that can't reach the agency sites.
 
 ## States joined so far
 
-| State | USGS wells | Source | Join | Matched | Operator named | Cross-check |
-| --- | ---: | --- | --- | ---: | ---: | --- |
-| Oklahoma | 19,981 | OCC RBDMS wells (nightly CSV) | API (97%), location (1.6%) | 99% | 61% | 16,218 of 16,218 wells on the OCC Orphan Well List carry the same operator |
-| Kentucky | 15,638 | KGS well shapefile (monthly) | permit no. (95%), location (1.5%) | 97% | 78% | 36 of 36 random wells match KGS's online well report (permit and operator) |
+Six states, 96,238 of the 130,121 USGS wells (74%).
+
+| State | USGS wells | Source | Matched | Operator named | Cross-check |
+| --- | ---: | --- | ---: | ---: | --- |
+| Pennsylvania | 21,262 | DEP well layer (PASDA, monthly) | 100% | 34% | 21,211 of 21,212 agree with DEP's Abandoned and Orphan Wells report |
+| Ohio | 22,759 | ODNR statewide wells (weekly) | 99.98% | 6% | Not checked: ODNR shows "HISTORIC OWNER" on 95%. 7,939 are in ODNR's orphan plugging program |
+| Oklahoma | 19,981 | OCC RBDMS wells (nightly) | 99% | 61% | 16,218 of 16,218 agree with the OCC Orphan Well List |
+| Kentucky | 15,638 | KGS well shapefile (monthly) | 97% | 78% (original operator) | 36 of 36 random wells match KGS well reports |
+| Texas | 8,998 | RRC Orphan Well List (monthly) | 78% | 78% | Not checked: only one operator source so far. 1,942 USGS wells aren't on the current RRC list |
+| New York | 7,600 | NYSDEC wells (data.ny.gov) | 99.97% | 43% | 3,244 of 3,245 agree with NYSDEC's Orphaned Wells dataset |
 
 Notes:
-- Oklahoma: ~42% of OCC orphan records say "OTC/OCC NOT ASSIGNED", shown as no operator. 3,763 USGS
-  Oklahoma wells are not on the current OCC orphan list (status changed since USGS compiled it, or the
-  well came from the Commissioners of the Land Office); the map shows the current OCC status.
-- Kentucky: the operator is the **original** operator at completion, not the last, and KGS has no current
-  status, so there is no nearby-active search. Kept out of the national ranking. The KGS report reads
-  from the same database as the joined file, so that check confirms the join, not KGS's records.
-- For every match, the USGS and state coordinates are compared. Median gap: 0.2 m (OK), 0.3 m (KY).
-  Wells more than 1 km (0.6 mi) apart (108 in OK, 133 in KY) get a note on the site.
-- Rerun the checks with `python -m owm.verify` (see the module docstring) and paste the output into the
-  state config's `verification` block.
+- **Last operator isn't always available.** Ohio replaces it with "HISTORIC OWNER"; Pennsylvania's orphan
+  list shows DEP itself or "UNKNOWN OPR". The site shows these as "no operator named".
+- **Kentucky** gives the original operator at completion, not the last; it's kept out of the national ranking.
+- **Texas** has no active-well data yet, so no nearby-active search; same for Kentucky (no current status).
+- Coordinates are compared for every match; gaps over 1 km get a note on the site.
+- Rerun the checks with `python -m owm.verify` and paste the output into the state's `verification` block.
 
-Largest states not yet joined: Ohio (22,759), Pennsylvania (21,262), Texas (8,998), New York (7,600).
+## Inactive wells that still have an owner
+
+A separate layer (24,172 wells) of wells that aren't orphans yet because the state still names an
+operator, excluding anything already in the USGS count. Each state's rule is in its config under `at_risk`:
+
+| State | Rule | Wells |
+| --- | --- | ---: |
+| Ohio | Unplugged, operator named, no reported production since 2020 or earlier (derived from ODNR's last-production year) | 14,311 |
+| Pennsylvania | DEP status "Abandoned" or "Regulatory Inactive", operator named | 6,032 |
+| New York | NYSDEC status IN, SI or TA, owner named | 2,531 |
+| Oklahoma | OCC status TA (temporarily abandoned) | 1,298 |
+
+Operator names are grouped across states with common agency abbreviations expanded (PROD → production,
+OPR → operating, DEV → development), so e.g. "DIVERSIFIED PROD LLC" and "DIVERSIFIED PRODUCTION LLC" count together.
+
+## Land ownership view
+
+From USGS's own estimates (BLM Surface Management Agency map): federal surface (12,369 wells, 9,578 of
+them national forest), federal minerals under non-federal surface (617, mapped only in NM, CO, ND, UT),
+state/local/tribal (2,641), confirmed private (2,844), and not determined (111,650). "Not determined" is
+mostly non-federal land the map doesn't classify; it is not a count of private wells.
 
 ## How the join works and where it can go wrong
 

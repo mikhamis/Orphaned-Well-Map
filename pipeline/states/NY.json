@@ -1,0 +1,39 @@
+{
+  "state": "NY",
+  "verified": true,
+  "source": {
+    "name": "NYSDEC, Oil, Gas & Other Regulated Wells (data.ny.gov)",
+    "url": "https://data.ny.gov/api/views/szye-wmt3/rows.csv?accessType=DOWNLOAD",
+    "docs_url": "https://data.ny.gov/Energy-Environment/Oil-Gas-Other-Regulated-Wells-Beginning-1860/szye-wmt3"
+  },
+  "columns": {
+    "api": "API Well Number",
+    "operator": "Company Name",
+    "status": "Well Status ",
+    "lat": "Surface Latitude",
+    "lon": "Surface Longitude",
+    "well_name": "Well Name",
+    "date": "Status Date"
+  },
+  "active_status": [
+    "^AC$"
+  ],
+  "operator_label": "Owner/operator of record (NYSDEC)",
+  "at_risk": {
+    "status": [
+      "^IN$",
+      "^SI$",
+      "^TA$"
+    ],
+    "require_operator": true,
+    "definition": "NYSDEC status IN (inactive), SI (shut-in) or TA (temporarily abandoned), with an owner named."
+  },
+  "notes": "Status codes from the dataset's column description: AC active, IN inactive, SI shut-in, TA temporarily abandoned, PA plugged and abandoned, UN/UL/UM unknown (UL located and inspected, UM not found). Orphaned wells carry UN/UL/UM. Note the trailing space in the 'Well Status ' column name.",
+  "verification": {
+    "date": "2026-10-11",
+    "method": "Compared the owner joined from NYSDEC's full wells dataset with the owner on NYSDEC's separate Orphaned Wells dataset (data.ny.gov vgue-bamz), for every USGS New York well on that list.",
+    "checked": 3245,
+    "agree": 3244,
+    "of_usgs_wells": 7600
+  }
+}

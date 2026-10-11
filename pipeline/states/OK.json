@@ -26,5 +26,11 @@
     "checked": 16218,
     "agree": 16218,
     "of_usgs_wells": 19981
+  },
+  "at_risk": {
+    "status": [
+      "^TA$"
+    ],
+    "definition": "OCC status TA, temporarily abandoned: not plugged and inactive, with an operator still on record."
   }
 }

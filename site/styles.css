@@ -225,3 +225,6 @@ table.states .tag.ok, .pill.ok { color: var(--ok-ink); border-color: var(--ok-in
 .segmented { display: flex; border: 1px solid var(--border); border-radius: 8px; padding: 2px; gap: 2px; }
 .segmented button { flex: 1; border: 0; background: transparent; border-radius: 6px; padding: 6px 8px; color: var(--ink-2); }
 .segmented button[aria-pressed="true"] { background: var(--grid); color: var(--ink); font-weight: 600; }
+
+.risk-toggle { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; cursor: pointer; }
+.risk-toggle .ring { width: 12px; height: 12px; border-radius: 50%; border: 1.6px solid var(--ink-2); flex: none; }

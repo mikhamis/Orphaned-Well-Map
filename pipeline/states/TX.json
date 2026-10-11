@@ -1,0 +1,21 @@
+{
+  "state": "TX",
+  "verified": false,
+  "source": {
+    "name": "Texas Railroad Commission, Orphan Well List (monthly)",
+    "url": "https://www.rrc.texas.gov/media/atxlqy5q/orphanwells-09-26.zip",
+    "docs_url": "https://www.rrc.texas.gov/oil-and-gas/research-and-statistics/well-information/orphan-wells-12-months/"
+  },
+  "columns": {
+    "api": "API",
+    "operator": "OPERATOR_NAME",
+    "lat": "latitude",
+    "lon": "longitude",
+    "lease": "LEASE_NAME",
+    "well_name": "WELL_NO"
+  },
+  "active_status": [],
+  "operator_label": "Operator of record (RRC orphan list)",
+  "notes": "RRC lists a well as orphaned when it has been inactive 12+ months and the operator's P-5 organization report has been delinquent 12+ months, so OPERATOR_NAME is the last operator. API is county + well (8 digits); prefix 42 is added. The list has no active wells, so there is no nearby-active search for Texas yet. The URL changes monthly (orphanwells-MM-YY.zip).",
+  "verification_note": "Not cross-checked yet: the RRC orphan list is the only operator source found so far. 1,942 USGS Texas wells are not on the current RRC list (likely plugged or reassigned since USGS compiled its data)."
+}

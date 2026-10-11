@@ -45,6 +45,7 @@
     manifest: null, pts: null, map: null,
     lens: "match", showBy: { match: new Set([0, 1, 2, 3]), owner: new Set([0, 1, 2, 3, 4]) },
     stateFilter: "", operatorFilter: -1, agencyFilter: -1,
+    risk: null, showRisk: true, riskOperator: -1,
     details: {}, selected: -1, hasGlyphs: false,
   };
 
@@ -172,6 +173,65 @@
       0.6, steps[3], 0.75, steps[4], 0.9, steps[5], 1, steps[6]];
   }
 
+  function riskCollection() {
+    const r = state.risk, feats = [];
+    const sf = state.stateFilter ? state.manifest.state_codes.indexOf(state.stateFilter) : -1;
+    for (let i = 0; i < r.lon.length; i++) {
+      if (sf >= 0 && r.s[i] !== sf) continue;
+      if (state.riskOperator >= 0 && r.o[i] !== state.riskOperator) continue;
+      feats.push({ type: "Feature", id: i, properties: {}, geometry: { type: "Point", coordinates: [r.lon[i], r.lat[i]] } });
+    }
+    return { type: "FeatureCollection", features: feats };
+  }
+
+  function selectRisk(i) {
+    const r = state.risk, m = state.manifest;
+    const s = m.states[r.s[i]];
+    const op = r.o[i] >= 0 ? r.operators[r.o[i]] : null;
+    if (state.selected >= 0) state.map.setFeatureState({ source: "wells", id: state.selected }, { sel: false });
+    state.selected = -1;
+    $("#detail-body").innerHTML = `
+      <h3>${esc(r.n[i] || r.id[i] || "Unnamed well")}</h3>
+      <div class="muted">${esc(s.name)} · inactive well with an owner on record</div>
+      <dl>
+        <dt>API</dt><dd>${esc(r.id[i] || "–")}</dd>
+        <dt>Coordinates</dt><dd>${r.lat[i].toFixed(5)}, ${r.lon[i].toFixed(5)}</dd>
+        <dt>${esc(s.status_label || "State status")}</dt><dd>${esc(r.st[i])}</dd>
+      </dl>
+      <h2>Operator of record</h2>
+      <div class="op">${op ? esc(op) : '<span class="muted">No operator named</span>'}</div>
+      <p class="note">Not an orphan yet: ${esc(s.name)} still lists a responsible operator. ${esc((s.at_risk || {}).definition || "")}</p>
+      <p class="note">Source: ${s.source_url ? `<a href="${esc(s.source_url)}" target="_blank" rel="noopener">${esc(s.source || "state records")}</a>` : esc(s.source || "state records")}. Not part of the USGS orphaned well count.</p>`;
+    $("#detail").hidden = false;
+    state.map.resize();
+  }
+
+  function refreshRisk(fit) {
+    if (!state.risk || !state.map || !state.map.getSource("risk")) return;
+    const fc = riskCollection();
+    state.map.getSource("risk").setData(fc);
+    state.map.setLayoutProperty("risk", "visibility", state.showRisk ? "visible" : "none");
+    if (fit) { const b = bounds(fc); if (b) state.map.fitBounds(b, { padding: 40, maxZoom: 11, duration: 600 }); }
+  }
+
+  function renderRisk() {
+    const r = state.risk, m = state.manifest;
+    $("#risk-section").hidden = !r || !r.lon.length;
+    if (!r) return;
+    const sf = state.stateFilter;
+    const states = m.states.filter((s) => s.at_risk && (!sf || s.code === sf));
+    $("#risk-toggle-count").textContent = fmt(states.reduce((a, s) => a + s.at_risk.count, 0));
+    const ops = r.operators.map((name, i) => {
+      const by = r.operator_states[String(i)] || {};
+      return { name, i, n: sf ? (by[sf] || 0) : Object.values(by).reduce((a, b) => a + b, 0), st: Object.keys(by) };
+    }).filter((o) => o.n > 0).sort((a, b) => b.n - a.n).slice(0, 12);
+    $("#risk-operators").innerHTML = ops.map((o) => `
+      <li><button type="button" data-risk-op="${o.i}" aria-pressed="${state.riskOperator === o.i}">
+        <span>${esc(o.name)}<span class="st">${esc(o.st.join(", "))}</span></span><span class="n">${fmt(o.n)}</span>
+      </button></li>`).join("");
+    $("#risk-states").textContent = states.length ? "Included: " + states.map((s) => `${s.name} (${s.at_risk.definition})`).join(" ") : "";
+  }
+
   function addLayers(map) {
     map.addSource("wells", { type: "geojson", data: featureCollection() });
     for (const [id, lens] of Object.entries(HEAT_LAYERS)) {
@@ -207,6 +267,26 @@
       if (map.getZoom() >= POINTS_ZOOM || map.queryRenderedFeatures(e.point, { layers: ["wells"] }).length) return;
       map.easeTo({ center: e.lngLat, zoom: Math.min(POINTS_ZOOM + 1.5, map.getZoom() + 2.5) });
     });
+    if (state.risk) {
+      map.addSource("risk", { type: "geojson", data: riskCollection() });
+      map.addLayer({
+        id: "risk", type: "circle", source: "risk", minzoom: POINTS_ZOOM - 0.5,
+        layout: { visibility: state.showRisk ? "visible" : "none" },
+        paint: {
+          "circle-radius": ["interpolate", ["linear"], ["zoom"], POINTS_ZOOM, 3, 10, 5, 14, 8],
+          "circle-color": "rgba(0,0,0,0)",
+          "circle-stroke-width": ["case", ["boolean", ["feature-state", "sel"], false], 3, 1.6],
+          "circle-stroke-color": css("--ink-2"),
+          "circle-stroke-opacity": ["interpolate", ["linear"], ["zoom"], POINTS_ZOOM - 0.5, 0, POINTS_ZOOM + 1, 0.9],
+        },
+      }, "wells");
+      map.on("click", "risk", (e) => {
+        if (map.queryRenderedFeatures(e.point, { layers: ["wells"] }).length) return;
+        selectRisk(e.features[0].id);
+      });
+      map.on("mouseenter", "risk", () => (map.getCanvas().style.cursor = "pointer"));
+      map.on("mouseleave", "risk", () => (map.getCanvas().style.cursor = ""));
+    }
     map.on("click", "wells", (e) => select(e.features[0].id));
     map.on("mouseenter", "wells", () => (map.getCanvas().style.cursor = "pointer"));
     map.on("mouseleave", "wells", () => (map.getCanvas().style.cursor = ""));
@@ -237,6 +317,7 @@
     if (!map || !map.getLayer("wells")) return;
     map.setPaintProperty("wells", "circle-color", colorExpr());
     for (const id of Object.keys(HEAT_LAYERS)) map.setPaintProperty(id, "heatmap-color", heatColorExpr());
+    if (map.getLayer("risk")) map.setPaintProperty("risk", "circle-stroke-color", css("--ink-2"));
     syncHeatLayers();
     if (map.getLayer("states-fill")) {
       map.setPaintProperty("bg", "background-color", css("--page"));
@@ -409,7 +490,8 @@
         <td>${esc(s.name)}${s.configured ? (s.verified ? '<span class="tag ok" title="Operator matches checked against a second agency source">✓ checked</span>' : '<span class="tag">not yet checked</span>') : '<span class="tag">USGS only</span>'}</td>
         <td class="num">${fmt(s.count)}</td>
         <td class="num">${s.configured ? pct(st.with_operator || 0, s.count) : "–"}</td>
-        <td class="num">${s.configured && s.nearby ? pct(st.with_nearby_active || 0, s.count) : "–"}</td></tr>`;
+        <td class="num">${s.configured && s.nearby ? pct(st.with_nearby_active || 0, s.count) : "–"}</td>
+        <td class="num">${s.at_risk ? fmt(s.at_risk.count) : "–"}</td></tr>`;
     }).join("");
     document.querySelectorAll(".radius").forEach((e) => (e.textContent = miles(m.params.radius_m)));
   }
@@ -424,8 +506,9 @@
     const notes = [];
     if (m.demo) notes.push("<strong>Synthetic demo data.</strong> These points are test fixtures, not real wells.");
     if (!joined.length) notes.push("No state well records are connected yet, so the map shows USGS records only.");
-    else notes.push(`Operator names come from state records for ${joined.map((s) => s.name).join(" and ")} so far (${fmt(joined.reduce((a, s) => a + s.count, 0))} of ${fmt(total)} wells). Other states show the USGS record only.`);
-    if (joined.some((s) => !s.verified)) notes.push("Some connected states haven't been cross-checked yet.");
+    else notes.push(`Operator names come from state records for ${new Intl.ListFormat("en", { type: "conjunction" }).format(joined.map((s) => s.name))} so far (${fmt(joined.reduce((a, s) => a + s.count, 0))} of ${fmt(total)} wells). Other states show the USGS record only.`);
+    const unchecked = joined.filter((s) => !s.verified).map((s) => s.name);
+    if (unchecked.length) notes.push(`Not yet cross-checked against a second source: ${new Intl.ListFormat("en", { type: "conjunction" }).format(unchecked)} (see About the data).`);
     if (m.usgs.rows !== m.usgs.loaded) notes.push(`${fmt(m.usgs.rows - m.usgs.loaded)} USGS rows without usable coordinates or state aren't mapped.`);
     if (notes.length) { $("#banner").innerHTML = notes.join(" "); $("#banner").hidden = false; }
 
@@ -446,7 +529,7 @@
       <p><strong>How the matches were checked:</strong></p>
       <ul>${states.map((s) => {
         const v = s.verification, st = s.stats || {};
-        return `<li><strong>${esc(s.name)}:</strong> ${v ? `${fmt(v.agree)} of ${fmt(v.checked)} operators agree. ${esc(v.method)} (${esc(v.date)})` : "not yet cross-checked."}
+        return `<li><strong>${esc(s.name)}:</strong> ${v ? `${fmt(v.agree)} of ${fmt(v.checked)} operators agree. ${esc(v.method)} (${esc(v.date)})` : esc(s.verification_note || "not yet cross-checked.")}
           USGS and state coordinates agree within ${st.match_dist_median_m ?? "–"} m for the median well; ${fmt(st.location_disagrees || 0)} wells differ by more than ${miles(m.params.disagree_m)} and are flagged.</li>`;
       }).join("")}</ul>
       <p><strong>Known limits:</strong> operator names are grouped loosely (case, punctuation, and suffixes like “LLC” or “Inc” are ignored),
@@ -469,6 +552,8 @@
     $("#state-select").value = code;
     renderOperators();
     renderAgencies();
+    renderRisk();
+    refreshRisk(false);
     refresh(true);
   }
 
@@ -538,6 +623,16 @@
       setOperator(state.operatorFilter === i ? -1 : i);
     });
     $("#operator-clear").addEventListener("click", () => setOperator(-1));
+    $("#risk-toggle").addEventListener("change", (e) => { state.showRisk = e.target.checked; refreshRisk(false); });
+    $("#risk-operators").addEventListener("click", (e) => {
+      const b = e.target.closest("button[data-risk-op]");
+      if (!b) return;
+      const i = Number(b.dataset.riskOp);
+      state.riskOperator = state.riskOperator === i ? -1 : i;
+      state.showRisk = true; $("#risk-toggle").checked = true;
+      renderRisk();
+      refreshRisk(state.riskOperator >= 0);
+    });
     $("#states-table tbody").addEventListener("click", (e) => {
       const tr = e.target.closest("tr[data-state]");
       if (tr) setState(tr.dataset.state);
@@ -563,6 +658,7 @@
     let manifest, pts;
     try {
       [manifest, pts] = await Promise.all([getJSON(DATA + "manifest.json"), getJSON(DATA + "points.json")]);
+      state.risk = await getJSON(DATA + "atrisk.json").catch(() => null);
     } catch (e) {
       showEmpty(`<p><strong>Data not built.</strong></p><p>Download the USGS 2026 orphaned well file
         (<a href="https://doi.org/10.5066/P13FHBYG">doi:10.5066/P13FHBYG</a>), then run:</p>
@@ -577,6 +673,7 @@
     renderLegend();
     renderOperators();
     renderAgencies();
+    renderRisk();
     renderStates();
     wire();
 

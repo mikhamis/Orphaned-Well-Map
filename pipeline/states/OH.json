@@ -1,0 +1,48 @@
+{
+  "state": "OH",
+  "verified": false,
+  "source": {
+    "name": "Ohio DNR, Oil and Gas Wells Locations of Ohio (statewide, weekly)",
+    "url": null,
+    "docs_url": "https://gis-odnr.opendata.arcgis.com/documents/3dce2c55a9e1486b9483db25710ae588",
+    "download": "https://gis.ohiodnr.gov/geodata/Statewide/OGWells_statewide.zip"
+  },
+  "columns": {
+    "api": "API_NO",
+    "operator": "OPERATOR",
+    "status": "MAPSYMBOL_",
+    "lat": "Y",
+    "lon": "X",
+    "lease": "LEASE_NAME",
+    "well_name": "WELL_NO",
+    "date": "COMP_DATE"
+  },
+  "active_where": [
+    {
+      "column": "Last_Nonze",
+      "gte": "2024"
+    },
+    {
+      "column": "PLUG_DATE",
+      "empty": true
+    }
+  ],
+  "operator_label": "Operator of record (ODNR)",
+  "status_label": "Well type (ODNR)",
+  "at_risk": {
+    "where": [
+      {
+        "column": "Last_Nonze",
+        "lte": "2020"
+      },
+      {
+        "column": "PLUG_DATE",
+        "empty": true
+      }
+    ],
+    "require_operator": true,
+    "definition": "Unplugged, with an operator named, and no reported production since 2020 or earlier (derived from ODNR's last-production-year field)."
+  },
+  "notes": "ODNR's export dropped its well-status field; MAPSYMBOL_ is the map symbol (well type plus plugged/dry). Active = production reported in 2024 or later and not plugged. ODNR lists 'HISTORIC OWNER' as operator on almost all orphaned wells, treated as no operator. The zip holds two shapefiles; use OGWells_statewide.shp.",
+  "verification_note": "Not cross-checked for operator: ODNR lists 'HISTORIC OWNER' on 95% of these wells, so there is little to check. The join itself matched 22,755 of 22,759 wells by API number, and 7,939 of them are enrolled in ODNR's orphan well plugging program."
+}

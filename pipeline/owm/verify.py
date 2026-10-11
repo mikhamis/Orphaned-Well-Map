@@ -2,6 +2,8 @@
 
     python -m owm.verify ok-orphan-list OK_orphan-well-list.xlsx ../site/data
     python -m owm.verify ky-kgs-reports DIR_OF_KGS_WELL_REPORT_HTML ../site/data
+    python -m owm.verify pa-dep-report PA_abandoned_orphan.csv ../site/data
+    python -m owm.verify ny-orphan-list NY_orphaned.csv ../site/data
 
 Prints a JSON summary to paste into the state's config under "verification".
 """
@@ -103,13 +105,54 @@ def ky_kgs_reports(report_dir: Path, data: Path) -> dict:
     }
 
 
+def _compare(code: str, ref: dict, data: Path, method: str) -> dict:
+    _, _, rows, _ = _load(data, code)
+    checked = agree = 0
+    diffs = []
+    for d in rows:
+        api = (d.get("sa") or d.get("id") or "")[:10]
+        if api in ref and d.get("op") is not None:
+            checked += 1
+            if _norm(ref[api]) == _norm(d["op"]):
+                agree += 1
+            else:
+                diffs.append([api, ref[api], d["op"]])
+    return {"date": date.today().isoformat(), "method": method, "checked": checked, "agree": agree,
+            "of_usgs_wells": len(rows), "differences": diffs[:20]}
+
+
+def _api_map(path: Path, api_col: str, op_col: str, state: str) -> dict:
+    from .util import normalize_api, read_table
+    out = {}
+    for r in read_table(path):
+        a = normalize_api(r.get(api_col), state)
+        if a:
+            out[a] = r.get(op_col) or ""
+    return out
+
+
+def pa_dep_report(csv_path: Path, data: Path) -> dict:
+    """DEP Abandoned and Orphan Wells report (SSRS export) vs PASDA well layer operator."""
+    return _compare("PA", _api_map(csv_path, "API", "OPERATOR", "PA"), data,
+                    "Compared the operator joined from DEP's statewide well layer (PASDA) with the operator on DEP's "
+                    "separate Abandoned and Orphan Wells report (cedatareporting.pa.gov), for every USGS Pennsylvania well on that report.")
+
+
+def ny_orphan_list(csv_path: Path, data: Path) -> dict:
+    """NYSDEC Orphaned Wells dataset vs operator from the full wells dataset."""
+    return _compare("NY", _api_map(csv_path, "API WELL NUMBER", "COMPANY NAME", "NY"), data,
+                    "Compared the owner joined from NYSDEC's full wells dataset with the owner on NYSDEC's separate "
+                    "Orphaned Wells dataset (data.ny.gov vgue-bamz), for every USGS New York well on that list.")
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("check", choices=["ok-orphan-list", "ky-kgs-reports"])
+    ap.add_argument("check", choices=["ok-orphan-list", "ky-kgs-reports", "pa-dep-report", "ny-orphan-list"])
     ap.add_argument("source")
     ap.add_argument("data")
     a = ap.parse_args(argv)
-    fn = ok_orphan_list if a.check == "ok-orphan-list" else ky_kgs_reports
+    fn = {"ok-orphan-list": ok_orphan_list, "ky-kgs-reports": ky_kgs_reports,
+          "pa-dep-report": pa_dep_report, "ny-orphan-list": ny_orphan_list}[a.check]
     print(json.dumps(fn(Path(a.source), Path(a.data)), indent=2))
 
 

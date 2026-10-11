@@ -30,6 +30,7 @@ class StateWell:
     well_name: str
     date: str
     active: bool
+    extra: dict | None = None   # columns named by "where" rules, raw strings
 
     @property
     def has_location(self) -> bool:
@@ -71,7 +72,7 @@ def fetch(cfg: dict, cache_dir: Path, local_file: Path | None = None) -> Path | 
         with zipfile.ZipFile(dest) as z:
             names = [n for n in z.namelist() if not n.endswith("/")]
             if member is None:
-                tables = [n for n in names if n.lower().endswith((".csv", ".txt", ".geojson", ".tsv"))]
+                tables = [n for n in names if n.lower().endswith((".csv", ".txt", ".geojson", ".tsv", ".xlsx"))]
                 if len(tables) != 1:
                     raise SystemExit(f"{cfg['state']}: set source.member; zip contains {names[:20]}")
                 member = tables[0]
@@ -89,6 +90,9 @@ def load_records(cfg: dict, path: Path) -> tuple[list[StateWell], dict]:
         raise SystemExit(f"{cfg['state']}: columns.operator and columns.api or columns.id are required")
     src = cfg.get("source") or {}
     active_res = [re.compile(p, re.I) for p in cfg.get("active_status", [])]
+    active_where = cfg.get("active_where") or []
+    risk_where = (cfg.get("at_risk") or {}).get("where") or []
+    extra_cols = sorted({c["column"] for c in active_where + risk_where})
     st = cfg["state"].upper()
     out: list[StateWell] = []
     stats = {"rows": 0, "no_api": 0, "active": 0}
@@ -109,14 +113,36 @@ def load_records(cfg: dict, path: Path) -> tuple[list[StateWell], dict]:
         if api is None:
             stats["no_api"] += 1
         status = g("status")
-        active = bool(status) and any(r.search(status) for r in active_res)
+        extra = {c: (row.get(c) or "").strip() for c in extra_cols} if extra_cols else None
+        if active_where:
+            active = where(extra, active_where)
+        else:
+            active = bool(status) and any(r.search(status) for r in active_res)
         stats["active"] += active
         out.append(StateWell(
             api=api, alt_id=normalize_id(g("id")), operator=g("operator"), status=status,
             lon=parse_float(g("lon")), lat=parse_float(g("lat")),
-            lease=g("lease"), well_name=g("well_name"), date=g("date"), active=active,
+            lease=g("lease"), well_name=g("well_name"), date=g("date"), active=active, extra=extra,
         ))
     return out, stats
+
+
+def where(extra: dict | None, rules: list[dict]) -> bool:
+    """All rules must hold. Rule keys: column, plus one of
+    empty (bool), lte / gte (compared as strings, so use same-width values such
+    as years), match (regex)."""
+    extra = extra or {}
+    for r in rules:
+        v = extra.get(r["column"], "")
+        if "empty" in r and (v == "") != r["empty"]:
+            return False
+        if "lte" in r and not (v and v <= r["lte"]):
+            return False
+        if "gte" in r and not (v and v >= r["gte"]):
+            return False
+        if "match" in r and not re.search(r["match"], v, re.I):
+            return False
+    return True
 
 
 def latest_by_api(records: list[StateWell], key: str = "api") -> dict[str, StateWell]:
