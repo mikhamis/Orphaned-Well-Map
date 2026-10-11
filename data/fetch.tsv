@@ -1,7 +1,3 @@
 # name<TAB>url — fetched by .github/workflows/fetch-data.yml on GitHub runners into the draft release "source-data".
-# "arcgis:<layer url>" pages through an ArcGIS REST layer into a gzipped CSV (owm.arcgis).
-# Round 5: West Virginia and Alaska wells, Louisiana Office of Conservation service.
-WV_wells.csv.gz	arcgis:https://tagis.dep.wv.gov/arcgis/rest/services/WVDEP_enterprise/oil_gas/MapServer/7
-AK_explore.csv.gz	arcgis:https://maps.commerce.alaska.gov/server/rest/services/AOGCC/AOGCC_SQL_Test/MapServer/1
-AK_develop.csv.gz	arcgis:https://maps.commerce.alaska.gov/server/rest/services/AOGCC/AOGCC_SQL_Test/MapServer/5
-LA_OC.json	https://sonris-gis.dnr.la.gov/arcgis/rest/services/DNRSvc/OC/MapServer?f=json
+# Round 6: Louisiana wells.
+LA_wells.csv.gz	arcgis:https://sonris-gis.dnr.la.gov/arcgis/rest/services/DNRSvc/OC/MapServer/0
