@@ -58,6 +58,8 @@ class OrphanWell:
     mineral_owner: str = ""
     source: str = ""
     data_date: str = ""
+    ownership: int = 0          # OWNERSHIP index, see ownership_class()
+    fed_agency: str = ""        # e.g. USFS, BLM; "" when not federal
     # populated by join
     extra: dict = field(default_factory=dict)
 
@@ -73,6 +75,34 @@ def detect_columns(headers, overrides: dict | None = None) -> dict[str, str | No
             "Pass --usgs-columns to map them."
         )
     return cols
+
+
+# Land-ownership classes, from USGS's estimates (BLM Surface Management Agency
+# spatial join; subsurface from BLM and state sources in NM, CO, ND, UT only).
+# Order matters: index is stored per well. "Not determined" is most of the
+# country: the SMA map covers federal land but rarely identifies private land.
+OWNERSHIP = [
+    "Not determined",
+    "Private",
+    "State, local or tribal",
+    "Federal minerals, non-federal surface",
+    "Federal surface",
+]
+FED_SURFACE = {"DOI", "USDA", "DOD"}
+FED_MINERALS = {"federal", "BLM", "USFS", "USACE"}
+TRIBAL = {"NTVPIC", "BIA", "Indian/Tribal", "Tribal", "Jicarilla Apache Nation", "Navajo Nation"}
+
+
+def ownership_class(surface_dept: str, surface_agency: str, sub_owner: str) -> tuple[int, str]:
+    if surface_dept in FED_SURFACE:
+        return 4, surface_agency or surface_dept
+    if sub_owner in FED_MINERALS:
+        return 3, "BLM" if sub_owner in ("federal", "BLM") else sub_owner
+    if surface_dept in ("state", "local government") or surface_dept in TRIBAL or sub_owner in TRIBAL:
+        return 2, ""
+    if surface_dept == "private":
+        return 1, ""
+    return 0, ""
 
 
 def usgs_api(primary: str, id_type: str, secondary: str, state: str, has_type: bool) -> str | None:
@@ -136,6 +166,8 @@ def load(path: Path, overrides: dict | None = None) -> tuple[list[OrphanWell], d
             surface_owner=" / ".join(x for x in (g("surface_owner"), g("surface_agency")) if x),
             mineral_owner=" / ".join(x for x in (g("mineral_owner"), g("subsurface_rights")) if x),
             source=g("source"), data_date=g("data_date"),
+            **dict(zip(("ownership", "fed_agency"),
+                       ownership_class(g("surface_owner"), g("surface_agency"), g("mineral_owner")))),
         ))
     stats["columns"] = cols or {}
     stats["loaded"] = len(wells)

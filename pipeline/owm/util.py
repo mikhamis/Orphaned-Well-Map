@@ -47,6 +47,8 @@ PLACEHOLDER_OPERATORS = (
     "state of", "plugging fund", "abandoned well program",
     "otc occ not assigned",  # Oklahoma RBDMS: no operator of record
     "state fund plugging",   # Oklahoma RBDMS: state plugging program
+    "historic owner", "unregistered owner", "unknown owner",  # Ohio ODNR
+    "pa dep ofc oil & gas mgmt", "unknown opr",              # Pennsylvania DEP
 )
 
 
@@ -189,7 +191,7 @@ class GridIndex:
 
 
 def read_table(path: Path, encoding: str = "utf-8-sig", delimiter: str | None = None) -> Iterator[dict]:
-    """Yield rows from CSV/TSV/TXT or GeoJSON (optionally .gz) as dicts.
+    """Yield rows from CSV/TSV/TXT, GeoJSON (optionally .gz) or XLSX (first sheet) as dicts.
 
     GeoJSON point features get synthetic ``__lon``/``__lat`` keys. Other
     formats (shapefile, file geodatabase, xlsx) should be converted first,
@@ -202,6 +204,15 @@ def read_table(path: Path, encoding: str = "utf-8-sig", delimiter: str | None = 
     def opener(**kw):
         return gzip.open(path, "rt", **kw) if gz else path.open(**kw)
 
+    if suffix == ".xlsx":
+        import openpyxl  # optional; only needed for Excel sources
+
+        ws = openpyxl.load_workbook(path, read_only=True, data_only=True).worksheets[0]
+        it = ws.iter_rows(values_only=True)
+        hdr = [str(h).strip() if h is not None else f"col{i}" for i, h in enumerate(next(it))]
+        for r in it:
+            yield {h: ("" if v is None else str(v)) for h, v in zip(hdr, r)}
+        return
     if suffix in (".geojson", ".json"):
         with opener(encoding=encoding) as f:
             data = json.load(f)

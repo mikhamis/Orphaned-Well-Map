@@ -54,3 +54,15 @@ def test_read_table_gzip(tmp_path):
     with gzip.open(p, "wt") as f:
         f.write("a,b\n1,2\n")
     assert list(read_table(p)) == [{"a": "1", "b": "2"}]
+
+
+def test_ownership_class():
+    from owm.usgs import OWNERSHIP, ownership_class
+    assert OWNERSHIP[ownership_class("USDA", "USFS", "")[0]] == "Federal surface"
+    assert ownership_class("USDA", "USFS", "")[1] == "USFS"
+    assert OWNERSHIP[ownership_class("private", "", "federal")[0]] == "Federal minerals, non-federal surface"
+    assert OWNERSHIP[ownership_class("undetermined", "", "Navajo Nation")[0]] == "State, local or tribal"
+    assert OWNERSHIP[ownership_class("state", "", "")[0]] == "State, local or tribal"
+    assert OWNERSHIP[ownership_class("private", "", "fee")[0]] == "Private"
+    assert OWNERSHIP[ownership_class("undetermined", "", "")[0]] == "Not determined"
+    assert OWNERSHIP[ownership_class("", "", "")[0]] == "Not determined"

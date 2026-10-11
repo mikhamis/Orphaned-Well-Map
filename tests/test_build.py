@@ -85,3 +85,26 @@ def test_original_operator_states_excluded_from_national_count(tmp_path):
     acme = next(o for o in m["operators"] if o["name"] == "Acme Oil Co.")
     assert acme["count"] == 0 and acme["by_state"] == {"TX": 1}
     assert next(s for s in m["states"] if s["code"] == "TX")["operator_kind"] == "original"
+
+
+def test_at_risk_layer_excludes_usgs_orphans(tmp_path):
+    import shutil
+    states = tmp_path / "states"
+    shutil.copytree(FIX / "states", states)
+    cfg = json.loads((states / "TX.json").read_text())
+    cfg["at_risk"] = {"status": ["^shut-in$"], "definition": "Shut-in with an operator"}
+    (states / "TX.json").write_text(json.dumps(cfg))
+    build.main(["--usgs", str(FIX / "usgs_2026_sample.csv"), "--states-dir", str(states),
+                "--state-file", f"TX={FIX / 'tx_wells.csv'}", "--out", str(tmp_path / "out")])
+    risk = json.loads((tmp_path / "out" / "atrisk.json").read_text())
+    # 4200100001 and 4200100003 are shut-in but already USGS orphans; only Zeta remains
+    assert risk["id"] == ["4200100050"]
+    assert risk["operators"] == ["Zeta Oil LLC"] and risk["o"] == [0]
+    m = json.loads((tmp_path / "out" / "manifest.json").read_text())
+    tx = next(s for s in m["states"] if s["code"] == "TX")
+    assert tx["at_risk"]["count"] == 1 and tx["at_risk"]["with_operator"] == 1
+
+
+def test_operator_key_expands_agency_abbreviations():
+    assert build.operator_key("DIVERSIFIED PROD LLC") == build.operator_key("Diversified Production, LLC")
+    assert build.operator_key("COMPASS DEV, INC") == build.operator_key("COMPASS DEVELOPMENT CO, INC")

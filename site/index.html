@@ -37,14 +37,40 @@
       </section>
 
       <section>
+        <div class="field">
+          <span>Color wells by</span>
+          <div class="segmented" id="lens" role="group" aria-label="Color wells by">
+            <button type="button" data-lens="match" aria-pressed="true">State records</button>
+            <button type="button" data-lens="owner" aria-pressed="false">Land ownership</button>
+          </div>
+        </div>
+      </section>
+
+      <section>
         <div id="legend-heat" class="heat-legend">
-          <h2>Orphaned wells per area</h2>
+          <h2 id="legend-heat-title">Orphaned wells per area</h2>
           <div class="heat-bar" aria-hidden="true"></div>
           <div class="heat-ends"><span>Fewer</span><span>More</span></div>
         </div>
         <h2>Well colors when zoomed in</h2>
         <p class="muted small" id="legend-points-note">Zoom in to county level to see each well in these colors.</p>
         <ul class="legend" id="legend"></ul>
+      </section>
+
+      <section id="risk-section" hidden>
+        <h2>Inactive wells that still have an owner</h2>
+        <label class="risk-toggle"><input type="checkbox" id="risk-toggle" checked>
+          <span class="ring" aria-hidden="true"></span>
+          <span>Show on map when zoomed in (<span id="risk-toggle-count">0</span>)</span></label>
+        <p class="muted small">Not orphans yet: the state still names a responsible operator. These are the likeliest future orphans. Click an operator to map its wells.</p>
+        <ol class="operators" id="risk-operators"></ol>
+        <p class="muted small" id="risk-states"></p>
+      </section>
+
+      <section id="agencies-section" hidden>
+        <h2>Orphaned wells on federal land, by agency</h2>
+        <p class="muted small">Surface managing agency, estimated by USGS from BLM's land map. Click one to map its wells.</p>
+        <ol class="operators" id="agencies"></ol>
       </section>
 
       <section id="operator-filter" hidden>
@@ -64,7 +90,7 @@
         <h2>By state</h2>
         <div class="table-wrap">
           <table class="states" id="states-table">
-            <thead><tr><th>State</th><th class="num">Orphans</th><th class="num">Operator found</th><th class="num">Active well ≤ <span class="radius"></span></th></tr></thead>
+            <thead><tr><th>State</th><th class="num">Orphans</th><th class="num">Operator found</th><th class="num">Active well ≤ <span class="radius"></span></th><th class="num">Inactive, owned</th></tr></thead>
             <tbody></tbody>
           </table>
         </div>

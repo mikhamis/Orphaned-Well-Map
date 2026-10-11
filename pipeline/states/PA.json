@@ -1,0 +1,39 @@
+{
+  "state": "PA",
+  "verified": true,
+  "source": {
+    "name": "Pennsylvania DEP, Oil and Gas Locations (conventional and unconventional), via PASDA",
+    "url": null,
+    "docs_url": "https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=1088",
+    "download": "https://www.pasda.psu.edu/download/dep/OilGasLocations_ConventionalUnconventional2026_10.zip"
+  },
+  "columns": {
+    "api": "PERMIT_NUM",
+    "operator": "OPERATOR",
+    "status": "WELL_STATU",
+    "lat": "Y",
+    "lon": "X",
+    "well_name": "WELL_NAME",
+    "date": "PERMIT_DAT"
+  },
+  "active_status": [
+    "^Active$"
+  ],
+  "operator_label": "Operator of record (DEP)",
+  "at_risk": {
+    "status": [
+      "^Abandoned$",
+      "^Regulatory Inactive Status$"
+    ],
+    "require_operator": true,
+    "definition": "DEP status Abandoned or Regulatory Inactive, with an operator named. (Wells on DEP's Abandoned and Orphan lists are already in the USGS count.)"
+  },
+  "notes": "PERMIT_NUM is county + well number (e.g. 123-22151); the state prefix 37 is added. USGS Pennsylvania wells are DEP's Orphan List plus its Abandoned List; DEP shows 'PA DEP OFC OIL & GAS MGMT' or 'UNKNOWN OPR' as operator on most orphan-list wells, treated as no operator. The download is monthly; update the file name in source.download.",
+  "verification": {
+    "date": "2026-10-11",
+    "method": "Compared the operator joined from DEP's statewide well layer (PASDA) with the operator on DEP's separate Abandoned and Orphan Wells report (cedatareporting.pa.gov), for every USGS Pennsylvania well on that report.",
+    "checked": 21212,
+    "agree": 21211,
+    "of_usgs_wells": 21262
+  }
+}

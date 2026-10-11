@@ -18,6 +18,7 @@ from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
+from . import atrisk
 from . import states as st_mod
 from . import usgs
 from .join import JoinParams, join_state
@@ -31,9 +32,15 @@ J_NO_CONFIG, J_UNMATCHED, J_PLACEHOLDER, J_OPERATOR = 0, 1, 2, 3
 _SUFFIX = re.compile(r"\b(inc|llc|l l c|lp|l p|co|corp|corporation|company|ltd|plc|incorporated)\b")
 
 
+# Abbreviations state agencies use in operator names (PA DEP truncates heavily).
+_ABBREV = {"prod": "production", "prods": "production", "expl": "exploration", "opr": "operating",
+           "oper": "operating", "dev": "development", "devel": "development", "engy": "energy", "amer": "american"}
+
+
 def operator_key(name: str) -> str:
     n = normalize_name(name).replace("&", " and ")
     n = _SUFFIX.sub(" ", n)
+    n = " ".join(_ABBREV.get(t, t) for t in n.split())
     return re.sub(r"\s+", " ", n).strip()
 
 
@@ -69,6 +76,7 @@ def build(args) -> dict:
         by_state[w.state].append(w)
 
     state_rows = []
+    at_risk_rows: list = []
     for code in sorted(by_state):
         orphans = by_state[code]
         cfg = configs.get(code)
@@ -80,6 +88,7 @@ def build(args) -> dict:
                         operator_kind=cfg.get("operator_kind", "last"),
                         status_label=cfg.get("status_label") or "State status",
                         verification=cfg.get("verification"),
+                        verification_note=cfg.get("verification_note"),
                         nearby=bool(cfg.get("active_status")),
                         source=(cfg.get("source") or {}).get("name"),
                         source_url=(cfg.get("source") or {}).get("docs_url") or (cfg.get("source") or {}).get("url"))
@@ -94,6 +103,10 @@ def build(args) -> dict:
                 jstats = join_state(orphans, records, params)
                 info["configured"] = True
                 info["stats"] = {**rstats, **jstats}
+                risk = atrisk.select(cfg, records, orphans)
+                if cfg.get("at_risk"):
+                    info["at_risk"] = {**atrisk.summarize(risk), "definition": cfg["at_risk"].get("definition", "")}
+                    at_risk_rows.extend((code, r) for r in risk)
                 print(f"{code}: {len(orphans):,} orphans, {rstats['rows']:,} state rows -> {jstats}", file=sys.stderr)
             elif "error" not in info:
                 info["error"] = "no source URL or --state-file"
@@ -118,7 +131,10 @@ def build(args) -> dict:
     operators = [{"name": op_names[k].most_common(1)[0][0], "count": op_counts[k],
                   "states": sorted(op_by_state[k]), "by_state": dict(op_by_state[k])} for k in op_list]
 
-    pts = {"lon": [], "lat": [], "s": [], "j": [], "o": [], "a": []}
+    agencies = sorted({w.fed_agency for w in wells if w.fed_agency},
+                      key=lambda a: -sum(1 for w in wells if w.fed_agency == a))
+    agency_index = {a: i for i, a in enumerate(agencies)}
+    pts = {"lon": [], "lat": [], "s": [], "j": [], "o": [], "a": [], "w": [], "g": []}
     state_codes = [r["code"] for r in state_rows]
     offset = 0
     for si, info in enumerate(state_rows):
@@ -141,6 +157,8 @@ def build(args) -> dict:
             pts["j"].append(j)
             pts["o"].append(oi)
             pts["a"].append(min(e.get("nearby_active", 0), 999))
+            pts["w"].append(w.ownership)
+            pts["g"].append(agency_index.get(w.fed_agency, -1))
             d = {"id": w.api or w.raw_id, "n": w.name, "t": w.type, "st": w.status,
                  "c": w.county, "so": w.surface_owner, "mo": w.mineral_owner,
                  "src": w.source, "sd": w.data_date}
@@ -174,8 +192,36 @@ def build(args) -> dict:
         "states": state_rows,
         "state_codes": state_codes,
         "operators": operators,
+        "ownership": usgs.OWNERSHIP,
+        "fed_agencies": agencies,
         "demo": bool(args.demo),
     }
+    # at-risk layer: columnar, operators indexed (ranked by count, placeholders last)
+    risk_ops: Counter = Counter()
+    risk_spell: dict[str, Counter] = defaultdict(Counter)
+    for _, r in at_risk_rows:
+        if not is_placeholder_operator(r.operator):
+            k = operator_key(r.operator)
+            risk_ops[k] += 1
+            risk_spell[k][r.operator] += 1
+    risk_keys = [k for k, _ in risk_ops.most_common()]
+    risk_names = [risk_spell[k].most_common(1)[0][0] for k in risk_keys]
+    risk_key_index = {k: i for i, k in enumerate(risk_keys)}
+    risk = {"lon": [], "lat": [], "s": [], "o": [], "id": [], "st": [], "n": [], "operators": risk_names,
+            "operator_states": {}}
+    for code, r in at_risk_rows:
+        risk["lon"].append(round(r.lon, 5))
+        risk["lat"].append(round(r.lat, 5))
+        risk["s"].append(state_codes.index(code))
+        oi = -1 if is_placeholder_operator(r.operator) else risk_key_index[operator_key(r.operator)]
+        risk["o"].append(oi)
+        risk["id"].append(r.api or "")
+        risk["st"].append(r.status)
+        risk["n"].append(r.well_name or r.lease)
+        if oi >= 0:
+            risk["operator_states"].setdefault(str(oi), {})
+            risk["operator_states"][str(oi)][code] = risk["operator_states"][str(oi)].get(code, 0) + 1
+    write_json(out / "atrisk.json", risk)
     write_json(out / "points.json", pts)
     write_json(out / "manifest.json", manifest, compact=False)
     return manifest
