@@ -12,6 +12,7 @@
   --c-placeholder: #eb6834;
   --c-unmatched: #1baf7a;
   --c-noconfig: #a3a199;
+  --c-private: #5f5d58;
   --ok-ink: #006300;
   --heat-0: #cde2fb;
   --heat-1: #9ec5f4;
@@ -39,6 +40,8 @@
     --c-placeholder: #d95926;
     --c-unmatched: #199e70;
     --c-noconfig: #6b6a64;
+  --c-private: #b5b3aa;
+    --c-private: #b5b3aa;
     --ok-ink: #0ca30c;
     --ok-ink: #0ca30c;
   --heat-0: #184f95;
@@ -218,3 +221,7 @@ dialog li { margin-bottom: 6px; }
 }
 
 table.states .tag.ok, .pill.ok { color: var(--ok-ink); border-color: var(--ok-ink); }
+
+.segmented { display: flex; border: 1px solid var(--border); border-radius: 8px; padding: 2px; gap: 2px; }
+.segmented button { flex: 1; border: 0; background: transparent; border-radius: 6px; padding: 6px 8px; color: var(--ink-2); }
+.segmented button[aria-pressed="true"] { background: var(--grid); color: var(--ink); font-weight: 600; }

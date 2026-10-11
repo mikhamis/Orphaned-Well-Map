@@ -118,7 +118,10 @@ def build(args) -> dict:
     operators = [{"name": op_names[k].most_common(1)[0][0], "count": op_counts[k],
                   "states": sorted(op_by_state[k]), "by_state": dict(op_by_state[k])} for k in op_list]
 
-    pts = {"lon": [], "lat": [], "s": [], "j": [], "o": [], "a": []}
+    agencies = sorted({w.fed_agency for w in wells if w.fed_agency},
+                      key=lambda a: -sum(1 for w in wells if w.fed_agency == a))
+    agency_index = {a: i for i, a in enumerate(agencies)}
+    pts = {"lon": [], "lat": [], "s": [], "j": [], "o": [], "a": [], "w": [], "g": []}
     state_codes = [r["code"] for r in state_rows]
     offset = 0
     for si, info in enumerate(state_rows):
@@ -141,6 +144,8 @@ def build(args) -> dict:
             pts["j"].append(j)
             pts["o"].append(oi)
             pts["a"].append(min(e.get("nearby_active", 0), 999))
+            pts["w"].append(w.ownership)
+            pts["g"].append(agency_index.get(w.fed_agency, -1))
             d = {"id": w.api or w.raw_id, "n": w.name, "t": w.type, "st": w.status,
                  "c": w.county, "so": w.surface_owner, "mo": w.mineral_owner,
                  "src": w.source, "sd": w.data_date}
@@ -174,6 +179,8 @@ def build(args) -> dict:
         "states": state_rows,
         "state_codes": state_codes,
         "operators": operators,
+        "ownership": usgs.OWNERSHIP,
+        "fed_agencies": agencies,
         "demo": bool(args.demo),
     }
     write_json(out / "points.json", pts)

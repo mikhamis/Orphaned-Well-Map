@@ -37,14 +37,30 @@
       </section>
 
       <section>
+        <div class="field">
+          <span>Color wells by</span>
+          <div class="segmented" id="lens" role="group" aria-label="Color wells by">
+            <button type="button" data-lens="match" aria-pressed="true">State records</button>
+            <button type="button" data-lens="owner" aria-pressed="false">Land ownership</button>
+          </div>
+        </div>
+      </section>
+
+      <section>
         <div id="legend-heat" class="heat-legend">
-          <h2>Orphaned wells per area</h2>
+          <h2 id="legend-heat-title">Orphaned wells per area</h2>
           <div class="heat-bar" aria-hidden="true"></div>
           <div class="heat-ends"><span>Fewer</span><span>More</span></div>
         </div>
         <h2>Well colors when zoomed in</h2>
         <p class="muted small" id="legend-points-note">Zoom in to county level to see each well in these colors.</p>
         <ul class="legend" id="legend"></ul>
+      </section>
+
+      <section id="agencies-section" hidden>
+        <h2>Orphaned wells on federal land, by agency</h2>
+        <p class="muted small">Surface managing agency, estimated by USGS from BLM's land map. Click one to map its wells.</p>
+        <ol class="operators" id="agencies"></ol>
       </section>
 
       <section id="operator-filter" hidden>

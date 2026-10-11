@@ -41,14 +41,16 @@ jobs:
       - name: Download listed files
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq gdal-bin >/dev/null
+          set +e   # one failed URL shouldn't stop the rest; failures show in REPORT.txt
           grep -v '^#' data/fetch.tsv | while IFS=$'\t' read -r name url; do
             [ -n "$name" ] || continue
-            code=$(curl -sSL --retry 3 --max-time 1200 -A "orphaned-well-map/1.0" -o "out/$name" -w '%{http_code} %{content_type}' "$url" 2>&1) || true
+            code=$(curl -sSL --retry 3 --max-time 300 -A "orphaned-well-map/1.0" -o "out/$name" -w '%{http_code} %{content_type}' "$url" 2>&1) || true
             {
               echo "=== $name"
               echo "url: $url"
               echo "result: $code"
               echo "size: $(stat -c %s "out/$name" 2>/dev/null || echo 0)"
+              [ -s "out/$name" ] || { rm -f "out/$name"; continue; }
               file -b "out/$name" 2>/dev/null || true
               if file -b "out/$name" | grep -qi zip; then
                 unzip -l "out/$name" | head -40

@@ -21,6 +21,19 @@
     "AL AZ AR CA CO CT DE DC FL GA ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY AK HI"
       .split(" ").map((c, i) => [String(i + 1).padStart(2, "0"), c]));
 
+  // Land-ownership classes, by index stored per well (must match OWNERSHIP in usgs.py).
+  const OWN_CATS = [
+    { j: 4, key: "operator", label: "Federal surface", desc: "Surface managed by a federal agency (USGS estimate from BLM's land map)." },
+    { j: 3, key: "placeholder", label: "Federal minerals, non-federal surface", desc: "Split estate. Only mapped in New Mexico, Colorado, North Dakota and Utah." },
+    { j: 2, key: "unmatched", label: "State, local or tribal", desc: "State or local government surface, or tribal surface or minerals." },
+    { j: 1, key: "private", label: "Private (confirmed)", desc: "Land map identifies the surface as private." },
+    { j: 0, key: "noconfig", label: "Not determined", desc: "Not federal, state or tribal on the land map; owner not identified. Most of these are likely private." },
+  ];
+  const LENSES = {
+    match: { field: "j", cats: CATS },
+    owner: { field: "w", cats: OWN_CATS },
+  };
+
   const $ = (s) => document.querySelector(s);
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const fmt = (n) => Number(n).toLocaleString("en-US");
@@ -30,7 +43,8 @@
 
   const state = {
     manifest: null, pts: null, map: null,
-    show: new Set([0, 1, 2, 3]), stateFilter: "", operatorFilter: -1,
+    lens: "match", showBy: { match: new Set([0, 1, 2, 3]), owner: new Set([0, 1, 2, 3, 4]) },
+    stateFilter: "", operatorFilter: -1, agencyFilter: -1,
     details: {}, selected: -1, hasGlyphs: false,
   };
 
@@ -92,13 +106,16 @@
 
   function featureCollection() {
     const { lon, lat, s, j, o, a } = state.pts;
+    const w = state.pts.w || [], g = state.pts.g || [];
+    const lensVals = state.pts[LENSES[state.lens].field] || [], show = state.showBy[state.lens];
     const sf = state.stateFilter ? state.manifest.state_codes.indexOf(state.stateFilter) : -1;
     const feats = [];
     for (let i = 0; i < lon.length; i++) {
-      if (!state.show.has(j[i])) continue;
+      if (!show.has(lensVals[i] ?? 0)) continue;
       if (sf >= 0 && s[i] !== sf) continue;
       if (state.operatorFilter >= 0 && o[i] !== state.operatorFilter) continue;
-      feats.push({ type: "Feature", id: i, properties: { j: j[i], a: a[i] }, geometry: { type: "Point", coordinates: [lon[i], lat[i]] } });
+      if (state.agencyFilter >= 0 && g[i] !== state.agencyFilter) continue;
+      feats.push({ type: "Feature", id: i, properties: { j: j[i], a: a[i], w: w[i] ?? 0 }, geometry: { type: "Point", coordinates: [lon[i], lat[i]] } });
     }
     return { type: "FeatureCollection", features: feats };
   }
@@ -126,8 +143,14 @@
   // ---------- map ----------
 
   function colorExpr() {
-    return ["match", ["get", "j"],
-      3, css("--c-operator"), 2, css("--c-placeholder"), 1, css("--c-unmatched"), css("--c-noconfig")];
+    const { field, cats } = LENSES[state.lens];
+    const pairs = cats.filter((c) => c.key !== "noconfig").flatMap((c) => [c.j, css("--c-" + c.key)]);
+    return ["match", ["get", field], ...pairs, css("--c-noconfig")];
+  }
+
+  // In the ownership view the heat map shows only wells on federal land or minerals.
+  function heatFilter() {
+    return state.lens === "owner" ? [">=", ["get", "w"], 3] : true;
   }
 
   // Heat map below POINTS_ZOOM, individual wells above it, cross-faded.
@@ -156,6 +179,7 @@
         "heatmap-color": heatColorExpr(),
         "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], POINTS_ZOOM, 0.92, POINTS_ZOOM + 1.5, 0],
       },
+      filter: heatFilter(),
     });
     map.addLayer({
       id: "wells", type: "circle", source: "wells", minzoom: POINTS_ZOOM - 0.5,
@@ -181,7 +205,8 @@
     const hover = new maplibregl.Popup({ closeButton: false, closeOnClick: false, offset: 8 });
     map.on("mousemove", "wells", (e) => {
       const f = e.features[0];
-      const cat = CATS.find((c) => c.j === f.properties.j);
+      const { field, cats } = LENSES[state.lens];
+      const cat = cats.find((c) => c.j === f.properties[field]) || cats[cats.length - 1];
       hover.setLngLat(f.geometry.coordinates)
         .setHTML(`${esc(cat.label)}${f.properties.j > 0 && stateOf(f.id).nearby ? ` · ${fmt(f.properties.a)} active within ${miles(state.manifest.params.radius_m)}` : ""}<br><span class="muted">Click for details</span>`)
         .addTo(map);
@@ -203,6 +228,7 @@
     if (!map || !map.getLayer("wells")) return;
     map.setPaintProperty("wells", "circle-color", colorExpr());
     map.setPaintProperty("heat", "heatmap-color", heatColorExpr());
+    map.setFilter("heat", heatFilter());
     if (map.getLayer("states-fill")) {
       map.setPaintProperty("bg", "background-color", css("--page"));
       map.setPaintProperty("states-fill", "fill-color", css("--surface"));
@@ -284,26 +310,58 @@
   // ---------- sidebar ----------
 
   function counts() {
-    const { j, s, o } = state.pts;
+    const { s, o } = state.pts, g = state.pts.g || [];
+    const vals = state.pts[LENSES[state.lens].field] || [];
     const sf = state.stateFilter ? state.manifest.state_codes.indexOf(state.stateFilter) : -1;
-    const c = [0, 0, 0, 0];
-    for (let i = 0; i < j.length; i++) {
+    const c = [0, 0, 0, 0, 0];
+    for (let i = 0; i < s.length; i++) {
       if (sf >= 0 && s[i] !== sf) continue;
       if (state.operatorFilter >= 0 && o[i] !== state.operatorFilter) continue;
-      c[j[i]]++;
+      if (state.agencyFilter >= 0 && g[i] !== state.agencyFilter) continue;
+      c[vals[i] ?? 0]++;
     }
     return c;
   }
 
   function renderLegend() {
-    const c = counts();
-    $("#legend").innerHTML = CATS.map((cat) => `
+    const c = counts(), show = state.showBy[state.lens];
+    const owner = state.lens === "owner";
+    $("#legend-heat-title").textContent = owner ? "Orphaned wells on federal land or minerals, per area" : "Orphaned wells per area";
+    $("#agencies-section").hidden = !owner;
+    $("#legend").innerHTML = LENSES[state.lens].cats.map((cat) => `
       <li><label>
-        <input type="checkbox" data-j="${cat.j}" ${state.show.has(cat.j) ? "checked" : ""}>
+        <input type="checkbox" data-j="${cat.j}" ${show.has(cat.j) ? "checked" : ""}>
         <span class="swatch" style="background:${css("--c-" + cat.key)}"></span>
         <span>${esc(cat.label)}</span><span class="count">${fmt(c[cat.j])}</span>
         <span class="desc">${esc(cat.desc)}</span>
       </label></li>`).join("");
+  }
+
+  function setLens(lens) {
+    state.lens = lens;
+    document.querySelectorAll("#lens button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lens === lens)));
+    if (lens !== "owner") state.agencyFilter = -1;
+    renderAgencies();
+    refresh(false);
+    repaint();
+  }
+
+  const AGENCY_NAMES = {
+    USFS: "U.S. Forest Service", BLM: "Bureau of Land Management", BIA: "Bureau of Indian Affairs (tribal trust land)",
+    FWS: "Fish and Wildlife Service", USACE: "Army Corps of Engineers", DOD: "Defense Department", NPS: "National Park Service",
+    USAF: "Air Force", USBR: "Bureau of Reclamation", ARMY: "Army", USMC: "Marine Corps", NAVY: "Navy",
+  };
+
+  function renderAgencies() {
+    const m = state.manifest, g = state.pts.g || [], s = state.pts.s;
+    const sf = state.stateFilter ? m.state_codes.indexOf(state.stateFilter) : -1;
+    const n = (m.fed_agencies || []).map(() => 0);
+    g.forEach((gi, i) => { if (gi >= 0 && (sf < 0 || s[i] === sf)) n[gi]++; });
+    const rows = (m.fed_agencies || []).map((code, i) => ({ code, i, n: n[i] })).filter((r) => r.n > 0).sort((a, b) => b.n - a.n);
+    $("#agencies").innerHTML = rows.length ? rows.map((r) => `
+      <li><button type="button" data-agency="${r.i}" aria-pressed="${state.agencyFilter === r.i}">
+        <span>${esc(AGENCY_NAMES[r.code] || r.code)}</span><span class="n">${fmt(r.n)}</span>
+      </button></li>`).join("") : '<li class="muted small">No wells on federal land here.</li>';
   }
 
   function renderOperators() {
@@ -401,6 +459,7 @@
     state.stateFilter = code;
     $("#state-select").value = code;
     renderOperators();
+    renderAgencies();
     refresh(true);
   }
 
@@ -434,7 +493,9 @@
       if (k >= 0) {
         const i = s.offset + k;
         msg.textContent = "";
-        if (!state.show.has(state.pts.j[i])) { state.show.add(state.pts.j[i]); }
+        const lv = (state.pts[LENSES[state.lens].field] || [])[i] ?? 0;
+        state.showBy[state.lens].add(lv);
+        if (state.agencyFilter >= 0 && (state.pts.g || [])[i] !== state.agencyFilter) { state.agencyFilter = -1; renderAgencies(); }
         if (state.operatorFilter >= 0 && state.pts.o[i] !== state.operatorFilter) setOperator(-1);
         refresh(false);
         state.map.flyTo({ center: [state.pts.lon[i], state.pts.lat[i]], zoom: 13 });
@@ -447,11 +508,20 @@
 
   function wire() {
     $("#legend").addEventListener("change", (e) => {
-      const j = Number(e.target.dataset.j);
-      e.target.checked ? state.show.add(j) : state.show.delete(j);
+      const j = Number(e.target.dataset.j), show = state.showBy[state.lens];
+      e.target.checked ? show.add(j) : show.delete(j);
       refresh(false);
     });
     $("#state-select").addEventListener("change", (e) => setState(e.target.value));
+    document.querySelectorAll("#lens button").forEach((b) => b.addEventListener("click", () => setLens(b.dataset.lens)));
+    $("#agencies").addEventListener("click", (e) => {
+      const b = e.target.closest("button[data-agency]");
+      if (!b) return;
+      const i = Number(b.dataset.agency);
+      state.agencyFilter = state.agencyFilter === i ? -1 : i;
+      renderAgencies();
+      refresh(state.agencyFilter >= 0);
+    });
     $("#operators").addEventListener("click", (e) => {
       const b = e.target.closest("button[data-op]");
       if (!b) return;
@@ -497,6 +567,7 @@
     populateStateSelect();
     renderLegend();
     renderOperators();
+    renderAgencies();
     renderStates();
     wire();
 

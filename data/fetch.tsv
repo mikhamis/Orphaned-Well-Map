@@ -3,8 +3,8 @@
 NY_wells.csv	https://data.ny.gov/api/views/szye-wmt3/rows.csv?accessType=DOWNLOAD
 NY_orphaned.csv	https://data.ny.gov/api/views/vgue-bamz/rows.csv?accessType=DOWNLOAD
 PA_pasda_1088.html	https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=1088
-PA_abandoned_orphan.csv	https://cedatareporting.pa.gov/ReportServer?/Public/DEP/OG/SSRS/Abandoned_Orphan_Web&rs:Format=CSV
-PA_prod_status.csv	https://cedatareporting.pa.gov/ReportServer?/Public/DEP/OG/SSRS/OG_Well_Prod_Status&rs:Format=CSV
+PA_abandoned_orphan.csv	http://cedatareporting.pa.gov/ReportServer?/Public/DEP/OG/SSRS/Abandoned_Orphan_Web&rs:Format=CSV
+PA_prod_status.csv	http://cedatareporting.pa.gov/ReportServer?/Public/DEP/OG/SSRS/OG_Well_Prod_Status&rs:Format=CSV
 OH_hub_item.json	https://www.arcgis.com/sharing/rest/content/items/3dce2c55a9e1486b9483db25710ae588?f=json
 OH_wells.zip	https://www.arcgis.com/sharing/rest/content/items/3dce2c55a9e1486b9483db25710ae588/data
 TX_orphan_page.html	https://www.rrc.texas.gov/oil-and-gas/research-and-statistics/well-information/orphan-wells-12-months/
