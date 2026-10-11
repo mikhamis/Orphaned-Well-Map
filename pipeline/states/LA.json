@@ -1,0 +1,35 @@
+{
+  "state": "LA",
+  "verified": false,
+  "source": {
+    "name": "Louisiana Dept. of Conservation and Energy (SONRIS), Oil/Gas Wells map service",
+    "arcgis": "https://sonris-gis.dnr.la.gov/arcgis/rest/services/DNRSvc/OC/MapServer/0",
+    "docs_url": "https://sonris-gis.dnr.la.gov/arcgis/rest/services/DNRSvc/OC/MapServer"
+  },
+  "columns": {
+    "api": "API_NUM",
+    "operator": "ORG_OPER_NAME",
+    "status": "LEGEND_DESC",
+    "lat": "Y",
+    "lon": "X",
+    "well_name": "WELL_NAME",
+    "date": "WELL_STATUS_DATE"
+  },
+  "active_status": [
+    "^ACTIVE - PRODUCING",
+    "^ACTIVE- INJECTION"
+  ],
+  "operator_label": "Operator of record (SONRIS)",
+  "status_label": "SONRIS well status",
+  "at_risk": {
+    "status": [
+      "^SHUT-IN PRODUCTIVE",
+      "^SHUT-IN DRY HOLE",
+      "^PA-35 TEMPORARY INACTIVE"
+    ],
+    "require_operator": true,
+    "definition": "SONRIS status Shut-in (future utility) or PA-35 temporary inactive, with an operator named."
+  },
+  "verification_note": "Not cross-checked for operator. All 4,729 USGS Louisiana wells with an API number match SONRIS, and SONRIS flags 4,470 of them as orphaned (ORPHANED_FLAG = Y). The other 249 USGS rows have no API number.",
+  "notes": "USGS status 'ACT 404 ORPHAN WELL' refers to Louisiana's orphan well statute (Act 404)."
+}
