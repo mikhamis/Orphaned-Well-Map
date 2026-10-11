@@ -1,0 +1,6 @@
+__pycache__/
+.pytest_cache/
+data/raw/
+# built by pipeline (owm.build); deployed by CI, not committed
+site/data/*
+!site/data/.gitkeep

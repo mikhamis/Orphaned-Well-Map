@@ -1,0 +1,81 @@
+name: Test, build data, deploy site
+
+on:
+  push:
+    branches: [main, "claude/**"]   # non-main pushes build but don't deploy
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pytest
+      - run: pytest -q tests
+
+  build:
+    needs: test
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: USGS DOWDB 2026 from API
+        run: |
+          mkdir -p data/raw
+          api=https://energy.usgs.gov/api/dowdb/v1/wells
+          total=$(curl -sS -I -H 'Prefer: count=exact' -H 'Range: 0-0' "$api" | tr -d '\r' | awk -F/ 'tolower($0) ~ /^content-range/ {print $2}')
+          : > data/raw/usgs.csv
+          for ((off=0; off<total; off+=10000)); do
+            curl -sSf --retry 3 -H 'Accept: text/csv' "$api?order=record_key.asc&offset=$off&limit=10000" -o page.csv
+            sed -i -e '$a\' page.csv   # PostgREST CSV has no trailing newline
+            if [ "$off" -eq 0 ]; then cat page.csv; else tail -n +2 page.csv; fi >> data/raw/usgs.csv
+          done
+          rows=$(python3 -c "import csv; print(sum(1 for _ in csv.DictReader(open('data/raw/usgs.csv', newline=''))))")
+          echo "USGS rows: $rows (API reported $total)"
+          [ "$rows" = "$total" ]
+      - name: State shapefiles to CSV
+        run: |
+          # configs with source.download point at zipped shapefiles; source.url files are fetched by the build
+          sudo apt-get update -qq && sudo apt-get install -y -qq gdal-bin >/dev/null
+          : > state-files.txt
+          for cfg in pipeline/states/[A-Z][A-Z].json; do
+            st=$(basename "$cfg" .json)
+            url=$(python3 -c "import json,sys; print((json.load(open(sys.argv[1])).get('source') or {}).get('download') or '')" "$cfg")
+            [ -n "$url" ] || continue
+            curl -sSfL --retry 3 -o "data/raw/$st.zip" "$url"
+            shp=$(unzip -Z1 "data/raw/$st.zip" | grep -i '\.shp$' | head -1)
+            ogr2ogr -f CSV -t_srs EPSG:4326 -lco GEOMETRY=AS_XY "data/raw/$st.csv" "/vsizip/data/raw/$st.zip/$shp"
+            echo "--state-file $st=../data/raw/$st.csv" >> state-files.txt
+          done
+          cat state-files.txt
+      - name: Build site data
+        run: |
+          cd pipeline
+          python -m owm.build --usgs ../data/raw/usgs.csv $(cat ../state-files.txt)
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

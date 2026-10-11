@@ -1,0 +1,7 @@
+{
+  "state": "TX",
+  "verified": false,
+  "source": {"name": "Synthetic test fixture", "url": null},
+  "columns": {"api": "API", "operator": "OPERATOR", "status": "STATUS", "lat": "LAT", "lon": "LON", "lease": "LEASE", "date": "DATE"},
+  "active_status": ["^producing$"]
+}

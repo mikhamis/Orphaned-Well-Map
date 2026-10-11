@@ -1,0 +1,7 @@
+record_key,primary_identifier_type,primary_identifier,secondary_identifier,state,county,well_name,well_number,type,status,latitude,longitude,principal_meridian,township,t_dir,range,r_dir,section,source,data_file_date,well_info_notes,location_notes,other_notes,surface_owner_fed_dept,surface_fed_agency,surface_source,subsurface_owner_fed,subsurface_source,subsurface_fed_rights,subsurface_fed_rights_source
+1,API,42-001-00001,,Texas,Anderson,SYNTH A,1,Oil,Orphan,31.0000,-97.0000,,,,,,,Synthetic Commission,12/31/2025,,,,private,,BLM National SMA,private,,,
+2,API,4200100002,,Texas,Anderson,SYNTH B,1,Gas,Orphan,31.0100,97.0100,,,,,,,Synthetic Commission,12/31/2025,,,,DOI,NPS,BLM National SMA,federal,,oil and gas,
+3,,,,Texas,Anderson,SYNTH C,1,Oil,Orphan,31.0200,-97.0200,,,,,,,Synthetic Commission,12/31/2025,,,,private,,BLM National SMA,,,,
+4,API,42-001-00004,,Texas,Anderson,SYNTH D,1,Oil,Orphan,31.0300,-97.0300,,,,,,,Synthetic Commission,12/31/2025,,,,private,,BLM National SMA,,,,
+5,API,42-001-00005,,Texas,Anderson,SYNTH E,1,Oil,Orphan,,,,,,,,,Synthetic Commission,12/31/2025,,,,,,,,,,
+6,KYPermit,12345,,Oklahoma,Adair,SYNTH F,1,Oil,Orphan,35.5000,-97.5000,,,,,,,Synthetic OCC,04/13/2026,,,,state,,BLM National SMA,,,,

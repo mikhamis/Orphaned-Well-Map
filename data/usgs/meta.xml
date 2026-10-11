@@ -1,0 +1,2236 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <idinfo>
+    <citation>
+      <citeinfo>
+        <origin>Matthew D. Merrill</origin>
+        <origin>Brian A. Varela</origin>
+        <origin>Nicholas J. Gianoutsos</origin>
+        <pubdate>20260930</pubdate>
+        <title>United States Documented Orphaned Well Database 2026</title>
+        <geoform>spreadsheet</geoform>
+        <pubinfo>
+          <pubplace>Reston, VA</pubplace>
+          <publish>U.S. Geological Survey</publish>
+        </pubinfo>
+        <othercit>Update to: Grove, C.A., and Merrill, M.D., 2022, United States Documented Unplugged Orphaned Oil and Gas Well Dataset: U.S. Geological Survey data release, https://doi.org/10.5066/P91PJETI</othercit>
+        <onlink>https://doi.org/10.5066/P13FHBYG</onlink>
+        <onlink>https://www.sciencebase.gov/catalog/item/6aad481a1ba49ba9a487439b</onlink>
+      </citeinfo>
+    </citation>
+    <descript>
+      <abstract>The United States Documented Orphaned Well Database (DOWDB) contains 130,121 unplugged oil and gas wells in 28 states. This release of the data is an update to, and supersedes, the initial version (Grove and Merrill, 2022). The definition of an orphaned oil or gas well varies across data sources; the database includes oil or gas wells where the state indicates that the well is an unplugged orphan, or the following criteria are met: 1) no production for 6 to 24 months depending on the state (an average of 12 months), 2) the well is unplugged, 3) there is no responsible party to manage the well for future re-use or for plugging and abandonment, and 4) the location of the well is documented. The database includes location coordinates, American Petroleum Institute (API) number, or other identification number, well type, well status, and additional information for each unplugged orphaned well. In this update, completely new orphaned wells records were obtained from the states. As an additional feature, the authors estimated surface and subsurface rights ownership using maps of land ownership, and have attributed that information to the well records. Ownership information here is not official; it is a product of spatial operations that do not account for location errors or actual lease details. Ownership information at the well level was not provided by the states or Bureau of Land Management. Please confirm well responsibility with the appropriate agency or office. All other data were collected from the respective state agency overseeing oil and gas wells via online data sources or by direct requests. Location format conversion was performed on wells without coordinate locations using tools provided by the Bureau of Land Management and some state agencies. No other data manipulations were performed to the source data aside from reformatting or the addition of explanatory notes.</abstract>
+      <purpose>The database was created to provide documented orphaned well data to decision makers, as well as researchers, and other interested parties in a publicly available online format.</purpose>
+      <supplinf>The file contains data available in comma separated value (.csv) file format. The user must have software capable of opening and viewing a .csv file. Opening the csv formatted file in certain spreadsheet viewing/editing software without properly importing the data may result in undesired automatic formatting changes. These may impact identifier numbers and well numbers. If using the csv formatted file, please import correctly, otherwise use the provided software specific files which will maintain formatting.</supplinf>
+    </descript>
+    <timeperd>
+      <timeinfo>
+        <rngdates>
+          <begdate>20231231</begdate>
+          <enddate>20260413</enddate>
+        </rngdates>
+      </timeinfo>
+      <current>publication date</current>
+    </timeperd>
+    <status>
+      <progress>Complete</progress>
+      <update>Irregular</update>
+    </status>
+    <spdom>
+      <bounding>
+        <westbc>-153.4000</westbc>
+        <eastbc>-73.4000</eastbc>
+        <northbc>70.2000</northbc>
+        <southbc>25.9000</southbc>
+      </bounding>
+    </spdom>
+    <keywords>
+      <theme>
+        <themekt>ISO 19115 Topic Category</themekt>
+        <themekey>geoscientificInformation</themekey>
+      </theme>
+      <theme>
+        <themekt>None</themekt>
+        <themekey>orphaned oil and gas wells</themekey>
+        <themekey>oil wells</themekey>
+        <themekey>gas wells</themekey>
+        <themekey>unplugged well</themekey>
+      </theme>
+      <theme>
+        <themekt>USGS Thesaurus</themekt>
+        <themekey>natural gas resources</themekey>
+        <themekey>greenhouse gases</themekey>
+        <themekey>geospatial datasets</themekey>
+      </theme>
+      <theme>
+        <themekt>USGS Metadata Identifier</themekt>
+        <themekey>USGS:6aad481a1ba49ba9a487439b</themekey>
+      </theme>
+      <place>
+        <placekt>U.S. States</placekt>
+        <placekey>Alabama</placekey>
+        <placekey>Alaska</placekey>
+        <placekey>Arizona</placekey>
+        <placekey>Arkansas</placekey>
+        <placekey>California</placekey>
+        <placekey>Colorado</placekey>
+        <placekey>Illinois</placekey>
+        <placekey>Indiana</placekey>
+        <placekey>Kansas</placekey>
+        <placekey>Kentucky</placekey>
+        <placekey>Louisiana</placekey>
+        <placekey>Michigan</placekey>
+        <placekey>Mississippi</placekey>
+        <placekey>Missouri</placekey>
+        <placekey>Montana</placekey>
+        <placekey>Nebraska</placekey>
+        <placekey>Nevada</placekey>
+        <placekey>New Mexico</placekey>
+        <placekey>New York</placekey>
+        <placekey>North Dakota</placekey>
+        <placekey>Ohio</placekey>
+        <placekey>Oklahoma</placekey>
+        <placekey>Pennsylvania</placekey>
+        <placekey>Tennessee</placekey>
+        <placekey>Texas</placekey>
+        <placekey>Utah</placekey>
+        <placekey>West Virginia</placekey>
+        <placekey>Wyoming</placekey>
+      </place>
+    </keywords>
+    <accconst>None.  Please see 'Distribution Info' for details.</accconst>
+    <useconst>None.  Users are advised to read the dataset's metadata thoroughly to understand appropriate use and data limitations.</useconst>
+    <ptcontac>
+      <cntinfo>
+        <cntperp>
+          <cntper>Matthew D. Merrill</cntper>
+          <cntorg>U.S. Geological Survey, Northeast Region: Geology, Energy &amp; Minerals SC</cntorg>
+        </cntperp>
+        <cntpos>Supervisory Research Geologist</cntpos>
+        <cntaddr>
+          <addrtype>mailing address</addrtype>
+          <address>Mail Stop 954, 12201 Sunrise Valley Dr</address>
+          <city>Reston</city>
+          <state>VA</state>
+          <postal>20192</postal>
+          <country>US</country>
+        </cntaddr>
+        <cntvoice>703-648-6457</cntvoice>
+        <cntfax>703-648-6404</cntfax>
+        <cntemail>mmerrill@usgs.gov</cntemail>
+      </cntinfo>
+    </ptcontac>
+    <crossref>
+      <citeinfo>
+        <origin>Matthew D. Merrill</origin>
+        <origin>Claire A. Grove</origin>
+        <origin>Nicholas J. Gianoutsos</origin>
+        <origin>Philip A. Freeman</origin>
+        <pubdate>20230217</pubdate>
+        <title>Analysis of the United States documented unplugged orphaned oil and gas well dataset</title>
+        <geoform>publication</geoform>
+        <serinfo>
+          <sername>Data Report</sername>
+          <issue>vol. 1167</issue>
+        </serinfo>
+        <pubinfo>
+          <pubplace>https://pubs.usgs.gov</pubplace>
+          <publish>US Geological Survey</publish>
+        </pubinfo>
+        <onlink>https://doi.org/10.3133/dr1167</onlink>
+      </citeinfo>
+    </crossref>
+    <crossref>
+      <citeinfo>
+        <origin>Claire A. Grove</origin>
+        <origin>Matthew D. Merrill</origin>
+        <pubdate>20220822</pubdate>
+        <title>United States documented unplugged orphaned oil and gas well dataset</title>
+        <geoform>tabular digital data</geoform>
+        <pubinfo>
+          <pubplace>https://pubs.usgs.gov</pubplace>
+          <publish>US Geological Survey</publish>
+        </pubinfo>
+        <othercit>Grove, C.A., and Merrill, M.D., 2022, United States Documented Unplugged Orphaned Oil and Gas Well Dataset: U.S. Geological Survey data release, https://doi.org/10.5066/P91PJETI.</othercit>
+        <onlink>https://doi.org/10.5066/P91PJETI</onlink>
+      </citeinfo>
+    </crossref>
+  </idinfo>
+  <dataqual>
+    <attracc>
+      <attraccr>No formal attribute accuracy tests were conducted.</attraccr>
+    </attracc>
+    <logic>No formal logical accuracy tests were conducted.</logic>
+    <complete>Dataset is considered complete for the information presented, as described in the abstract. Users are advised to read the rest of the metadata record carefully for additional details.</complete>
+    <posacc>
+      <horizpa>
+        <horizpar>No formal positional accuracy tests were conducted.</horizpar>
+      </horizpa>
+      <vertacc>
+        <vertaccr>No formal positional accuracy tests were conducted.</vertaccr>
+      </vertacc>
+    </posacc>
+    <lineage>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Alabama Oil and Gas Board</origin>
+            <pubdate>20250731</pubdate>
+            <title>Alabama Oil and Gas Board Abandoned Oil and Gas Well Data</title>
+            <geoform>spreadsheet</geoform>
+            <pubinfo>
+              <pubplace>Tuscaloosa, AL</pubplace>
+              <publish>Alabama Oil and Gas Board</publish>
+            </pubinfo>
+            <onlink>https://www.ogb.state.al.us/ogb/wells</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20250731</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Alabama Oil and Gas Board, 2025</srccitea>
+        <srccontr>Alabama abandoned oil and gas well data.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Geological Survey of Alabama</origin>
+            <pubdate>202102</pubdate>
+            <title>State Oil and Gas Board of Alabama Administrative Code</title>
+            <geoform>publication</geoform>
+            <pubinfo>
+              <pubplace>Tuscaloosa, AL</pubplace>
+              <publish>Geological Survey of Alabama</publish>
+            </pubinfo>
+            <onlink>https://www.gsa.alabama.gov/Scripts/OGB/rules/goldbook.pdf</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>202102</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Geological Survey of Alabama, 2021</srccitea>
+        <srccontr>Alabama abandoned oil and gas well definition.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Alaska Oil and Gas Compact Commission</origin>
+            <pubdate>20240402</pubdate>
+            <title>Official AOGCC Alaska Orphan Well List</title>
+            <geoform>spreadsheet</geoform>
+            <pubinfo>
+              <pubplace>Anchorage, AK</pubplace>
+              <publish>Alaska Oil and Gas Compact Commission</publish>
+            </pubinfo>
+            <onlink>https://www.commerce.alaska.gov/web/aogcc/OrphanWellsGrant.aspx</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20250731</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Alaska Oil and Gas Compact Commission, 2024</srccitea>
+        <srccontr>Alaska orphan oil and gas well data.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Arkansas Oil and Gas Commission</origin>
+            <pubdate>20250731</pubdate>
+            <title>Arkansas Oil and Gas Wells</title>
+            <geoform>vector digital data</geoform>
+            <pubinfo>
+              <pubplace>Little Rock, AR</pubplace>
+              <publish>Alaska Oil and Gas Compact Commission</publish>
+            </pubinfo>
+            <onlink>https://gis.arkansas.gov/product/arkansas-oil-and-gas-wells/</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20250731</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Arkansas Oil and Gas Commission, 2025</srccitea>
+        <srccontr>Arkansas abandoned orphan oil and gas well data.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Bureau of Land Management</origin>
+            <pubdate>20230522</pubdate>
+            <title>BLM Colorado Federal Mineral Estate</title>
+            <geoform>vector digital data</geoform>
+            <pubinfo>
+              <pubplace>Denver, CO</pubplace>
+              <publish>Bureau of Land Management</publish>
+            </pubinfo>
+            <onlink>https://gbp-blm-egis.hub.arcgis.com/datasets/BLM-EGIS::blm-colorado-federal-mineral-estate/about</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20230522</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Bureau of Land Management, 2023</srccitea>
+        <srccontr>Used to determine subsurface land ownership or federal department/agency authority at well locations in Colorado.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Bureau of Land Management</origin>
+            <pubdate>20241217</pubdate>
+            <title>BLM ND SSME Subsurface Minerals Polygon</title>
+            <geoform>vector digital data</geoform>
+            <pubinfo>
+              <pubplace>Denver, CO</pubplace>
+              <publish>Bureau of Land Management</publish>
+            </pubinfo>
+            <onlink>https://gbp-blm-egis.hub.arcgis.com/datasets/BLM-EGIS::blm-nd-ssme-subsurface-minerals-polygon/about</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20241217</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Bureau of Land Management, 2024a</srccitea>
+        <srccontr>Used to determine subsurface land ownership or federal department/agency authority at well locations in North Dakota.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Bureau of Land Management</origin>
+            <pubdate>20241217</pubdate>
+            <title>BLM MT SSME Subsurface Minerals Polygon</title>
+            <geoform>vector digital data</geoform>
+            <pubinfo>
+              <pubplace>Denver, CO</pubplace>
+              <publish>Bureau of Land Management</publish>
+            </pubinfo>
+            <onlink>https://gbp-blm-egis.hub.arcgis.com/datasets/BLM-EGIS::blm-mt-ssme-subsurface-minerals-polygon/about</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20241217</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Bureau of Land Management, 2024b</srccitea>
+        <srccontr>Used to determine subsurface land ownership or federal department/agency authority at well locations in Montana.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Bureau of Land Management</origin>
+            <pubdate>2025</pubdate>
+            <title>Bureau of Land Management Township Decoder GetLatLon</title>
+            <geoform>application/service</geoform>
+            <pubinfo>
+              <pubplace>online</pubplace>
+              <publish>Bureau of Land Management</publish>
+            </pubinfo>
+            <onlink>https://gis.blm.gov/arcgis/rest/services/Cadastral/BLM_Natl_PLSS_CadNSDI/MapServer/exts/CadastralSpecialServices/GetLatLon</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>2025</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Bureau of Land Management, 2025a</srccitea>
+        <srccontr>Public Land Survey System location coordinate conversion.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Bureau of Land Management</origin>
+            <pubdate>20250408</pubdate>
+            <title>BLM NM Federal Minerals Estate</title>
+            <geoform>vector digital data</geoform>
+            <pubinfo>
+              <pubplace>Denver, CO</pubplace>
+              <publish>Bureau of Land Management</publish>
+            </pubinfo>
+            <onlink>https://gbp-blm-egis.hub.arcgis.com/datasets/BLM-EGIS::blm-nm-lands-mineral-estate/about</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20250408</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Bureau of Land Management, 2025b</srccitea>
+        <srccontr>Used to determine subsurface land ownership or federal department/agency authority at well locations in New Mexico.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Bureau of Land Management</origin>
+            <pubdate>20260318</pubdate>
+            <title>BLM Utah Federal Minerals Estate</title>
+            <geoform>vector digital data</geoform>
+            <pubinfo>
+              <pubplace>Denver, CO</pubplace>
+              <publish>Bureau of Land Management</publish>
+            </pubinfo>
+            <onlink>https://gbp-blm-egis.hub.arcgis.com/datasets/BLM-EGIS::blm-utah-federal-minerals-estate/about</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20260318</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Bureau of Land Management, 2026a</srccitea>
+        <srccontr>Used to determine subsurface land ownership or federal department/agency authority at well locations in Utah.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Bureau of Land Management</origin>
+            <pubdate>20260424</pubdate>
+            <title>BLM National SMA Surface Management Agency Area Polygons</title>
+            <geoform>vector digital data</geoform>
+            <pubinfo>
+              <pubplace>Denver, CO</pubplace>
+              <publish>Bureau of Land Management</publish>
+            </pubinfo>
+            <onlink>https://gisnation-sdi.hub.arcgis.com/maps/BLM-EGIS::blm-national-surface-management-agency/about</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20260424</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Bureau of Land Management, 2026b</srccitea>
+        <srccontr>Used to determine surface land ownership or federal department/agency authority at well locations.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>California Department of Conservation Geologic Energy Management Division (CALGEM)</origin>
+            <pubdate>20251231</pubdate>
+            <title>Idle Well Program Legislative Report</title>
+            <geoform>publication</geoform>
+            <pubinfo>
+              <pubplace>Sacramento, CA</pubplace>
+              <publish>California Geologic Energy Management Division</publish>
+            </pubinfo>
+            <onlink>https://conservation.ca.gov/calgem/pubs_stats/Pages/legislative_reports.aspx</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <rngdates>
+              <begdate>20230101</begdate>
+              <enddate>20231231</enddate>
+            </rngdates>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>California Geologic Energy Management Division, 2025</srccitea>
+        <srccontr>California idle oil and gas well data.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>California Department of Conservation</origin>
+            <pubdate>20250731</pubdate>
+            <title>All Wells</title>
+            <geoform>publication</geoform>
+            <pubinfo>
+              <pubplace>Sacramento, CA</pubplace>
+              <publish>California Department of Conservation</publish>
+            </pubinfo>
+            <onlink>https://www.conservation.ca.gov/calgem/maps/Pages/GISMapping2.aspx</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20250731</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>California Department of Conservation, 2025</srccitea>
+        <srccontr>California well locations.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Colorado Oil and Gas Conservation Commission</origin>
+            <pubdate>20251210</pubdate>
+            <title>Colorado Oil and Gas Conservation Commission Unplugged Orphan Well Data</title>
+            <geoform>vector digital data</geoform>
+            <pubinfo>
+              <pubplace>Denver, CO</pubplace>
+              <publish>Colorado Oil and Gas Conservation Commission</publish>
+            </pubinfo>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20251210</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Colorado Oil and Gas Conservation Commission, 2025</srccitea>
+        <srccontr>Colorado orphan oil and gas well data provided directly to author following emailed request.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Illinois Department of Natural Resources</origin>
+            <pubdate>20250909</pubdate>
+            <title>Illinois Department of Natural Resources Temporarily Abandoned Oil and Gas Well Data</title>
+            <geoform>spreadsheet</geoform>
+            <pubinfo>
+              <pubplace>Springfield, IL</pubplace>
+              <publish>Illinois Department of Natural Resources</publish>
+            </pubinfo>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20250909</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Illinois Department of Natural Resources, 2025</srccitea>
+        <srccontr>Illinois temporarily abandoned oil and gas well data obtained via state freedom of information act (FOIA) request.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Indiana Department of Natural Resources</origin>
+            <pubdate>20250710</pubdate>
+            <title>Indiana Department of Natural Resources Orphan Abandoned Oil and Gas Well Data</title>
+            <geoform>spreadsheet</geoform>
+            <pubinfo>
+              <pubplace>Indianapolis, IN</pubplace>
+              <publish>Indiana Department of Natural Resources</publish>
+            </pubinfo>
+            <onlink>https://www.in.gov/dnr/oil-and-gas/permits-and-forms/permits/well-records-search/</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20250710</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Indiana Department of Natural Resources, 2025</srccitea>
+        <srccontr>Indiana orphaned, revoked, and other orphan oil and gas well data.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Indiana Department of Natural Resources</origin>
+            <pubdate>2022</pubdate>
+            <title>Indiana Department of Natural Resources Orphaned &amp; Abandoned Well Program</title>
+            <geoform>publication</geoform>
+            <pubinfo>
+              <pubplace>Indianapolis, IN</pubplace>
+              <publish>Indiana Department of Natural Resources</publish>
+            </pubinfo>
+            <onlink>https://www.in.gov/dnr/oil-and-gas/files/og-abandoned_oil_wells_program.pdf#:~:text=Indiana%20law%20requires%20a%20well%20to%20be%20plugged,a%20suitable%20condition.%20What%20is%20an%20orphaned%20well%3F</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>2022</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Indiana Department of Natural Resources, 2022</srccitea>
+        <srccontr>Indiana orphan and abandoned oil and gas well definition.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Kansas Corporation Commission</origin>
+            <pubdate>20260319</pubdate>
+            <title>Kansas Corporation Commission Abandoned Oil and Gas Well Data</title>
+            <geoform>publication</geoform>
+            <pubinfo>
+              <pubplace>Topeka, KS</pubplace>
+              <publish>Kansas Corporation Commission</publish>
+            </pubinfo>
+            <onlink>https://www.kcc.ks.gov/oil-gas/abandoned-well-legislative-reports</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20260319</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Kansas Corporation Commission, 2026</srccitea>
+        <srccontr>Kansas abandoned oil and gas well data.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Kansas Geological Survey</origin>
+            <pubdate>20260319</pubdate>
+            <title>Leoweb Kansas Geological Survey</title>
+            <geoform>publication</geoform>
+            <pubinfo>
+              <pubplace>Lawrence, KS</pubplace>
+              <publish>Kansas Geological Survey</publish>
+            </pubinfo>
+            <onlink>https://maps.kgs.ku.edu/leoweb/</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20260319</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Kansas Geological Survey, 2026</srccitea>
+        <srccontr>Kansas Leoweb tool to convert public land survey system (PLSS) locations into coordinates in latitude and longitude.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Kentucky Energy and Environment Cabinet</origin>
+            <pubdate>20251016</pubdate>
+            <title>Kentucky Energy and Environment Cabinet Orphan Oil and Gas Well Data</title>
+            <geoform>spreadsheet</geoform>
+            <pubinfo>
+              <pubplace>Frankfort, KY</pubplace>
+              <publish>Kentucky Energy and Environment Cabinet</publish>
+            </pubinfo>
+            <onlink>https://eec.ky.gov/Natural-Resources/Oil-and-Gas/Resources/Pages/default.aspx</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20251016</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Kentucky Energy and Environment Cabinet, 2025</srccitea>
+        <srccontr>Kentucky orphan oil and gas well data.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Louisiana Department of Natural Resources</origin>
+            <pubdate>20250725</pubdate>
+            <title>Louisiana Department of Natural Resources Orphan Oil and Gas Well Data</title>
+            <geoform>spreadsheet</geoform>
+            <pubinfo>
+              <pubplace>Baton Rouge, LA</pubplace>
+              <publish>Louisiana Department of Natural Resources</publish>
+            </pubinfo>
+            <onlink>https://sonlite.dnr.state.la.us/ords/r/sonris_pub/sonris_data_portal/home</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20250725</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Louisiana Department of Natural Resources, 2025</srccitea>
+        <srccontr>Louisiana orphan oil and gas well data.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Louisiana Department of Natural Resources</origin>
+            <pubdate>2022</pubdate>
+            <title>Louisiana Department of Natural Resources well status codes</title>
+            <geoform>publication</geoform>
+            <pubinfo>
+              <pubplace>Baton Rouge, LA</pubplace>
+              <publish>Louisiana Department of Natural Resources</publish>
+            </pubinfo>
+            <onlink>https://www.denr.louisiana.gov/page/sonris-data-entry</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>2022</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Louisiana Department of Natural Resources, 2022</srccitea>
+        <srccontr>Louisiana orphan oil and gas well definition.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Michigan Department of Environment, Great Lakes, and Energy</origin>
+            <pubdate>20250725</pubdate>
+            <title>Michigan Department of Environment, Great Lakes, and Energy Orphan Oil and Gas Well Data</title>
+            <geoform>spreadsheet</geoform>
+            <pubinfo>
+              <pubplace>Lansing, MI</pubplace>
+              <publish>Michigan Department of Environment, Great Lakes, and Energy</publish>
+            </pubinfo>
+            <onlink>https://www.egle.state.mi.us/dataminer/</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20250725</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Michigan Department of Environment, Great Lakes, and Energy, 2025</srccitea>
+        <srccontr>Michigan orphan oil and gas well data.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Mississippi State Oil and Gas Board</origin>
+            <pubdate>20250725</pubdate>
+            <title>Mississippi State Oil and Gas Board Orphan and Potentially Orphan Oil and Gas Well Data</title>
+            <geoform>spreadsheet</geoform>
+            <pubinfo>
+              <pubplace>Jackson, MS</pubplace>
+              <publish>Mississippi State Oil and Gas Board</publish>
+            </pubinfo>
+            <onlink>https://www.ogb.state.ms.us/map.php?open=wellsearch</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20250725</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Mississippi State Oil and Gas Board, 2025</srccitea>
+        <srccontr>Mississippi orphan and potentially orphan oil and gas well data.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Missouri Department of Natural Resources</origin>
+            <pubdate>20250725</pubdate>
+            <title>Missouri Department of Natural Resources Orphan and Abandoned Oil and Gas Well Data</title>
+            <geoform>spreadsheet</geoform>
+            <pubinfo>
+              <pubplace>Jefferson City, MO</pubplace>
+              <publish>Missouri Department of Natural Resources</publish>
+            </pubinfo>
+            <onlink>https://gis-modnr.opendata.arcgis.com/maps/6a69ea30c9584a22b7100f6f9ba6ac94/about</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20250725</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Missouri Department of Natural Resources, 2025</srccitea>
+        <srccontr>Missouri orphan and abandoned oil and gas well data.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Montana Board of Oil &amp; Gas Conservation</origin>
+            <pubdate>20250730</pubdate>
+            <title>Montana Board of Oil &amp; Gas Conservation Orphan Oil and Gas Well Data</title>
+            <geoform>spreadsheet</geoform>
+            <pubinfo>
+              <pubplace>Billings, MT</pubplace>
+              <publish>Montana Board of Oil &amp; Gas Conservation</publish>
+            </pubinfo>
+            <onlink>https://bogapps.dnrc.mt.gov/dataminer/Wells/WellOrphans.aspx</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20250730</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Montana Board of Oil &amp; Gas Conservation, 2025</srccitea>
+        <srccontr>Montana orphan oil and gas well data.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Nebraska Oil &amp; Gas Conservation Commission</origin>
+            <pubdate>20250505</pubdate>
+            <title>Nebraska Wells GIS Shape File (NE_WELLS)</title>
+            <geoform>vector digital data</geoform>
+            <pubinfo>
+              <pubplace>Sidney, NE</pubplace>
+              <publish>Nebraska Oil &amp; Gas Conservation Commission</publish>
+            </pubinfo>
+            <onlink>http://www.nogcc.ne.gov/NOGCCPublications.aspx</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20250505</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Nebraska Oil &amp; Gas Conservation Commission, 2025</srccitea>
+        <srccontr>Nebraska abandoned oil and gas well data.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Nevada Division of Minerals Open Data Site</origin>
+            <pubdate>20250815</pubdate>
+            <title>Oil &amp; Gas Production and Well Data</title>
+            <geoform>spreadsheet</geoform>
+            <pubinfo>
+              <pubplace>Carson City, NV</pubplace>
+              <publish>Nevada Division of Minerals</publish>
+            </pubinfo>
+            <onlink>https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fdata.nbmg.unr.edu%2Fpublic%2FOilGas%2FLogs%2Foilgas_well_index_20200106.xlsx&amp;wdOrigin=BROWSELINK</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20250815</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Nevada Division of Minerals Open Data Site, 2025</srccitea>
+        <srccontr>Nevada abandoned oil and gas well data.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>New Mexico Oil Conservation Division</origin>
+            <pubdate>20260306</pubdate>
+            <title>New Mexico Oil Conservation Division Inactive Wells</title>
+            <geoform>spreadsheet</geoform>
+            <pubinfo>
+              <pubplace>Santa Fe, NM</pubplace>
+              <publish>New Mexico Oil Conservation Division</publish>
+            </pubinfo>
+            <onlink>https://wwwapps.emnrd.nm.gov/ocd/ocdpermitting/Reporting/Compliance/InactiveWells.aspx</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20260306</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>New Mexico Oil Conservation Division, 2026a</srccitea>
+        <srccontr>New Mexico orphan oil and gas well data.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>New Mexico Oil Conservation Division</origin>
+            <pubdate>20260306</pubdate>
+            <title>New Mexico OCD Oil and Gas Wells</title>
+            <geoform>vector digital data</geoform>
+            <pubinfo>
+              <pubplace>Santa Fe, NM</pubplace>
+              <publish>New Mexico Oil Conservation Division</publish>
+            </pubinfo>
+            <onlink>https://ocd-hub-nm-emnrd.hub.arcgis.com/datasets/387f397ebf164c7aa6a752aac7d22b17_0/about</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20260306</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>New Mexico Oil Conservation Division, 2026b</srccitea>
+        <srccontr>New Mexico well data with coordinates.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>New York State Department of Environmental Conservation</origin>
+            <pubdate>20250730</pubdate>
+            <title>New York State Department of Environmental Conservation Unknown Oil and Gas Well Status Wells Data</title>
+            <geoform>spreadsheet</geoform>
+            <pubinfo>
+              <pubplace>Albany, NY</pubplace>
+              <publish>New York State Department of Environmental Conservation</publish>
+            </pubinfo>
+            <onlink>https://extapps.dec.ny.gov/cfmx/extapps/GasOil/search/wells/index.cfm</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20250730</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>New York State Department of Environmental Conservation, 2025</srccitea>
+        <srccontr>New York oil and gas wells with "Unknown", "UnknownLocated", and "UnknownNotFound" status.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>North Dakota Department of Mineral Resources</origin>
+            <pubdate>20250731</pubdate>
+            <title>North Dakota Department of Mineral Resources Abandoned Oil and Gas Well Data</title>
+            <geoform>vector digital data</geoform>
+            <pubinfo>
+              <pubplace>Bismarck, ND</pubplace>
+              <publish>North Dakota Department of Mineral Resources</publish>
+            </pubinfo>
+            <onlink>https://gis.dmr.nd.gov/gisdownload.asp</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20250731</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>North Dakota Department of Mineral Resources, 2025</srccitea>
+        <srccontr>North Dakota abandoned oil and gas well data, where "shut in" date is greater than 12 months ago = abandoned.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Ohio Department of Natural Resources</origin>
+            <pubdate>20260313</pubdate>
+            <title>Ohio Department of Natural Resources Orphan and Potential Orphan Oil and Gas Wells Data</title>
+            <geoform>tabular digital data</geoform>
+            <pubinfo>
+              <pubplace>Columbus, OH</pubplace>
+              <publish>Ohio Department of Natural Resources</publish>
+            </pubinfo>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20260313</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Ohio Department of Natural Resources, 2026</srccitea>
+        <srccontr>Ohio orphan and potential orphan oil and gas wells provided upon request from staff at Ohio Department of National Resources. Filtering online well records (https://gis.ohiodnr.gov/arcgis/rest/services/DOG_Services/Oilgas_Wells_public/MapServer/2) did not yield expected results, therefor the authors relied on Ohio DNR staff assistance.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Oklahoma Corporation Commission Oil and Gas Conservation</origin>
+            <pubdate>20250731</pubdate>
+            <title>Oklahoma Corporation Commission Oil and Gas Conservation Orphan Oil and Gas Well Data</title>
+            <geoform>spreadsheet</geoform>
+            <pubinfo>
+              <pubplace>Oklahoma City, OK</pubplace>
+              <publish>Oklahoma Corporation Commission Oil and Gas Conservation</publish>
+            </pubinfo>
+            <onlink>https://oklahoma.gov/occ/divisions/oil-gas/oil-gas-data.html</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20250731</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Oklahoma Corporation Commission Oil and Gas Conservation, 2025</srccitea>
+        <srccontr>Oklahoma orphan oil and gas well data.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Pennsylvania Department of Environmental Protection</origin>
+            <pubdate>20260306</pubdate>
+            <title>Pennsylvania Department of Environmental Protection Orphan Oil and Gas Well Data</title>
+            <geoform>spreadsheet</geoform>
+            <pubinfo>
+              <pubplace>Harrisburg, PA</pubplace>
+              <publish>Pennsylvania Department of Environmental Protection</publish>
+            </pubinfo>
+            <onlink>https://newdata-padep-1.opendata.arcgis.com/datasets/PADEP-1::oil-gas-conventional-well-locations/about</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20260306</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Pennsylvania Department of Environmental Protection, 2026</srccitea>
+        <srccontr>Pennsylvania orphan oil and gas well data.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Tennessee Department of Environment and Conservation</origin>
+            <pubdate>20250915</pubdate>
+            <title>Tennessee Department of Environment and Conservation Forfeited Oil and Gas Well Data</title>
+            <geoform>spreadsheet</geoform>
+            <pubinfo>
+              <pubplace>Nashville, TN</pubplace>
+              <publish>Tennessee Department of Environment and Conservation</publish>
+            </pubinfo>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20250915</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Tennessee Department of Environment and Conservation, 2025</srccitea>
+        <srccontr>Tennessee forfeited oil and gas well data provided upon request.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Railroad Commission of Texas</origin>
+            <pubdate>20250601</pubdate>
+            <title>Texas Railroad Commission Orphan Oil and Gas Well Data</title>
+            <geoform>spreadsheet</geoform>
+            <pubinfo>
+              <pubplace>Austin, Texas</pubplace>
+              <publish>Railroad Commission of Texas</publish>
+            </pubinfo>
+            <onlink>https://www.rrc.texas.gov/oil-and-gas/research-and-statistics/well-information/orphan-wells-12-months/</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20250601</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Railroad Commission of Texas, 2025</srccitea>
+        <srccontr>Texas orphan oil and gas well data.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Utah Department of Natural Resources</origin>
+            <pubdate>20250801</pubdate>
+            <title>Utah Oil and Gas Well Locations</title>
+            <geoform>spreadsheet</geoform>
+            <pubinfo>
+              <pubplace>Salt Lake City, UT</pubplace>
+              <publish>Utah Department of Natural Resources</publish>
+            </pubinfo>
+            <onlink>https://opendata.gis.utah.gov/datasets/utahDNR::utah-oil-and-gas-well-locations/about</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20250801</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Utah Department of Natural Resources, 2025</srccitea>
+        <srccontr>Utah orphan oil and gas well data.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>West Virginia Department of Environmental Protection</origin>
+            <pubdate>20250807</pubdate>
+            <title>West Virginia Department of Environmental Protection Abandoned Oil and Gas Well Data</title>
+            <geoform>spreadsheet</geoform>
+            <pubinfo>
+              <pubplace>Charleston, WV</pubplace>
+              <publish>West Virginia Department of Environmental Protection</publish>
+            </pubinfo>
+            <onlink>https://data-wvdep.opendata.arcgis.com/datasets/WVDEP::all-dep-wells-2/about</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20250807</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>West Virginia Department of Environmental Protection, 2025</srccitea>
+        <srccontr>West Virginia abandoned oil and gas well data.</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Wyoming Oil &amp; Gas Conservation Commission</origin>
+            <pubdate>20250808</pubdate>
+            <title>Wyoming Oil &amp; Gas Conservation Commission Orphan Oil and Gas Well Data</title>
+            <geoform>spreadsheet</geoform>
+            <pubinfo>
+              <pubplace>Casper, WY</pubplace>
+              <publish>Wyoming Oil &amp; Gas Conservation Commission</publish>
+            </pubinfo>
+            <onlink>https://dataexplorer.wogcc.wyo.gov/</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>20250808</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Wyoming Oil &amp; Gas Conservation Commission, 2025</srccitea>
+        <srccontr>Wyoming orphan oil and gas well data.</srccontr>
+      </srcinfo>
+      <procstep>
+        <procdesc>Step 1: Compiling data from each state. This was done by visiting state websites and downloading available relevant data or by direct data requests via email or phone call.</procdesc>
+        <procdate>20250725</procdate>
+      </procstep>
+      <procstep>
+        <procdesc>Step 2: Formatting the collected data into a standard format. State data were put into a standard national dataset format that included API number (or other identifying number), state, county, well name and number, well type and status, location coordinates, additional notes, and surface and subsurface land ownership. State specific notes are included below.  
+
+Alabama: Searched well data filtered by the term AB (abandoned) and downloaded results (Alabama Oil and Gas Board, 2025). Well status definitions from Geological Survey of Alabama website hosting State Oil and Gas Board of Alabama Administrative Code (2021) pdf. 
+
+Alaska: Downloaded "Official AOGCC Alaska Orphan Well List" from Alaska Oil and Gas Compact Commission (2024). 
+
+Arkansas: Downloaded shapefile from Arkansas Oil and Gas Commission (2025). Converted shapefile attribute table into excel spreadsheet. Filtered spreadsheet by well status "Abandoned Orphan".  
+
+California: Appendix 5 data on deserted and probably deserted wells from the Idle Wells Report, (California Geologic Energy Management Division, 2025) was merged with declared orphans from appendix 6 (also California Geologic Energy Management Division, 2025), and the data table from an "All Wells" shapefile (California Department of Conservation, 2025) using API numbers to make the join in database software. Daily updated "All Wells" data table provided the coordinates needed to be appended to the appendix 5 and 6 records.  
+
+Colorado: Due to problems isolating unplugged orphan wells from online data, a request was made by email to Colorado Oil and Gas Conservation Commission (2025). A spreadsheet file was sent to the authors with a list of unplugged orphaned wells in Colorado.  
+
+Illinois: Submitted a Freedom of Information Act (FOIA) data request to staff at the Illinois Department of Natural Resources. Received data file from Illinois Department of Natural Resources (2025). 
+
+Indiana: Filtered well information from Indiana Department of Natural Resources (2025) by "orphan", "revoked", and "other orphan" and downloaded results. Definitions from IN DNR Orphaned &amp; Abandoned Well Program webpage (2022). Data included no API numbers or coordinates, only public land survey system (PLSS) information and Indiana Geological Survey (IGS) identification numbers.		 
+
+Kansas: Extracted wells from table in the Abandoned Oil and Gas Well Status Report (Kansas Corportation Commission, 2026) PDF table. Used Kansas Geological Survey Leoweb tool (KGS, 2026) to convert public land survey system (PLSS) locations to NAD83 coordinates. Added generic USGSID:KS#### sorting by county, then lease, then well number.   
+
+Kentucky: Downloaded Orphan Well List from Kentucky Energy and Environment Cabinet (2025) website. Carter coordinates (specific coordinate system used in Kentucky) was converted to NAD83 coordinates by USGS staff. XX wells missing API numbers were provided with a unique USGS ID.   
+
+Louisiana: Filtered well results on Louisiana SONRIS Data Portal on LA DNR (Louisiana Department of Natural Resources, 2025) website by well status “ACT 404 ORPHAN WELL-ENG" and “ACT 404 ORPHAN WELL-INJ", downloaded CSV results. Well status definitions from LA DNR (2022) website. 
+
+Michigan: Filtered well search status by "orphan" on Michigan Department of Environment, Great Lakes, and Energy (MI DEGLE) (2025) website’s Oil, Gas, &amp; Minerals Division Data Explorer, and downloaded results. 
+
+Mississippi: Filtered by the terms “O” (orphaned) and “PO” (potentially orphaned) well status on Mississippi State Oil and Gas Board (2025) website and downloaded excel files results.  
+
+Missouri: Downloaded CSV of all oil and gas wells from Missouri Department of Natural Resources (2025) website. Filtered spreadsheet by "orphan", "abandoned", "abandoned no evidence", "abandoned known location", and "abandoned unknown location" well statuses and combined resulting data. 
+
+Montana: In the Orphan Wells tab on the Montana Bureau of Oil and Gas Conservation (2025) website, queried using inputs for Well type, equal to, oil OR gas. Downloaded data.  
+
+Nebraska: Downloaded "Nebraska Wells GIS Shapefile" from the Nebraska Oil and Gas Conservation Commission (NE OGCC) (2025) website. Converted shapefile attribute table to excel spreadsheet, filtered excel spreadsheet by "AB" (abandoned) to obtain orphan wells, as directed in email from NEOGCC staff.  
+
+Nevada: Downloaded excel spreadsheet from Nevada Division of Minerals Open Data Site (2025) Oil and Gas Well Search page. Filtered spreadsheet by "AB" (abandoned) well status.  
+
+New Mexico: Downloaded inactive wells spreadsheet from New Mexico Oil Conservation Division (2026a). Filtered 15 months of inactivity, the same filter that the state used to report potential orphan wells. Obtained coordinates by join with "New Mexico OCD Oil and Gas Wells" list from New Mexico Oil Conservation Division (2026b).  
+
+New York: Downloaded well data from New York Department of Environmental Conservation (2025) Oil &amp; Gas Wells Data Search website. Filtered search by well status = “Unknown”, “Unknown Located”, and “Unknown Not Located”. Downloaded spreadsheets and merged.
+
+North Dakota: Downloaded "OGD_Wells" shapefile from North Dakota Department of Mineral Resources (2025) Oil and Gas ArcIMS Viewer webpage. Converted shapefile attribute table into excel spreadsheet, filtered by "abandoned" well status. Abandoned well status definition from ND Oil &amp; Gas Division. 
+
+Ohio: Attempts to filter publicly available data at https://gis.ohiodnr.gov/arcgis/rest/services/DOG_Services/Oilgas_Wells_public/MapServer/2 did not yield intended results. Upon request, Ohio Department of Natural Resources (2026) staff provided the requested data to the authors.
+
+Oklahoma: Downloaded "Orphan Well List" spreadsheet from Oklahoma Conservation Commission (2025) Oil and Gas Conservation Division website. 
+
+Pennsylvania: Downloaded orphan well data from Pennsylvania Department of Environmental Protection (2026). Filtered by "DEP orphan" and "DEP abandoned".  
+
+Tennessee: Received "forfeited" well data from Tennessee Department of Energy and Conservation (2025) staff. Converted NAD27 to NAD83 coordinates. 
+
+Texas: Downloaded spreadsheet of "Orphan Wells with Delinquent P-5 Greater Than 12 Months" data from Railroad Commission of Texas (2025) website. 
+
+Utah: Downloaded “Utah Oil and Gas Well Locations” file from Utah Division of Oil, Gas, and Mining (2025). Filtered operator by "Orphan-No Responsible Operator", and well status NOT = pa.
+
+West Virginia: Data downloaded from the West Virginia Department of Environmental Protection (2025) Oil &amp; Gas Wells website filtered by well status “Abandoned” and operator “Operator Unknown” and “Unknown”. 
+
+Wyoming: Filtered well class by any term including "orphaned" on Wyoming Oil &amp; Gas Conservation Commission (2025) Orphan Well webpage. Downloaded data and filtered out "Subsequent Report of Abandonment" and "Permanently Abandoned" in Well Status column.</procdesc>
+        <srcused>Alabama Oil and Gas Board, 2025</srcused>
+        <srcused>Geological Survey of Alabama, 2021</srcused>
+        <srcused>Alaska Oil and Gas Compact Commission, 2024</srcused>
+        <srcused>Arkansas Oil and Gas Commission, 2025</srcused>
+        <srcused>California Geologic Energy Management Division, 2025</srcused>
+        <srcused>California Department of Conservation, 2025</srcused>
+        <srcused>Colorado Oil and Gas Conservation Commission, 2025</srcused>
+        <srcused>Illinois Department of Natural Resources, 2025</srcused>
+        <srcused>Indiana Department of Natural Resources, 2025</srcused>
+        <srcused>Indiana Department of Natural Resources, 2022</srcused>
+        <srcused>Kansas Corporation Commission, 2026</srcused>
+        <srcused>Kansas Geological Survey, 2026</srcused>
+        <srcused>Kentucky Energy and Environment Cabinet, 2025</srcused>
+        <srcused>Louisiana Department of Natural Resources, 2022</srcused>
+        <srcused>Louisiana Department of Natural Resources, 2025</srcused>
+        <srcused>Michigan Department of Environment, Great Lakes, and Energy, 2025</srcused>
+        <srcused>Mississippi State Oil and Gas Board, 2025</srcused>
+        <srcused>Missouri Department of Natural Resources, 2025</srcused>
+        <srcused>Montana Board of Oil &amp; Gas Conservation, 2025</srcused>
+        <srcused>Nebraska Oil &amp; Gas Conservation Commission, 2025</srcused>
+        <srcused>Nevada Division of Minerals Open Data Site, 2025</srcused>
+        <srcused>New Mexico Oil Conservation Division, 2026a</srcused>
+        <srcused>New Mexico Oil Conservation Division, 2026b</srcused>
+        <srcused>New York State Department of Environmental Conservation, 2025</srcused>
+        <srcused>North Dakota Department of Mineral Resources, 2025</srcused>
+        <srcused>Ohio Department of Natural Resources, 2026</srcused>
+        <srcused>Oklahoma Corporation Commission Oil and Gas Conservation, 2025</srcused>
+        <srcused>Pennsylvania Department of Environmental Protection, 2026</srcused>
+        <srcused>Tennessee Department of Environment and Conservation, 2025</srcused>
+        <srcused>Railroad Commission of Texas, 2025</srcused>
+        <srcused>Utah Department of Natural Resources, 2025</srcused>
+        <srcused>West Virginia Department of Environmental Protection, 2025</srcused>
+        <srcused>Wyoming Oil &amp; Gas Conservation Commission, 2025</srcused>
+        <procdate>20260301</procdate>
+      </procstep>
+      <procstep>
+        <procdesc>Step 3: Data compilation. All state specific data were compiled into a national dataset.</procdesc>
+        <procdate>20260310</procdate>
+      </procstep>
+      <procstep>
+        <procdesc>Step 4: Quality control check on the preliminary dataset. General location checks, data formatting, value range checks, and other quality assurance and control checks were performed. Inconsequential data variation from source to source, such as capitalization, numerical digits reported, and well name / well number separation, were not reformatted in order to keep the data in a state as close as possible to that of the original source. Locations without coordinates were removed. Records with significant location errors, such as plotting in the wrong state far from borders were removed. Often these records had many wells at the same location, further indicating the record was incorrect.</procdesc>
+        <procdate>20250416</procdate>
+      </procstep>
+      <procstep>
+        <procdesc>Step 5: Surface landowner data added. Using Bureau of Land Management's (2026a) National SMA Surface Management Agency Area Polygons, a spatial join was performed to estimate the surface owner for each well location. If a federal agency is the estimated owner, both the department and agency were added to the dataset.</procdesc>
+        <srcused>Bureau of Land Management, 2026b</srcused>
+        <procdate>20260508</procdate>
+      </procstep>
+      <procstep>
+        <procdesc>Step 6: Subsurface landowner data added. Available data was incomplete. Colorado, New Mexico, and Utah provided the subsurface owner (also called mineral rights owner) data with their orphan wells. Bureau of Land Management has published maps of federal ownership alone, for some states. Using Bureau of Land Management's data (2023, 2024a, 2024b, 2025b, and 2026a), a spatial join was performed to estimate the type of federal mineral rights for each well location. Examples of these federal rights include all mineral rights, just oil, or just coal etc. Because the subsurface owner and federal mineral rights data are estimates and come from different sources (the states and BLM respectively), there are some wells where the data from state and federal sources are not in agreement.</procdesc>
+        <srcused>Bureau of Land Management, 2023</srcused>
+        <srcused>Bureau of Land Management, 2024a</srcused>
+        <srcused>Bureau of Land Management, 2024b</srcused>
+        <srcused>Bureau of Land Management, 2025b</srcused>
+        <srcused>Bureau of Land Management, 2026a</srcused>
+        <srcused>Colorado Oil and Gas Conservation Commission, 2025</srcused>
+        <srcused>New Mexico Oil Conservation Division, 2026b</srcused>
+        <srcused>Utah Department of Natural Resources, 2025</srcused>
+        <procdate>20260508</procdate>
+      </procstep>
+    </lineage>
+  </dataqual>
+  <spdoinfo>
+    <direct>Vector</direct>
+    <ptvctinf>
+      <sdtsterm>
+        <sdtstype>Entity point</sdtstype>
+        <ptvctcnt>130121</ptvctcnt>
+      </sdtsterm>
+    </ptvctinf>
+  </spdoinfo>
+  <spref>
+    <horizsys>
+      <geograph>
+        <latres>0.0197133854</latres>
+        <longres>0.0291834768</longres>
+        <geogunit>Decimal degrees</geogunit>
+      </geograph>
+      <geodetic>
+        <horizdn>North_American_Datum_1983</horizdn>
+        <ellips>GRS 1980</ellips>
+        <semiaxis>6378137.0</semiaxis>
+        <denflat>298.257222101</denflat>
+      </geodetic>
+    </horizsys>
+  </spref>
+  <eainfo>
+    <detailed>
+      <enttyp>
+        <enttypl>US_Orphaned_Wells_2026</enttypl>
+        <enttypd>United States documented unplugged orphaned oil and gas well data with well identification, status and location attributes.</enttypd>
+        <enttypds>Producer Defined</enttypds>
+      </enttyp>
+      <attr>
+        <attrlabl>record_key</attrlabl>
+        <attrdef>Unique record key or identifier for a documented orphan well within this dataset.</attrdef>
+        <attrdefs>Producer defined.</attrdefs>
+        <attrdomv>
+          <udom>7-digit numeric value assigned by the compiler to each well.</udom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>primary_identifier_type</attrlabl>
+        <attrdef>Type of primary identifier provided by the data source. The most common is API number, established by the American Petroleum Institute, but some wells without API numbers have state specific numbers or no identifier of any kind.</attrdef>
+        <attrdefs>Producer defined.</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>blank cell</edomv>
+            <edomvd>For some wells, no primary identifier was provided by the data source.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>API</edomv>
+            <edomvd>Unique, permanent, numeric identifier assigned to each well drilled for oil and gas in the United States. Format was established by the American Petroleum Institute (API). A 14-digit API is used here.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>IGSID</edomv>
+            <edomvd>Identification number provided by the State of Indiana for their wells. No API numbers were provided.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>KYPermit</edomv>
+            <edomvd>Identification number provided by the State of Kentucky for their wells. No API numbers were provided.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>ILRefNo</edomv>
+            <edomvd>Identification number provided by the State of Illinois for their wells. No API numbers were provided.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>primary_identifier</attrlabl>
+        <attrdef>An identifier assigned by the source state agency to the wells in this dataset.</attrdef>
+        <attrdefs>Producer defined</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>blank cell</edomv>
+            <edomvd>For some wells, no primary identifier was provided by the data source.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <udom>API values are 14-digit numeric values.
+IGSID values are 6-digit numeric values.
+ILRefNo values are 4 to 6-digit numeric values.
+KYPermit values are 3 to 7-digit alpha-numeric values with some dashes.</udom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>secondary_identifier</attrlabl>
+        <attrdef>A secondary identifier provided by the data source, often used by the state agency that provided the data.</attrdef>
+        <attrdefs>Producer defined</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>blank cell</edomv>
+            <edomvd>For most wells, no secondary identifier was provided by the data source.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <udom>Various alpha-numeric values used by state agencies to identify wells.</udom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>state</attrlabl>
+        <attrdef>First order division of a nation, including states and state equivalents.</attrdef>
+        <attrdefs>National Atlas of the United States</attrdefs>
+        <attrdomv>
+          <codesetd>
+            <codesetn>U.S. State Names</codesetn>
+            <codesets>USGS Common Geographic Areas: https://apps.usgs.gov/thesaurus/cga/</codesets>
+          </codesetd>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>county</attrlabl>
+        <attrdef>An administrative division of a U.S. state.</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <codesetd>
+            <codesetn>U.S. County Names</codesetn>
+            <codesets>USGS Common Geographic Areas: https://apps.usgs.gov/thesaurus/cga/</codesets>
+          </codesetd>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>well_name</attrlabl>
+        <attrdef>A name for an oil or gas well that typically includes the operator name and or lease name.</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>blank cell</edomv>
+            <edomvd>For some wells, no well name was provided by the data source.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <udom>The well name as provided by the data source.</udom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>well_number</attrlabl>
+        <attrdef>A number included with well name, typically corresponds to order in which the wells were permitted on each lease owned by an operator.</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>blank cell</edomv>
+            <edomvd>For some wells, no well number was provided by the data source.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <udom>The well number as provided by the data source.</udom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>type</attrlabl>
+        <attrdef>What the well was drilled for, i.e. oil, gas, injection, or production.</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>blank cell</edomv>
+            <edomvd>For some wells, no well type was provided by the data source.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <udom>The well type as provided by the original state data source listed in the source metadata. Please refer to the source material for state specific attribute definitions.</udom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>status</attrlabl>
+        <attrdef>The status of the well as determined by the managing agency.</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>blank cell</edomv>
+            <edomvd>For some wells, no well status was provided by the data source.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <udom>The well status as provided by the original state data source listed in the source metadata. Please refer to the source material for state specific attribute definitions.</udom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>latitude</attrlabl>
+        <attrdef>State provided latitude of the well.</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <rdom>
+            <rdommin>25.938656</rdommin>
+            <rdommax>70.172585</rdommax>
+            <attrunit>Degrees</attrunit>
+          </rdom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>longitude</attrlabl>
+        <attrdef>State provided longitude of well.</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <rdom>
+            <rdommin>-153.3442</rdommin>
+            <rdommax>-73.45713</rdommax>
+            <attrunit>Degrees</attrunit>
+          </rdom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>principal_meridian</attrlabl>
+        <attrdef>A meridian used for survey control in a large region. In this case, for the Public Land Survey System (PLSS).</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>blank cell</edomv>
+            <edomvd>Unless used by the authors to determine location coordinates, original values (if available) were not retained.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <udom>The PLSS principal meridian as provided by the data source.</udom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>township</attrlabl>
+        <attrdef>Numerical township of the well in the Public Land Survey System (PLSS).</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>blank cell</edomv>
+            <edomvd>Unless used by the authors to determine location coordinates, original values (if available) were not retained.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <udom>The PLSS township as provided by the data source.</udom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>t_dir</attrlabl>
+        <attrdef>Township direction, either North or South.</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>blank cell</edomv>
+            <edomvd>Unless used by the authors to determine location coordinates, original values (if available) were not retained.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>N</edomv>
+            <edomvd>North</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>S</edomv>
+            <edomvd>South</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>range</attrlabl>
+        <attrdef>Numerical range of the well in the Public Land Survey System (PLSS).</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>blank cell</edomv>
+            <edomvd>Unless used by the authors to determine location coordinates, original values (if available) were not retained.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <udom>The PLSS range as provided by the data source.</udom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>r_dir</attrlabl>
+        <attrdef>Range direction, either East or West</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>blank cell</edomv>
+            <edomvd>Unless used by the authors to determine location coordinates, original values (if available) were not retained.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>E</edomv>
+            <edomvd>East</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>W</edomv>
+            <edomvd>West</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>section</attrlabl>
+        <attrdef>Section number 1-36 of a specific township and range the Public Land Survey System (PLSS). Each section is 1 square mile. In some cases, Louisiana wells include values that are not PLSS section numbers in this attribute column.</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>blank cell</edomv>
+            <edomvd>Unless used by the authors to determine location coordinates, original values (if available) were not retained.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <udom>For all states except for Louisiana, section data will range from 1 to 36. In Louisiana, most section data will range from 1 to 36, but some wells have values ranging from 0 to 122, these are not PLSS sections they are a different format of marking locations.</udom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>source</attrlabl>
+        <attrdef>Source where the data were gathered.</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <udom>Source name.</udom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>data_file_date</attrlabl>
+        <attrdef>The date the data were last updated by the source.</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <rdom>
+            <rdommin>12/31/2023</rdommin>
+            <rdommax>04/13/2026</rdommax>
+          </rdom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>well_info_notes</attrlabl>
+        <attrdef>Additional well information notes.</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>blank cell</edomv>
+            <edomvd>No notes retained from the original source for inclusion by the authors.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <udom>Additional well information notes as provided by the data source or the USGS. Common notes are related to the field name ("Field:"), permit number ("Permit:"), and completion date ("CompletionDate:").</udom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>location_notes</attrlabl>
+        <attrdef>Additional well location notes.</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>blank cell</edomv>
+            <edomvd>No notes retained from the original source for inclusion by the authors.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <udom>Additional well location notes as provided by the data source or the USGS. Common notes are related to the coordinates (and any edits made by the authors), township, town, and municipality.</udom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>other_notes</attrlabl>
+        <attrdef>Additional notes that did not fit into any other category.</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>blank cell</edomv>
+            <edomvd>No notes retained from the original source for inclusion by the authors.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <udom>Additional notes from the source or USGS that did not fit into any other category. Common notes are related to the status date and lease identification number. For Kentucky wells, this is where the original carter coordinate system location data is stored.</udom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>surface_owner_fed_dept</attrlabl>
+        <attrdef>Estimated surface rights owner or federal department responsible for administration. Not an official declaration of responsibility.</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>blank cell</edomv>
+            <edomvd>No surface ownership was assigned to this well location by the source data (BLM, 2026b)</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>DOD</edomv>
+            <edomvd>Surface lands administered by the United States Department of Defense.</edomvd>
+            <edomvds>Bureau of Land Management, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>DOI</edomv>
+            <edomvd>Surface lands administered by the United States Department of Interior.</edomvd>
+            <edomvds>Bureau of Land Management, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>local government</edomv>
+            <edomvd>Surface lands owned at a hierarchical level of government below the state level.</edomvd>
+            <edomvds>Bureau of Land Management, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>NTVPIC</edomv>
+            <edomvd>Surface lands owned as Alaska Native Lands Patented or Interim Conveyed</edomvd>
+            <edomvds>Bureau of Land Management, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>private</edomv>
+            <edomvd>Surface lands owned privately.</edomvd>
+            <edomvds>Bureau of Land Management, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>state</edomv>
+            <edomvd>Surface lands owned by the state.</edomvd>
+            <edomvds>Bureau of Land Management, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>undetermined</edomv>
+            <edomvd>Surface lands where the ownership was not able to be determined by the source.</edomvd>
+            <edomvds>Bureau of Land Management, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>USDA</edomv>
+            <edomvd>Surface lands administered by the United States Department of Agriculture.</edomvd>
+            <edomvds>Bureau of Land Management, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>surface_fed_agency</attrlabl>
+        <attrdef>If applicable, estimated surface federal agency responsible for administration. Not an official declaration of responsibility.</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>blank cell</edomv>
+            <edomvd>No federal agency was assigned responsibility for the land at the location of this well, according to the land management source (BLM, 2026b)</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>ARMY</edomv>
+            <edomvd>The federal agency responsible for the surface lands at this location is the Army.</edomvd>
+            <edomvds>Bureau of Land Management, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>BIA</edomv>
+            <edomvd>The federal agency responsible for the surface lands at this location is the Bureau of Indian Affairs.</edomvd>
+            <edomvds>Bureau of Land Management, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>DOD</edomv>
+            <edomvd>The federal agency responsible for the surface lands at this location is the Department of Defense.</edomvd>
+            <edomvds>Bureau of Land Management, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>FWS</edomv>
+            <edomvd>The federal agency responsible for the surface lands at this location is the Fish and Wildlife Service.</edomvd>
+            <edomvds>Bureau of Land Management, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>NAVY</edomv>
+            <edomvd>The federal agency responsible for the surface lands at this location is the Navy.</edomvd>
+            <edomvds>Bureau of Land Management, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>NPS</edomv>
+            <edomvd>The federal agency responsible for the surface lands at this location is the National Park Service.</edomvd>
+            <edomvds>Bureau of Land Management, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>USACE</edomv>
+            <edomvd>The federal agency responsible for the surface lands at this location is the U.S. Army Corps of Engineers.</edomvd>
+            <edomvds>Bureau of Land Management, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>USAF</edomv>
+            <edomvd>The federal agency responsible for the surface lands at this location is the U.S. Air Force.</edomvd>
+            <edomvds>Bureau of Land Management, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>USBR</edomv>
+            <edomvd>The federal agency responsible for the surface lands at this location is the U.S. Bureau of Reclamation.</edomvd>
+            <edomvds>Bureau of Land Management, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>USFS</edomv>
+            <edomvd>The federal agency responsible for the surface lands at this location is the U.S. Forest Service.</edomvd>
+            <edomvds>Bureau of Land Management, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>USMC</edomv>
+            <edomvd>The federal agency responsible for the surface lands at this location is the U.S. Marine Corps.</edomvd>
+            <edomvds>Bureau of Land Management, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>BLM</edomv>
+            <edomvd>The federal agency responsible for the surface lands at this location is the Bureau of Land Management.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>surface_source</attrlabl>
+        <attrdef>Source of estimated surface ownership and federal responsibility from BLM National SMA.</attrdef>
+        <attrdefs>BLM, 2026b</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>BLM National SMA</edomv>
+            <edomvd>The source of the surface land ownership and federal agency responsibility is the BLM Surface Management Agency dataset.</edomvd>
+            <edomvds>Bureau of Land Management, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>subsurface_owner_fed</attrlabl>
+        <attrdef>Estimated subsurface or mineral rights owner or federal department responsible for administration. Not an official declaration of responsibility.</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>blank cell</edomv>
+            <edomvd>No subsurface owner was identified by the source datasets or it was outside the scope of those datasets.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>BIA</edomv>
+            <edomvd>Subsurface owner identified by the source as Bureau of Indian Affairs.</edomvd>
+            <edomvds>BLM MT (Bureau of Land Management, 2024b), BLM ND (Bureau of Land Management, 2024a)</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>BLM</edomv>
+            <edomvd>Subsurface owner identified by the source as Bureau of Land Management.</edomvd>
+            <edomvds>BLM ND (Bureau of Land Management, 2024a)</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>federal</edomv>
+            <edomvd>Subsurface owner identified by the source as federal, but undifferentiated.</edomvd>
+            <edomvds>Colorado Oil and Gas Conservation Commission, 2025; New Mexico Oil Conservation Division, 2026b; Utah Department of Natural Resources, 2025</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>fee</edomv>
+            <edomvd>Subsurface owner identified by the source as fee (private).</edomvd>
+            <edomvds>Colorado Oil and Gas Conservation Commission, 2025; Utah Department of Natural Resources, 2025</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>Indian/Tribal</edomv>
+            <edomvd>Subsurface owner identified by the source as Indian or Tribal Lands.</edomvd>
+            <edomvds>New Mexico Oil Conservation Division, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>Jicarilla Apache Nation</edomv>
+            <edomvd>Subsurface owner identified by the source as Jicarilla Apache Nation.</edomvd>
+            <edomvds>New Mexico Oil Conservation Division, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>Navajo Nation</edomv>
+            <edomvd>Subsurface owner identified by the source as Navajo Nation.</edomvd>
+            <edomvds>New Mexico Oil Conservation Division, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>private</edomv>
+            <edomvd>Subsurface owner identified by the source as private.</edomvd>
+            <edomvds>New Mexico Oil Conservation Division, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>state</edomv>
+            <edomvd>Subsurface owner identified by the source as state.</edomvd>
+            <edomvds>Colorado Oil and Gas Conservation Commission, 2025; New Mexico Oil Conservation Division, 2026b; Utah Department of Natural Resources, 2025</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>Tribal</edomv>
+            <edomvd>Subsurface owner identified by the source as Tribal.</edomvd>
+            <edomvds>Colorado Oil and Gas Conservation Commission, 2025</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>undetermined</edomv>
+            <edomvd>Subsurface owner not determined according to the source.</edomvd>
+            <edomvds>New Mexico Oil Conservation Division, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>USACE</edomv>
+            <edomvd>Subsurface owner identified by the source as U.S. Army Corps of Engineers.</edomvd>
+            <edomvds>BLM ND (Bureau of Land Management, 2024a)</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>USFS</edomv>
+            <edomvd>Subsurface owner identified by the source as U.S. Forest Service.</edomvd>
+            <edomvds>BLM ND (Bureau of Land Management, 2024a)</edomvds>
+          </edom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>subsurface_source</attrlabl>
+        <attrdef>Source of subsurface ownership and federal responsibility.</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>blank cell</edomv>
+            <edomvd>There is not subsurface data and therefore no source identified.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>BLM ND SSME Subsurface Minerals</edomv>
+            <edomvd>North Dakota subsurface ownership and federal responsibility data from BLM.</edomvd>
+            <edomvds>Bureau of Land Management, 2024a</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>BLM MT SSME Subsurface Minerals</edomv>
+            <edomvd>Montana subsurface ownership and federal responsibility data from BLM.</edomvd>
+            <edomvds>Bureau of Land Management, 2024b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>Colorado Energy &amp; Carbon Management Commission: Orphan Well Program</edomv>
+            <edomvd>Colorado subsurface ownership and federal responsibility data from State of Colorado.</edomvd>
+            <edomvds>Colorado Oil and Gas Conservation Commission, 2025</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>New Mexico Oil Conservation Division</edomv>
+            <edomvd>New Mexico subsurface ownership and federal responsibility data from State of New Mexico.</edomvd>
+            <edomvds>New Mexico Oil Conservation Division, 2026b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>Utah Department of Natural Resources</edomv>
+            <edomvd>Utah subsurface ownership and federal responsibility data from State of Utah.</edomvd>
+            <edomvds>Utah Department of Natural Resources, 2025</edomvds>
+          </edom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>subsurface_fed_rights</attrlabl>
+        <attrdef>If applicable, estimate of federal subsurface rights details. Not an official declaration of responsibility.</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>blank cell</edomv>
+            <edomvd>No subsurface federal rights were identified by the source datasets or it was outside the scope of those datasets.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>all</edomv>
+            <edomvd>All rights to minerals are held by the federal government at this location.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>coal</edomv>
+            <edomvd>Only coal rights are held by the federal government at this location.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>none</edomv>
+            <edomvd>No rights to minerals are held by the federal government at this location.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>oil and gas</edomv>
+            <edomvd>Only oil and gas rights are held by the federal government at this location.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>oil, gas, and coal</edomv>
+            <edomvd>Only oil, gas, and coal rights are held by the federal government at this location.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>other</edomv>
+            <edomvd>Other rights (not specified) are held by the federal government at this location.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>restricted</edomv>
+            <edomvd>Restricted rights are held by the federal government at this location.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>undetermined</edomv>
+            <edomvd>Mineral rights held by the federal government at this location are undetermined.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+      </attr>
+      <attr>
+        <attrlabl>subsurface_fed_rights_source</attrlabl>
+        <attrdef>Source of, if applicable, federal sub-surface rights details.</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>blank cell</edomv>
+            <edomvd>No subsurface federal rights data at this location, therefore no source information.</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>BLM ND SSME Subsurface Minerals</edomv>
+            <edomvd>North Dakota subsurface ownership and federal responsibility data from BLM.</edomvd>
+            <edomvds>Bureau of Land Management, 2024a</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>BLM MT SSME Subsurface Minerals</edomv>
+            <edomvd>Montana subsurface ownership and federal responsibility data from BLM.</edomvd>
+            <edomvds>Bureau of Land Management, 2024b</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>BLM Utah Federal Minerals Estate</edomv>
+            <edomvd>Utah subsurface ownership and federal responsibility data from BLM.</edomvd>
+            <edomvds>Bureau of Land Management, 2026a</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>BLM Colorado Federal Mineral Estate</edomv>
+            <edomvd>Colorado subsurface ownership and federal responsibility data from BLM.</edomvd>
+            <edomvds>Bureau of Land Management, 2023</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <edom>
+            <edomv>BLM NM Lands Mineral Estate</edomv>
+            <edomvd>New Mexico subsurface ownership and federal responsibility data from BLM.</edomvd>
+            <edomvds>Bureau of Land Management, 2025b</edomvds>
+          </edom>
+        </attrdomv>
+      </attr>
+    </detailed>
+  </eainfo>
+  <distinfo>
+    <distrib>
+      <cntinfo>
+        <cntperp>
+          <cntper>GS ScienceBase</cntper>
+          <cntorg>U.S. Geological Survey</cntorg>
+        </cntperp>
+        <cntaddr>
+          <addrtype>mailing address</addrtype>
+          <address>Denver Federal Center, Building 810, Mail Stop 302</address>
+          <city>Denver</city>
+          <state>CO</state>
+          <postal>80225</postal>
+          <country>United States</country>
+        </cntaddr>
+        <cntvoice>1-888-275-8747</cntvoice>
+        <cntemail>sciencebase@usgs.gov</cntemail>
+      </cntinfo>
+    </distrib>
+    <distliab>Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the U.S. Government. 
+
+Unless otherwise stated, all data, metadata and related materials are considered to satisfy the quality standards relative to the purpose for which the data were collected. Although these data and associated metadata have been reviewed for accuracy and completeness and approved for release by the U.S. Geological Survey (USGS), no warranty expressed or implied is made regarding the display or utility of the data for other purposes, nor on all computer systems, nor shall the act of distribution constitute any such warranty.</distliab>
+    <stdorder>
+      <digform>
+        <digtinfo>
+          <formname>Digital Data</formname>
+        </digtinfo>
+        <digtopt>
+          <onlinopt>
+            <computer>
+              <networka>
+                <networkr>https://doi.org/10.5066/P13FHBYG</networkr>
+              </networka>
+            </computer>
+          </onlinopt>
+        </digtopt>
+      </digform>
+      <fees>None</fees>
+    </stdorder>
+    <techpreq>The file contains data available in comma separated value (.csv) file format. The user must have software capable of opening and viewing a .csv file.</techpreq>
+  </distinfo>
+  <metainfo>
+    <metd>20260930</metd>
+    <metc>
+      <cntinfo>
+        <cntperp>
+          <cntper>Matthew D. Merrill</cntper>
+          <cntorg>U.S. Geological Survey, Northeast Region: Geology, Energy &amp; Minerals SC</cntorg>
+        </cntperp>
+        <cntpos>Supervisory Research Geologist</cntpos>
+        <cntaddr>
+          <addrtype>mailing address</addrtype>
+          <address>Mail Stop 954, 12201 Sunrise Valley Dr</address>
+          <city>Reston</city>
+          <state>VA</state>
+          <postal>20192</postal>
+          <country>US</country>
+        </cntaddr>
+        <cntvoice>703-648-6457</cntvoice>
+        <cntfax>703-648-6404</cntfax>
+        <cntemail>mmerrill@usgs.gov</cntemail>
+      </cntinfo>
+    </metc>
+    <metstdn>FGDC Content Standard for Digital Geospatial Metadata</metstdn>
+    <metstdv>FGDC-STD-001-1998</metstdv>
+  </metainfo>
+</metadata>
