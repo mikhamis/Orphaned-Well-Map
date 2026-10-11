@@ -57,12 +57,21 @@ def download(layer: str, dst: str, where: str = "1=1", batch: int | None = None)
     n = 0
     with gzip.open(dst, "wt", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
+        def fetch(chunk: list[int]) -> list[dict]:
+            # A busy server can time out on a full page; split the page and retry the halves.
+            try:
+                d = _get(layer + "/query", {
+                    "where": f"{oid_field} >= {chunk[0]} AND {oid_field} <= {chunk[-1]}",
+                    "outFields": "*", "outSR": "4326", "returnGeometry": "true", "f": "json"})
+                return d.get("features", [])
+            except Exception:
+                if len(chunk) <= 25:
+                    raise
+                mid = len(chunk) // 2
+                return fetch(chunk[:mid]) + fetch(chunk[mid:])
+
         for i in range(0, len(ids), batch):
-            chunk = ids[i:i + batch]
-            d = _get(layer + "/query", {
-                "where": f"{oid_field} >= {chunk[0]} AND {oid_field} <= {chunk[-1]}",
-                "outFields": "*", "outSR": "4326", "returnGeometry": "true", "f": "json"})
-            for feat in d.get("features", []):
+            for feat in fetch(ids[i:i + batch]):
                 attrs = feat.get("attributes") or {}
                 if names is None:
                     names = list(attrs)
