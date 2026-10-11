@@ -46,21 +46,19 @@ jobs:
       - name: State shapefiles to CSV
         run: |
           # configs with source.download point at zipped shapefiles; source.url files are fetched by the build
-          sudo apt-get update -qq && sudo apt-get install -y -qq gdal-bin >/dev/null
+          pip install -q pyshp pyproj openpyxl
           : > state-files.txt
           for cfg in pipeline/states/[A-Z][A-Z].json; do
             st=$(basename "$cfg" .json)
             url=$(python3 -c "import json,sys; print((json.load(open(sys.argv[1])).get('source') or {}).get('download') or '')" "$cfg")
             [ -n "$url" ] || continue
             curl -sSfL --retry 3 -o "data/raw/$st.zip" "$url"
-            shp=$(unzip -Zl "data/raw/$st.zip" | awk 'tolower($NF) ~ /\.shp$/ {print $4, $NF}' | sort -n | tail -1 | cut -d' ' -f2)   # largest .shp: zips can hold several layers
-            ogr2ogr -f CSV -t_srs EPSG:4326 -lco GEOMETRY=AS_XY "data/raw/$st.csv" "/vsizip/data/raw/$st.zip/$shp"
-            echo "--state-file $st=../data/raw/$st.csv" >> state-files.txt
+            (cd pipeline && python -m owm.shp2csv "../data/raw/$st.zip" "../data/raw/$st.csv.gz")
+            echo "--state-file $st=../data/raw/$st.csv.gz" >> state-files.txt
           done
           cat state-files.txt
       - name: Build site data
         run: |
-          pip install -q openpyxl
           cd pipeline
           python -m owm.build --usgs ../data/raw/usgs.csv $(cat ../state-files.txt)
       - uses: actions/upload-pages-artifact@v3

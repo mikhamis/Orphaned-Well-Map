@@ -99,7 +99,7 @@ def load_records(cfg: dict, path: Path) -> tuple[list[StateWell], dict]:
     checked = False
     for row in read_table(path, encoding=src.get("encoding", "utf-8-sig"), delimiter=src.get("delimiter")):
         if not checked:
-            missing = [c for k, c in cols.items() if c and c not in row]
+            missing = [c for k, c in cols.items() if c and c not in row] + [c for c in extra_cols if c not in row]
             if missing:
                 raise SystemExit(f"{st}: columns {missing} not in file. Headers: {list(row.keys())}")
             checked = True
