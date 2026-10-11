@@ -64,7 +64,7 @@ Notes:
   status, so there is no nearby-active search. Kept out of the national ranking. The KGS report reads
   from the same database as the joined file, so that check confirms the join, not KGS's records.
 - For every match, the USGS and state coordinates are compared. Median gap: 0.2 m (OK), 0.3 m (KY).
-  Wells more than 1 mile apart (108 in OK, 133 in KY) get a note on the site.
+  Wells more than 1 km (0.6 mi) apart (108 in OK, 133 in KY) get a note on the site.
 - Rerun the checks with `python -m owm.verify` (see the module docstring) and paste the output into the
   state config's `verification` block.
 
