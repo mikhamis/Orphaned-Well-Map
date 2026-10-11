@@ -1,2 +1,3 @@
-# Round 11: NETL well layer coverage.
-NETL_state_counts.json	https://arcgis.netl.doe.gov/server/rest/services/Hosted/Oil_and_Gas_Wells/FeatureServer/0/query?where=1%3D1&groupByFieldsForStatistics=state&outStatistics=%5B%7B%22statisticType%22%3A%22count%22%2C%22onStatisticField%22%3A%22fid%22%2C%22outStatisticFieldName%22%3A%22n%22%7D%5D&f=json
+# name<TAB>url — fetched by .github/workflows/fetch-data.yml on GitHub runners into the draft release "source-data".
+# "arcgis:<layer url>[|<where>]" pages through an ArcGIS REST layer into a gzipped CSV (owm.arcgis).
+# Add lines here to pull a source; pushing a change to this file runs the workflow.

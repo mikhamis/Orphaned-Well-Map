@@ -463,7 +463,8 @@
     if (sf) {
       ops = m.operators.map((op, i) => ({ ...op, i, count: (op.by_state || {})[sf.code] || 0 }))
         .filter((op) => op.count > 0).sort((a, b) => b.count - a.count);
-      $("#operators-title").textContent = sf.configured ? `Most orphaned wells, by ${(sf.operator_label || "last operator").toLowerCase()}` : "Most orphaned wells, by operator";
+      const lbl = sf.operator_label || "Last operator";
+      $("#operators-title").textContent = sf.configured ? `Most orphaned wells, by ${lbl[0].toLowerCase()}${lbl.slice(1)}` : "Most orphaned wells, by operator";
       $("#operators-note").textContent = "Click one to map its wells.";
     } else {
       ops = m.operators.map((op, i) => ({ ...op, i })).filter((op) => op.count > 0);
@@ -508,9 +509,14 @@
     const notes = [];
     if (m.demo) notes.push("<strong>Synthetic demo data.</strong> These points are test fixtures, not real wells.");
     if (!joined.length) notes.push("No state well records are connected yet, so the map shows USGS records only.");
-    else notes.push(`Operator names come from state records for ${new Intl.ListFormat("en", { type: "conjunction" }).format(joined.map((s) => s.name))} so far (${fmt(joined.reduce((a, s) => a + s.count, 0))} of ${fmt(total)} wells). Other states show the USGS record only.`);
-    const unchecked = joined.filter((s) => !s.verified).map((s) => s.name);
-    if (unchecked.length) notes.push(`Not yet cross-checked against a second source: ${new Intl.ListFormat("en", { type: "conjunction" }).format(unchecked)} (see About the data).`);
+    else {
+      const list = (xs) => new Intl.ListFormat("en", { type: "conjunction" }).format(xs);
+      const missing = m.states.filter((s) => !s.configured);
+      notes.push(`State well records are connected for ${joined.length} of ${m.states.length} states (${fmt(joined.reduce((a, s) => a + s.count, 0))} of ${fmt(total)} wells).` +
+        (missing.length ? ` Not yet connected: ${list(missing.map((s) => s.name))}.` : ""));
+      const checked = joined.filter((s) => s.verified).length;
+      notes.push(`Operators cross-checked against a second source in ${checked} of ${joined.length}; see About the data.`);
+    }
     if (m.usgs.rows !== m.usgs.loaded) notes.push(`${fmt(m.usgs.rows - m.usgs.loaded)} USGS rows without usable coordinates or state aren't mapped.`);
     if (notes.length) { $("#banner").innerHTML = notes.join(" "); $("#banner").hidden = false; }
 

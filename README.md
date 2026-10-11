@@ -51,36 +51,55 @@ environment that can't reach the agency sites.
 
 ## States joined so far
 
-Six states, 96,238 of the 130,121 USGS wells (74%).
+24 of 28 states, 129,177 of 130,121 USGS wells (99.3%). Not connected: Mississippi (11), Nebraska (32), Nevada (6), Tennessee (895).
+Each state's config in `pipeline/states/` records its source, join rule, status codes, and why it is or isn't cross-checked.
 
-| State | USGS wells | Source | Matched | Operator named | Cross-check |
-| --- | ---: | --- | ---: | ---: | --- |
-| Pennsylvania | 21,262 | DEP well layer (PASDA, monthly) | 100% | 34% | 21,211 of 21,212 agree with DEP's Abandoned and Orphan Wells report |
-| Ohio | 22,759 | ODNR statewide wells (weekly) | 99.98% | 6% | Not checked: ODNR shows "HISTORIC OWNER" on 95%. 7,939 are in ODNR's orphan plugging program |
-| Oklahoma | 19,981 | OCC RBDMS wells (nightly) | 99% | 61% | 16,218 of 16,218 agree with the OCC Orphan Well List |
-| Kentucky | 15,638 | KGS well shapefile (monthly) | 97% | 78% (original operator) | 36 of 36 random wells match KGS well reports |
-| Texas | 8,998 | RRC Orphan Well List (monthly) | 78% | 78% | Not checked: only one operator source so far. 1,942 USGS wells aren't on the current RRC list |
-| New York | 7,600 | NYSDEC wells (data.ny.gov) | 99.97% | 43% | 3,244 of 3,245 agree with NYSDEC's Orphaned Wells dataset |
+| State | USGS wells | Matched | Operator named | Cross-check | Inactive, owned | Source |
+| --- | ---: | ---: | ---: | --- | ---: | --- |
+| Ohio | 22,759 | 100% | 1,302 | not yet | 14,311 | Ohio DNR, Oil and Gas Wells Locations of Ohio (statewide, weekly) |
+| Pennsylvania | 21,262 | 100% | 7,283 | ✓ 21,211 of 21,212 agree | 6,032 | Pennsylvania DEP, Oil and Gas Locations (conventional and unconventional), via PASDA |
+| Oklahoma | 19,981 | 99% | 12,116 | ✓ 16,218 of 16,218 agree | 1,298 | Oklahoma Corporation Commission, RBDMS well data (nightly) |
+| Kentucky | 15,638 | 97% | 12,155 | ✓ 36 of 36 agree | — | Kentucky Geological Survey, oil and gas well shapefile (KYOG, monthly) |
+| Texas | 8,998 | 78% | 7,056 | not yet | — | Texas Railroad Commission, Orphan Well List (monthly) |
+| New York | 7,600 | 100% | 3,261 | ✓ 3,244 of 3,245 agree | 2,531 | NYSDEC, Oil, Gas & Other Regulated Wells (data.ny.gov) |
+| Louisiana | 4,978 | 100% | 4,975 | not yet | 20,605 | Louisiana Dept. of Conservation and Energy (SONRIS), Oil/Gas Wells map service |
+| Missouri | 4,816 | 100% | 4,816 | not yet | 157 | Missouri DNR, Oil and Gas Wells (Missouri Geological Survey map service) |
+| Kansas | 4,566 | 83% | 2,040 | not yet | 13,181 | Kansas Geological Survey, oil and gas wells (ks_wells) |
+| Illinois | 3,986 | 94% | — | not yet | — | Illinois State Geological Survey, Wells and Borings location points (weekly) |
+| West Virginia | 3,789 | 100% | 10 | not yet | 11,232 | West Virginia DEP, All DEP Wells (TAGIS map service) |
+| New Mexico | 3,366 | 100% | 3,366 | ✓ 3,265 of 3,366 agree | 4,075 | New Mexico OCD well data via NM Tech PRRC GO-TECH (AllWells, daily) |
+| California | 2,940 | 100% | 2,934 | not yet | 27,457 | CalGEM WellSTAR, Oil and Gas Wells (map service) |
+| Colorado | 1,302 | 100% | 1,299 | not yet | 6,491 | Colorado ECMC, Wells (API spots) map service |
+| Indiana | 946 | 100% | — | not yet | 0 | Indiana DNR / Indiana Geological and Water Survey, Oil and Gas Wells (map service) |
+| North Dakota | 562 | 100% | 562 | not yet | 1,135 | North Dakota DMR, Oil and Gas Division wells (OGD_Wells) |
+| Arizona | 460 | 100% | 455 | not yet | 33 | Arizona Oil and Gas Conservation Commission, oil and gas wells (map service) |
+| Wyoming | 374 | 100% | 374 | not yet | 6,151 | WOGCC well header download, as published by the Wyoming State Geological Survey (January 3, 2025) |
+| Arkansas | 356 | 100% | 356 | not yet | 579 | Arkansas Oil and Gas Commission wells, via the Arkansas GIS Office (map service) |
+| Michigan | 272 | 100% | 272 | not yet | 967 | Michigan EGLE, Oil & Gas Test Well Surface Hole Locations (map service, nightly) |
+| Utah | 90 | 100% | 3 | not yet | 2,571 | Utah Division of Oil, Gas and Mining, well data download |
+| Montana | 61 | 97% | 59 | not yet | 5,150 | Montana Board of Oil and Gas Conservation, well surface locations |
+| Alaska | 44 | 34% | — | not yet | — | Alaska Oil and Gas Conservation Commission, well surface holes (map service) |
+| Alabama | 31 | 94% | 29 | not yet | 643 | Alabama State Oil and Gas Board, Wells (map service) |
 
 Notes:
-- **Last operator isn't always available.** Ohio replaces it with "HISTORIC OWNER"; Pennsylvania's orphan
-  list shows DEP itself or "UNKNOWN OPR". The site shows these as "no operator named".
-- **Kentucky** gives the original operator at completion, not the last; it's kept out of the national ranking.
-- **Texas** has no active-well data yet, so no nearby-active search; same for Kentucky (no current status).
+- **Last operator isn't always available.** Ohio shows "HISTORIC OWNER", West Virginia "OPERATOR UNKNOWN", Utah
+  "Orphan-No Responsible Operator", Pennsylvania DEP itself; these show as "no operator named". Illinois and Alaska
+  publish no operator at all; Indiana leaves it blank on these wells.
+- **Different operator meanings** are kept out of the national ranking: Kentucky (original operator at completion)
+  and Kansas (current operator of a matching lease; Kansas has no well IDs, so wells are matched by location within
+  300 m plus a shared lease-name word).
+- **North Dakota's** USGS rows are wells NDIC marked AB (shut in over 12 months); many have major operators on record.
+- **Not connected:** Tennessee's TDEC server refuses requests from GitHub's runners; Nebraska's NOGCC site was
+  unreachable; Mississippi and Nevada publish no bulk well download.
 - Coordinates are compared for every match; gaps over 1 km get a note on the site.
 - Rerun the checks with `python -m owm.verify` and paste the output into the state's `verification` block.
 
 ## Inactive wells that still have an owner
 
-A separate layer (24,172 wells) of wells that aren't orphans yet because the state still names an
+A separate layer (124,599 wells) of wells that aren't orphans yet because the state still names an
 operator, excluding anything already in the USGS count. Each state's rule is in its config under `at_risk`:
 
-| State | Rule | Wells |
-| --- | --- | ---: |
-| Ohio | Unplugged, operator named, no reported production since 2020 or earlier (derived from ODNR's last-production year) | 14,311 |
-| Pennsylvania | DEP status "Abandoned" or "Regulatory Inactive", operator named | 6,032 |
-| New York | NYSDEC status IN, SI or TA, owner named | 2,531 |
-| Oklahoma | OCC status TA (temporarily abandoned) | 1,298 |
+Each state's rule is its config's `at_risk` block; counts are in the table above.
 
 Operator names are grouped across states with common agency abbreviations expanded (PROD → production,
 OPR → operating, DEV → development), so e.g. "DIVERSIFIED PROD LLC" and "DIVERSIFIED PRODUCTION LLC" count together.
