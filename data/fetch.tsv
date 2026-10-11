@@ -1,2 +1,2 @@
-# Round 10: which states the HIFLD copy covers.
-HIFLD_state_counts.json	https://services.arcgis.com/04HiymDgLlsbhaV4/ArcGIS/rest/services/WebMap/FeatureServer/11/query?where=1%3D1&groupByFieldsForStatistics=STATE&outStatistics=%5B%7B%22statisticType%22%3A%22count%22%2C%22onStatisticField%22%3A%22OBJECTID%22%2C%22outStatisticFieldName%22%3A%22n%22%7D%5D&f=json
+# Round 11: NETL well layer coverage.
+NETL_state_counts.json	https://arcgis.netl.doe.gov/server/rest/services/Hosted/Oil_and_Gas_Wells/FeatureServer/0/query?where=1%3D1&groupByFieldsForStatistics=state&outStatistics=%5B%7B%22statisticType%22%3A%22count%22%2C%22onStatisticField%22%3A%22fid%22%2C%22outStatisticFieldName%22%3A%22n%22%7D%5D&f=json
