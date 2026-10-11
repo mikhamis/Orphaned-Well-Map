@@ -58,6 +58,7 @@ class OrphanWell:
     mineral_owner: str = ""
     source: str = ""
     data_date: str = ""
+    secondary_id: str = ""      # e.g. "Permit:16667"
     ownership: int = 0          # OWNERSHIP index, see ownership_class()
     fed_agency: str = ""        # e.g. USFS, BLM; "" when not federal
     # populated by join
@@ -165,7 +166,7 @@ def load(path: Path, overrides: dict | None = None) -> tuple[list[OrphanWell], d
             type=g("type"), status=g("status"), county=g("county"),
             surface_owner=" / ".join(x for x in (g("surface_owner"), g("surface_agency")) if x),
             mineral_owner=" / ".join(x for x in (g("mineral_owner"), g("subsurface_rights")) if x),
-            source=g("source"), data_date=g("data_date"),
+            source=g("source"), data_date=g("data_date"), secondary_id=g("secondary_id"),
             **dict(zip(("ownership", "fed_agency"),
                        ownership_class(g("surface_owner"), g("surface_agency"), g("mineral_owner")))),
         ))

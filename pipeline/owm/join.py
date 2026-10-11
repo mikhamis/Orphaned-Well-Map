@@ -34,10 +34,13 @@ def _name_tokens(s: str) -> set[str]:
 
 def join_state(orphans: list[OrphanWell], records: list[StateWell], p: JoinParams,
                loc_cfg: dict | None = None) -> dict:
-    """loc_cfg (state config "location_match"): {"tolerance_m": 300, "name_match": true}
+    """loc_cfg (state config "location_match"): {"tolerance_m": 300, "name_match": true, "usgs_id": "secondary"}
     widens the location fallback but then requires the USGS well name to share a word
     with the state record's lease or well name."""
     loc_tol = (loc_cfg or {}).get("tolerance_m", p.loc_tolerance_m)
+    # "usgs_id": "secondary" joins columns.id to the USGS secondary_identifier
+    # (value after any "Label:" prefix) instead of primary_identifier.
+    use_secondary = (loc_cfg or {}).get("usgs_id") == "secondary"
     name_match = bool((loc_cfg or {}).get("name_match"))
     by_api = latest_by_api(records)
     by_id = latest_by_api(records, key="alt_id")
@@ -59,7 +62,9 @@ def join_state(orphans: list[OrphanWell], records: list[StateWell], p: JoinParam
     dists: list[float] = []
     for w in orphans:
         rec, method, dist = None, None, None
-        wid = normalize_id(w.raw_id) if by_id else None
+        wid = None
+        if by_id:
+            wid = normalize_id(w.secondary_id.split(":")[-1] if use_secondary else w.raw_id)
         if w.api and w.api in by_api:
             rec, method = by_api[w.api], "api"
         elif wid and wid in by_id:

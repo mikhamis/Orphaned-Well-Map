@@ -1,0 +1,31 @@
+{
+  "state": "AZ",
+  "verified": false,
+  "source": {
+    "name": "Arizona Oil and Gas Conservation Commission, oil and gas wells (map service)",
+    "arcgis": "https://utility.arcgis.com/usrsvcs/servers/6c01eae404a44e95a9aad050effe93cd/rest/services/OIL_AND_GAS_WELLS_AGOL/FeatureServer/0",
+    "docs_url": "https://azogcc.az.gov/"
+  },
+  "columns": {
+    "api": "API",
+    "operator": "OPERATOR",
+    "status": "STATUS_WELL",
+    "lat": "Y",
+    "lon": "X",
+    "lease": "LEASE_NAME",
+    "well_name": "WELL_NAME"
+  },
+  "active_status": [
+    "^Producing$",
+    "^Active$"
+  ],
+  "operator_label": "Operator of record (AZOGCC)",
+  "at_risk": {
+    "status": [
+      "^Shut In$"
+    ],
+    "require_operator": true,
+    "definition": "AZOGCC status Shut In, with an operator named."
+  },
+  "verification_note": "Not cross-checked yet: the state file is the only operator source found so far. Most of Arizona's orphaned wells are decades old and show status 'Unknown'; the operator is usually the original driller."
+}

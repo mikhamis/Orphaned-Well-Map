@@ -1,0 +1,36 @@
+{
+  "state": "AR",
+  "verified": false,
+  "source": {
+    "name": "Arkansas Oil and Gas Commission wells, via the Arkansas GIS Office (map service)",
+    "arcgis": "https://gis.arkansas.gov/arcgis/rest/services/FEATURESERVICES/Utilities/FeatureServer/5",
+    "docs_url": "https://gis.arkansas.gov/product/arkansas-oil-and-gas-wells/"
+  },
+  "columns": {
+    "id": "permitnumberstring",
+    "operator": "operatorname",
+    "status": "wellstatusdescription",
+    "lat": "Y",
+    "lon": "X",
+    "well_name": "wellname"
+  },
+  "location_match": {
+    "usgs_id": "secondary"
+  },
+  "active_status": [
+    "^Producing$",
+    "^Active$"
+  ],
+  "operator_label": "Operator of record (AOGC)",
+  "at_risk": {
+    "status": [
+      "^Temporarily Abandoned$",
+      "^Inactive - Not TA$",
+      "^Shut_In$"
+    ],
+    "require_operator": true,
+    "definition": "AOGC status Temporarily Abandoned, Inactive or Shut In, with an operator named."
+  },
+  "verification_note": "Not cross-checked yet: the state file is the only operator source found so far. USGS Arkansas rows are matched on their AOGC permit number (356 of 356); coordinates agree within about 1 m.",
+  "notes": "The layer has no API column; USGS secondary_identifier 'Permit:NNNN' is joined to permitnumberstring. Only wells with surface coordinates are in this layer."
+}

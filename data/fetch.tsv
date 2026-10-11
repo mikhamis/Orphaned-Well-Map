@@ -1,14 +1,8 @@
 # name<TAB>url — fetched by .github/workflows/fetch-data.yml on GitHub runners into the draft release "source-data".
 # "arcgis:<layer url>" pages through an ArcGIS REST layer into a gzipped CSV (owm.arcgis).
-# Round 3 for the remaining states.
-NM_allwells.zip	https://octane.nmt.edu/gotech/Petroleum_Data/allwells_zip/AllWells.zip
-AR_wells.csv.gz	arcgis:https://gis.arkansas.gov/arcgis/rest/services/FEATURESERVICES/Utilities/FeatureServer/5
-MI_wells.csv.gz	arcgis:https://gisagocss.state.mi.us/arcgis/rest/services/OpenData/geology/MapServer/3
-AZ_wells.csv.gz	arcgis:https://utility.arcgis.com/usrsvcs/servers/6c01eae404a44e95a9aad050effe93cd/rest/services/OIL_AND_GAS_WELLS_AGOL/FeatureServer/0
-TN_wells.csv.gz	arcgis:https://tdeconline.tn.gov/arcgis/rest/services/Oil_and_Gas2/MapServer/0
-WV_enterprise.json	https://tagis.dep.wv.gov/arcgis/rest/services/WVDEP_enterprise?f=json
-AK_services.json	https://maps.commerce.alaska.gov/server/rest/services/AOGCC?f=json
-AK_data.html	https://commerce.alaska.gov/web/aogcc/Data
-LA_sonris_services.json	https://sonris-gis.dnr.la.gov/arcgis/rest/services?f=json
-LA_dotd_sonris.json	https://giswebnew.dotd.la.gov/arcgis/rest/services/LTRC/SONRIS/MapServer?f=json
-MS_downloads.html	https://www.ogb.state.ms.us/downloads.php
+# Round 4: West Virginia, Alaska, Louisiana service discovery.
+WV_oil_gas.json	https://tagis.dep.wv.gov/arcgis/rest/services/WVDEP_enterprise/oil_gas/MapServer?f=json
+AK_aogcc.json	https://maps.commerce.alaska.gov/server/rest/services/AOGCC/AOGCC_SQL_Test/MapServer?f=json
+LA_DNRSvc.json	https://sonris-gis.dnr.la.gov/arcgis/rest/services/DNRSvc?f=json
+LA_MapSvc.json	https://sonris-gis.dnr.la.gov/arcgis/rest/services/MapSvc?f=json
+LA_Services.json	https://sonris-gis.dnr.la.gov/arcgis/rest/services/Services?f=json
