@@ -58,7 +58,7 @@ jobs:
                     echo "converted $shp -> ${name%.zip}.csv" && head -c 1500 "out/${name%.zip}.csv" && echo
                 fi
               fi
-              if file -b "out/$name" | grep -qiE 'text|csv'; then head -c 1500 "out/$name"; echo; fi
+              if file -b "out/$name" | grep -qiE 'csv'; then head -c 1500 "out/$name"; echo; fi
             } >> out/REPORT.txt
           done
           cat out/REPORT.txt
