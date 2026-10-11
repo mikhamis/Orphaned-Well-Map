@@ -61,7 +61,25 @@ def fetch(cfg: dict, cache_dir: Path, local_file: Path | None = None) -> Path | 
         cache_dir.mkdir(parents=True, exist_ok=True)
         dest = cache_dir / f"{cfg['state'].upper()}_arcgis.csv.gz"
         if not dest.exists():
-            download(src["arcgis"], str(dest))
+            layers = src["arcgis"] if isinstance(src["arcgis"], list) else [src["arcgis"]]
+            if len(layers) == 1:
+                download(layers[0], str(dest))
+            else:  # several layers with the same schema (e.g. one per well type): concatenate
+                import csv
+                import gzip
+                parts = []
+                for i, layer in enumerate(layers):
+                    part = cache_dir / f"{cfg['state'].upper()}_arcgis_{i}.csv.gz"
+                    download(layer, str(part))
+                    parts.append(part)
+                with gzip.open(dest, "wt", newline="", encoding="utf-8") as out:
+                    w = None
+                    for part in parts:
+                        for row in csv.DictReader(gzip.open(part, "rt", newline="", encoding="utf-8")):
+                            if w is None:
+                                w = csv.DictWriter(out, fieldnames=list(row), extrasaction="ignore")
+                                w.writeheader()
+                            w.writerow(row)
         return dest
     url = src.get("url")
     if not url:
