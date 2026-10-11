@@ -44,7 +44,12 @@ jobs:
           set +e   # one failed URL shouldn't stop the rest; failures show in REPORT.txt
           grep -v '^#' data/fetch.tsv | while IFS=$'\t' read -r name url; do
             [ -n "$name" ] || continue
-            code=$(curl -sSL --retry 3 --max-time 300 -A "orphaned-well-map/1.0" -o "out/$name" -w '%{http_code} %{content_type}' "$url" 2>&1) || true
+            if [[ "$url" == arcgis:* ]]; then
+              # ArcGIS REST layer: page through every feature into a gzipped CSV
+              code=$(cd pipeline && timeout 1200 python3 -m owm.arcgis "${url#arcgis:}" "../out/$name" 2>&1 | tail -2) || true
+            else
+              code=$(curl -sSL --retry 3 --max-time 300 -A "orphaned-well-map/1.0" -o "out/$name" -w '%{http_code} %{content_type}' "$url" 2>&1) || true
+            fi
             {
               echo "=== $name"
               echo "url: $url"
@@ -61,12 +66,13 @@ jobs:
                 fi
               fi
               if file -b "out/$name" | grep -qiE 'csv'; then head -c 1500 "out/$name"; echo; fi
+              if [[ "$name" == *.csv.gz ]]; then zcat "out/$name" | head -c 1500; echo; echo "rows: $(zcat "out/$name" | wc -l)"; fi
             } >> out/REPORT.txt
           done
           cat out/REPORT.txt
       - name: Compress large files
         run: |
-          find out -type f -size +20M ! -name '*.zip' ! -name '*.gz' -exec gzip -9 {} \;
+          find out -type f -size +20M ! -name '*.zip' ! -name '*.gz' ! -name '*.mdb' ! -name '*.accdb' -exec gzip -9 {} \;
           ls -la out
       - name: Attach to draft release
         env:
