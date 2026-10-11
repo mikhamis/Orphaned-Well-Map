@@ -1,6 +1,6 @@
 {
   "state": "NM",
-  "verified": false,
+  "verified": true,
   "source": {
     "name": "New Mexico OCD well data via NM Tech PRRC GO-TECH (AllWells, daily)",
     "url": null,
@@ -39,6 +39,12 @@
     "require_operator": true,
     "definition": "Not plugged (OCD status Active or TA), operator named, and no production or injection reported since mid-2024."
   },
-  "verification_note": "Not cross-checked yet: the state file is the only operator source found so far. OCD marks unplugged wells 'Active' even when idle, so active wells nearby are those reporting production or injection since January 2025. Coordinates are GO-TECH estimates (NAD27).",
-  "notes": "The download is an Access database; the deploy workflow exports table AllWells with mdbtools."
+  "notes": "The download is an Access database; the deploy workflow exports table AllWells with mdbtools. OCD marks unplugged wells 'Active' even when idle, so active wells nearby are those reporting production or injection since January 2025. Coordinates are GO-TECH estimates (NAD27).",
+  "verification": {
+    "date": "2026-10-11",
+    "method": "Compared the operator joined from the GO-TECH AllWells copy of OCD data with the operator (ogrid_name) on OCD's own oil, gas and injection well map layers. Differences are mostly recent operator transfers that the GO-TECH copy hadn't picked up.",
+    "checked": 3366,
+    "agree": 3265,
+    "of_usgs_wells": 3366
+  }
 }
