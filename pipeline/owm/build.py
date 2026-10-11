@@ -79,6 +79,7 @@ def build(args) -> dict:
                         operator_label=cfg.get("operator_label") or "Last operator of record",
                         operator_kind=cfg.get("operator_kind", "last"),
                         status_label=cfg.get("status_label") or "State status",
+                        verification=cfg.get("verification"),
                         nearby=bool(cfg.get("active_status")),
                         source=(cfg.get("source") or {}).get("name"),
                         source_url=(cfg.get("source") or {}).get("docs_url") or (cfg.get("source") or {}).get("url"))
@@ -168,7 +169,8 @@ def build(args) -> dict:
             "dropped_bad_location": ustats["bad_location"], "dropped_bad_state": ustats["bad_state"],
             "columns": ustats["columns"],
         },
-        "params": {"radius_m": params.radius_m, "loc_tolerance_m": params.loc_tolerance_m},
+        "params": {"radius_m": params.radius_m, "loc_tolerance_m": params.loc_tolerance_m,
+                   "disagree_m": params.disagree_m},
         "states": state_rows,
         "state_codes": state_codes,
         "operators": operators,

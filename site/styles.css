@@ -12,7 +12,14 @@
   --c-placeholder: #eb6834;
   --c-unmatched: #1baf7a;
   --c-noconfig: #a3a199;
-  --c-cluster: #52514e;
+  --ok-ink: #006300;
+  --heat-0: #cde2fb;
+  --heat-1: #9ec5f4;
+  --heat-2: #6da7ec;
+  --heat-3: #3987e5;
+  --heat-4: #256abf;
+  --heat-5: #184f95;
+  --heat-6: #0d366b;
   --warn-bg: #fff4dc;
   --warn-ink: #5c3d00;
   --font: system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -32,7 +39,15 @@
     --c-placeholder: #d95926;
     --c-unmatched: #199e70;
     --c-noconfig: #6b6a64;
-    --c-cluster: #c3c2b7;
+    --ok-ink: #0ca30c;
+    --ok-ink: #0ca30c;
+  --heat-0: #184f95;
+    --heat-1: #256abf;
+    --heat-2: #2a78d6;
+    --heat-3: #5598e7;
+    --heat-4: #86b6ef;
+    --heat-5: #b7d3f6;
+    --heat-6: #e4effc;
     --warn-bg: #3a2c0c;
     --warn-ink: #f6d58f;
   }
@@ -51,12 +66,19 @@
   --c-placeholder: #d95926;
   --c-unmatched: #199e70;
   --c-noconfig: #6b6a64;
-  --c-cluster: #c3c2b7;
+  --heat-0: #184f95;
+  --heat-1: #256abf;
+  --heat-2: #2a78d6;
+  --heat-3: #5598e7;
+  --heat-4: #86b6ef;
+  --heat-5: #b7d3f6;
+  --heat-6: #e4effc;
   --warn-bg: #3a2c0c;
   --warn-ink: #f6d58f;
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html, body { height: 100%; margin: 0; }
 body {
   background: var(--page);
@@ -181,3 +203,18 @@ dialog li { margin-bottom: 6px; }
   .detail { position: absolute; inset: auto 0 0 0; max-height: 60vh; z-index: 5; border-left: 0; box-shadow: 0 -4px 16px rgba(0,0,0,.2); }
   .top { padding: 8px 16px; }
 }
+
+.heat-legend { margin-bottom: 16px; }
+.heat-bar {
+  height: 10px; border-radius: 5px;
+  background: linear-gradient(90deg, var(--heat-0), var(--heat-1), var(--heat-2), var(--heat-3), var(--heat-4), var(--heat-5), var(--heat-6));
+}
+.heat-ends { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-top: 4px; }
+.zoom-hint {
+  position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%);
+  background: var(--surface); color: var(--ink-2); border: 1px solid var(--border);
+  border-radius: 99px; padding: 6px 14px; font-size: 13px; box-shadow: 0 2px 8px rgba(0, 0, 0, .12);
+  pointer-events: none; white-space: nowrap; max-width: calc(100% - 32px); overflow: hidden; text-overflow: ellipsis;
+}
+
+table.states .tag.ok, .pill.ok { color: var(--ok-ink); border-color: var(--ok-ink); }

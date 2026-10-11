@@ -13,7 +13,7 @@
     { j: 3, key: "operator", label: "Operator found", desc: "Matched to a state record that names a company." },
     { j: 2, key: "placeholder", label: "State record names no operator", desc: "Matched, but the record says unknown, orphan, or similar." },
     { j: 1, key: "unmatched", label: "No matching state record", desc: "State data was joined, but this well wasn't found in it." },
-    { j: 0, key: "noconfig", label: "State not joined yet", desc: "Only the USGS record is available for this state so far." },
+    { j: 0, key: "noconfig", label: "USGS record only", desc: "This state's own well records aren't connected yet, so no operator is shown." },
   ];
 
   // API state code -> postal code (API Bulletin D12A; mirrors pipeline/owm/util.py)
@@ -130,43 +130,53 @@
       3, css("--c-operator"), 2, css("--c-placeholder"), 1, css("--c-unmatched"), css("--c-noconfig")];
   }
 
+  // Heat map below POINTS_ZOOM, individual wells above it, cross-faded.
+  const POINTS_ZOOM = 7;
+
+  function heatColorExpr() {
+    const steps = [0, 1, 2, 3, 4, 5, 6].map((k) => css(`--heat-${k}`));
+    // Fade in from a transparent copy of the lightest step; transparent black leaves a grey halo.
+    const h = steps[0].replace("#", "");
+    const clear = `rgba(${parseInt(h.slice(0, 2), 16)},${parseInt(h.slice(2, 4), 16)},${parseInt(h.slice(4, 6), 16)},0)`;
+    return ["interpolate", ["linear"], ["heatmap-density"],
+      0, clear, 0.05, steps[0], 0.2, steps[1], 0.4, steps[2],
+      0.6, steps[3], 0.75, steps[4], 0.9, steps[5], 1, steps[6]];
+  }
+
   function addLayers(map) {
-    map.addSource("wells", { type: "geojson", data: featureCollection(), cluster: true, clusterRadius: 38, clusterMaxZoom: 9 });
+    map.addSource("wells", { type: "geojson", data: featureCollection() });
     map.addLayer({
-      id: "clusters", type: "circle", source: "wells", filter: ["has", "point_count"],
+      id: "heat", type: "heatmap", source: "wells", maxzoom: POINTS_ZOOM + 2,
       paint: {
-        "circle-color": css("--c-cluster"), "circle-opacity": 0.82,
-        "circle-radius": ["step", ["get", "point_count"], 10, 50, 14, 500, 19, 5000, 25],
-        "circle-stroke-width": 2, "circle-stroke-color": css("--surface"),
+        // Tuned so dense basins (SE Ohio, W Pennsylvania, central Oklahoma) still separate
+        // from sparse areas at national zoom instead of saturating into one blob.
+        "heatmap-weight": 1,
+        "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 3, 0.04, 5, 0.1, POINTS_ZOOM, 0.22, POINTS_ZOOM + 2, 0.6],
+        "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 3, 4, 5, 7, POINTS_ZOOM, 12, POINTS_ZOOM + 2, 18],
+        "heatmap-color": heatColorExpr(),
+        "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], POINTS_ZOOM, 0.92, POINTS_ZOOM + 1.5, 0],
       },
     });
-    if (state.hasGlyphs) {
-      map.addLayer({
-        id: "cluster-count", type: "symbol", source: "wells", filter: ["has", "point_count"],
-        layout: { "text-field": ["get", "point_count_abbreviated"], "text-size": 11, "text-font": state.font, "text-allow-overlap": true },
-        paint: { "text-color": css("--surface") },
-      });
-    }
     map.addLayer({
-      id: "wells", type: "circle", source: "wells", filter: ["!", ["has", "point_count"]],
+      id: "wells", type: "circle", source: "wells", minzoom: POINTS_ZOOM - 0.5,
       paint: {
         "circle-color": colorExpr(),
-        "circle-radius": ["interpolate", ["linear"], ["zoom"], 9, 4, 14, 7],
+        "circle-radius": ["interpolate", ["linear"], ["zoom"], POINTS_ZOOM, 2.5, 10, 4.5, 14, 7],
+        "circle-opacity": ["interpolate", ["linear"], ["zoom"], POINTS_ZOOM - 0.5, 0, POINTS_ZOOM + 1, 1],
+        "circle-stroke-opacity": ["interpolate", ["linear"], ["zoom"], POINTS_ZOOM - 0.5, 0, POINTS_ZOOM + 1, 1],
         "circle-stroke-width": ["case", ["boolean", ["feature-state", "sel"], false], 3, 1],
         "circle-stroke-color": ["case", ["boolean", ["feature-state", "sel"], false], css("--ink"), css("--surface")],
       },
     });
 
-    map.on("click", "clusters", async (e) => {
-      const f = e.features[0];
-      const z = await map.getSource("wells").getClusterExpansionZoom(f.properties.cluster_id);
-      map.easeTo({ center: f.geometry.coordinates, zoom: z });
+    // Clicking the heat map zooms toward the wells under the cursor.
+    map.on("click", (e) => {
+      if (map.getZoom() >= POINTS_ZOOM || map.queryRenderedFeatures(e.point, { layers: ["wells"] }).length) return;
+      map.easeTo({ center: e.lngLat, zoom: Math.min(POINTS_ZOOM + 1.5, map.getZoom() + 2.5) });
     });
     map.on("click", "wells", (e) => select(e.features[0].id));
-    for (const l of ["clusters", "wells"]) {
-      map.on("mouseenter", l, () => (map.getCanvas().style.cursor = "pointer"));
-      map.on("mouseleave", l, () => (map.getCanvas().style.cursor = ""));
-    }
+    map.on("mouseenter", "wells", () => (map.getCanvas().style.cursor = "pointer"));
+    map.on("mouseleave", "wells", () => (map.getCanvas().style.cursor = ""));
 
     const hover = new maplibregl.Popup({ closeButton: false, closeOnClick: false, offset: 8 });
     map.on("mousemove", "wells", (e) => {
@@ -177,13 +187,22 @@
         .addTo(map);
     });
     map.on("mouseleave", "wells", () => hover.remove());
+
+    const syncMode = () => {
+      const points = map.getZoom() >= POINTS_ZOOM;
+      $("#zoom-hint").hidden = points;
+      $("#legend-heat").hidden = points;
+      $("#legend-points-note").hidden = points;
+    };
+    map.on("zoomend", syncMode);
+    syncMode();
   }
 
   function repaint() {
     const map = state.map;
     if (!map || !map.getLayer("wells")) return;
     map.setPaintProperty("wells", "circle-color", colorExpr());
-    map.setPaintProperty("clusters", "circle-color", css("--c-cluster"));
+    map.setPaintProperty("heat", "heatmap-color", heatColorExpr());
     if (map.getLayer("states-fill")) {
       map.setPaintProperty("bg", "background-color", css("--page"));
       map.setPaintProperty("states-fill", "fill-color", css("--surface"));
@@ -203,6 +222,12 @@
     renderDetail(i, s, d);
   }
 
+  function verifiedNote(s) {
+    const v = s.verification;
+    if (!v) return "";
+    return `<p class="note"><span class="pill ok">✓ checked</span> ${fmt(v.agree)} of ${fmt(v.checked)} ${esc(s.name)} operators matched a second agency source (${esc(v.date)}). See About the data.</p>`;
+  }
+
   function renderDetail(i, s, d) {
     const p = state.pts, m = state.manifest;
     const radius = miles(m.params.radius_m);
@@ -216,7 +241,7 @@
 
     let opHtml;
     if (!s.configured) {
-      opHtml = `<p class="note">${esc(s.name)}'s well records haven't been joined yet, so the operator is unknown here. ${s.error ? `(${esc(s.error)})` : ""}</p>`;
+      opHtml = `<p class="note">${esc(s.name)}'s own well records aren't connected to this map yet, so only the USGS record is shown and the operator isn't known here.</p>`;
     } else if (!d.m) {
       opHtml = `<p class="note">No record with this API number in ${esc(s.source || "the state file")}, and no well within ${m.params.loc_tolerance_m} m of this location.</p>`;
     } else {
@@ -227,7 +252,9 @@
         <div class="op">${d.opp ? `<span class="muted">${esc(d.op || "Blank")}</span>` : esc(d.op)}</div>
         ${d.opp ? `<p class="note">The state record lists no real operator.</p>` : ""}
         <p class="note">${esc(how)} ${esc(s.status_label || "State status")}: ${esc(d.ss || "–")}${d.ls ? ` · Lease: ${esc(d.ls)}` : ""}${d.sa && d.sa !== d.id ? ` · State API: ${esc(d.sa)}` : ""}</p>
-        <p class="note">Source: ${s.source_url ? `<a href="${esc(s.source_url)}" target="_blank" rel="noopener">${esc(s.source || "state records")}</a>` : esc(s.source || "state records")}${s.verified ? "" : ' <span class="pill">unverified source</span>'}</p>`;
+        <p class="note">Source: ${s.source_url ? `<a href="${esc(s.source_url)}" target="_blank" rel="noopener">${esc(s.source || "state records")}</a>` : esc(s.source || "state records")}</p>
+        ${d.md != null && d.m !== "location" && d.md > m.params.disagree_m ? `<p class="note"><strong>Location check:</strong> the USGS and state coordinates for this well are ${miles(d.md)} apart. The dot uses the USGS location.</p>` : ""}
+        ${verifiedNote(s)}`;
     }
 
     let nearHtml = "";
@@ -312,7 +339,7 @@
     $("#states-table tbody").innerHTML = [...m.states].sort((a, b) => b.count - a.count).map((s) => {
       const st = s.stats || {};
       return `<tr data-state="${s.code}">
-        <td>${esc(s.name)}${s.configured ? (s.verified ? "" : '<span class="tag">unverified</span>') : '<span class="tag">not joined</span>'}</td>
+        <td>${esc(s.name)}${s.configured ? (s.verified ? '<span class="tag ok" title="Operator matches checked against a second agency source">✓ checked</span>' : '<span class="tag">not yet checked</span>') : '<span class="tag">USGS only</span>'}</td>
         <td class="num">${fmt(s.count)}</td>
         <td class="num">${s.configured ? pct(st.with_operator || 0, s.count) : "–"}</td>
         <td class="num">${s.configured && s.nearby ? pct(st.with_nearby_active || 0, s.count) : "–"}</td></tr>`;
@@ -329,8 +356,9 @@
       (joined.length ? ` · operator identified for ${fmt(withOp)} so far` : "");
     const notes = [];
     if (m.demo) notes.push("<strong>Synthetic demo data.</strong> These points are test fixtures, not real wells.");
-    if (!joined.length) notes.push("No state records have been joined yet, so the map shows USGS locations only.");
-    else if (joined.some((s) => !s.verified)) notes.push("Some state joins haven't been spot-checked yet and are marked “unverified.”");
+    if (!joined.length) notes.push("No state well records are connected yet, so the map shows USGS records only.");
+    else notes.push(`Operator names come from state records for ${joined.map((s) => s.name).join(" and ")} so far (${fmt(joined.reduce((a, s) => a + s.count, 0))} of ${fmt(total)} wells). Other states show the USGS record only.`);
+    if (joined.some((s) => !s.verified)) notes.push("Some connected states haven't been cross-checked yet.");
     if (m.usgs.rows !== m.usgs.loaded) notes.push(`${fmt(m.usgs.rows - m.usgs.loaded)} USGS rows without usable coordinates or state aren't mapped.`);
     if (notes.length) { $("#banner").innerHTML = notes.join(" "); $("#banner").hidden = false; }
 
@@ -347,7 +375,13 @@
       <p><strong>Active wells nearby:</strong> state wells with an active or producing status within
       ${miles(m.params.radius_m)}. This shows active wells, not lease boundaries. A nearby active operator isn't legally responsible
       for an orphaned well, but it shows who is still working the area.</p>
-      <p><strong>State sources joined:</strong> ${states.length ? states.map((s) => `${esc(s.name)} (${s.source_url ? `<a href="${esc(s.source_url)}" target="_blank" rel="noopener">${esc(s.source || "source")}</a>` : esc(s.source || "source")}${s.verified ? "" : ", unverified"})`).join("; ") : "none yet."}</p>
+      <p><strong>State sources connected:</strong> ${states.length ? states.map((s) => `${esc(s.name)} (${s.source_url ? `<a href="${esc(s.source_url)}" target="_blank" rel="noopener">${esc(s.source || "source")}</a>` : esc(s.source || "source")})`).join("; ") : "none yet."}</p>
+      <p><strong>How the matches were checked:</strong></p>
+      <ul>${states.map((s) => {
+        const v = s.verification, st = s.stats || {};
+        return `<li><strong>${esc(s.name)}:</strong> ${v ? `${fmt(v.agree)} of ${fmt(v.checked)} operators agree. ${esc(v.method)} (${esc(v.date)})` : "not yet cross-checked."}
+          USGS and state coordinates agree within ${st.match_dist_median_m ?? "–"} m for the median well; ${fmt(st.location_disagrees || 0)} wells differ by more than ${miles(m.params.disagree_m)} and are flagged.</li>`;
+      }).join("")}</ul>
       <p><strong>Known limits:</strong> operator names are grouped loosely (case, punctuation, and suffixes like “LLC” or “Inc” are ignored),
       so affiliated companies under different names are counted separately. States update their files on their own schedules.</p>
       <p class="muted small">Data built ${esc(m.built_at)}.</p>`;

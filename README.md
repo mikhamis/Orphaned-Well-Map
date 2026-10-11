@@ -51,10 +51,22 @@ environment that can't reach the agency sites.
 
 ## States joined so far
 
-| State | USGS wells | Source | Join | Matched | Operator named | Notes |
+| State | USGS wells | Source | Join | Matched | Operator named | Cross-check |
 | --- | ---: | --- | --- | ---: | ---: | --- |
-| Oklahoma | 19,981 | OCC RBDMS wells (nightly CSV) | API (97%), location (1.6%) | 99% | 61% | ~42% of OCC orphan records say "OTC/OCC NOT ASSIGNED". Active = status `AC`. |
-| Kentucky | 15,638 | KGS well shapefile (monthly) | permit no. (95%), location (1.5%) | 97% | 78% | Operator is the **original** operator at completion, not the last; no current status, so no nearby-active search. Kept out of the national ranking. |
+| Oklahoma | 19,981 | OCC RBDMS wells (nightly CSV) | API (97%), location (1.6%) | 99% | 61% | 16,218 of 16,218 wells on the OCC Orphan Well List carry the same operator |
+| Kentucky | 15,638 | KGS well shapefile (monthly) | permit no. (95%), location (1.5%) | 97% | 78% | 36 of 36 random wells match KGS's online well report (permit and operator) |
+
+Notes:
+- Oklahoma: ~42% of OCC orphan records say "OTC/OCC NOT ASSIGNED", shown as no operator. 3,763 USGS
+  Oklahoma wells are not on the current OCC orphan list (status changed since USGS compiled it, or the
+  well came from the Commissioners of the Land Office); the map shows the current OCC status.
+- Kentucky: the operator is the **original** operator at completion, not the last, and KGS has no current
+  status, so there is no nearby-active search. Kept out of the national ranking. The KGS report reads
+  from the same database as the joined file, so that check confirms the join, not KGS's records.
+- For every match, the USGS and state coordinates are compared. Median gap: 0.2 m (OK), 0.3 m (KY).
+  Wells more than 1 mile apart (108 in OK, 133 in KY) get a note on the site.
+- Rerun the checks with `python -m owm.verify` (see the module docstring) and paste the output into the
+  state config's `verification` block.
 
 Largest states not yet joined: Ohio (22,759), Pennsylvania (21,262), Texas (8,998), New York (7,600).
 
@@ -80,6 +92,5 @@ Open issues to settle before publishing:
   or dissolved companies, and liability depends on state law.
 - **The USGS ownership fields are estimates.** USGS says its surface/mineral ownership comes
   from land-ownership maps and isn't official.
-- **Joins are marked unverified** until someone spot-checks a sample against each agency's own
-  well lookup. Automated checks so far: an Oklahoma sample matched API, name, and coordinates by
-  hand, and 99% of matched Kentucky wells share a name token with the KGS lease name.
+- **A state counts as checked** only after its operators are compared against a second agency source
+  (see the table above). New states start unchecked.

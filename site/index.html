@@ -37,7 +37,13 @@
       </section>
 
       <section>
-        <h2>What the color means</h2>
+        <div id="legend-heat" class="heat-legend">
+          <h2>Orphaned wells per area</h2>
+          <div class="heat-bar" aria-hidden="true"></div>
+          <div class="heat-ends"><span>Fewer</span><span>More</span></div>
+        </div>
+        <h2>Well colors when zoomed in</h2>
+        <p class="muted small" id="legend-points-note">Zoom in to county level to see each well in these colors.</p>
         <ul class="legend" id="legend"></ul>
       </section>
 
@@ -68,6 +74,7 @@
     <div class="map-wrap">
       <div id="map" role="region" aria-label="Map of orphaned wells"></div>
       <div id="map-empty" class="map-empty" hidden></div>
+      <div id="zoom-hint" class="zoom-hint" hidden>Zoom in or click a hot spot to see individual wells</div>
     </div>
 
     <aside class="panel detail" id="detail" hidden aria-live="polite">
