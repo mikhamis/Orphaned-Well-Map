@@ -1,9 +1,4 @@
 # name<TAB>url — fetched by .github/workflows/fetch-data.yml on GitHub runners into the draft release "source-data".
 # "arcgis:<layer url>[|<where>]" pages through an ArcGIS REST layer into a gzipped CSV (owm.arcgis).
-# Round 8: NM OCD official wells (second source for NM), national layers for TN/NE/NV/MS.
-NM_ocd_oil.csv.gz	arcgis:https://mercator.env.nm.gov/server/rest/services/emnrd/ocd_wells/MapServer/0
-NM_ocd_gas.csv.gz	arcgis:https://mercator.env.nm.gov/server/rest/services/emnrd/ocd_wells/MapServer/1
-NM_ocd_inj.csv.gz	arcgis:https://mercator.env.nm.gov/server/rest/services/emnrd/ocd_wells/MapServer/3
-NETL_wells_service.json	https://arcgis.netl.doe.gov/server/rest/services/Hosted/Oil_and_Gas_Wells/FeatureServer?f=json
-NETL_wells_layer.json	https://arcgis.netl.doe.gov/server/rest/services/Hosted/Oil_and_Gas_Wells/FeatureServer/0?f=json
-WEBMAP_layer11.json	https://services.arcgis.com/04HiymDgLlsbhaV4/ArcGIS/rest/services/WebMap/FeatureServer/11?f=json
+# Round 9: HIFLD copy of national oil and gas wells for states without a reachable state source.
+HIFLD_TN_NE_NV_MS.csv.gz	arcgis:https://services.arcgis.com/04HiymDgLlsbhaV4/ArcGIS/rest/services/WebMap/FeatureServer/11|STATE IN ('TN','NE','NV','MS')
