@@ -17,7 +17,7 @@ import urllib.parse
 import urllib.request
 
 
-def _get(url: str, params: dict, tries: int = 4) -> dict:
+def _get(url: str, params: dict, tries: int = 6) -> dict:
     q = url + "?" + urllib.parse.urlencode(params)
     for i in range(tries):
         try:
@@ -30,7 +30,7 @@ def _get(url: str, params: dict, tries: int = 4) -> dict:
         except Exception:
             if i == tries - 1:
                 raise
-            time.sleep(2 ** (i + 1))
+            time.sleep(min(5 * 2 ** i, 60))  # 5, 10, 20, 40, 60 s: some state servers are slow to recover
 
 
 def _xy(geom: dict | None):

@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 import re
 import shutil
+import sys
 import urllib.request
 import zipfile
 from dataclasses import dataclass
@@ -63,7 +64,15 @@ def fetch(cfg: dict, cache_dir: Path, local_file: Path | None = None) -> Path | 
         if not dest.exists():
             layers = src["arcgis"] if isinstance(src["arcgis"], list) else [src["arcgis"]]
             if len(layers) == 1:
-                download(layers[0], str(dest))
+                # "arcgis_mirrors": other URLs serving the same layer, tried in order on failure
+                for i, url in enumerate([layers[0]] + list(src.get("arcgis_mirrors") or [])):
+                    try:
+                        download(url, str(dest))
+                        break
+                    except Exception as e:
+                        if i == len(src.get("arcgis_mirrors") or []):
+                            raise
+                        print(f"{cfg['state']}: {url} failed ({e}); trying mirror", file=sys.stderr)
             else:  # several layers with the same schema (e.g. one per well type): concatenate
                 import csv
                 import gzip

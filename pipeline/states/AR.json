@@ -4,7 +4,10 @@
   "source": {
     "name": "Arkansas Oil and Gas Commission wells, via the Arkansas GIS Office (map service)",
     "arcgis": "https://gis.arkansas.gov/arcgis/rest/services/FEATURESERVICES/Utilities/FeatureServer/5",
-    "docs_url": "https://gis.arkansas.gov/product/arkansas-oil-and-gas-wells/"
+    "docs_url": "https://gis.arkansas.gov/product/arkansas-oil-and-gas-wells/",
+    "arcgis_mirrors": [
+      "https://geostor.arkansas.gov/arcgis/rest/services/FEATURESERVICES/Utilities/FeatureServer/5"
+    ]
   },
   "columns": {
     "id": "permitnumberstring",
