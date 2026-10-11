@@ -1,0 +1,36 @@
+{
+  "state": "WY",
+  "verified": false,
+  "source": {
+    "name": "WOGCC well header download, as published by the Wyoming State Geological Survey (January 3, 2025)",
+    "arcgis": "https://portal.wsgs.wyo.gov/ags/rest/services/OilGas/Data_layers/MapServer/12",
+    "docs_url": "https://portal.wsgs.wyo.gov/ags/rest/services/OilGas/Data_layers/MapServer"
+  },
+  "columns": {
+    "api": "CAPINO",
+    "operator": "COMPANY",
+    "status": "STATUS",
+    "lat": "Y",
+    "lon": "X",
+    "lease": "UNIT_LEASE",
+    "well_name": "WN",
+    "date": "STATUSDATE"
+  },
+  "active_status": [
+    "^PO$",
+    "^PG$",
+    "^AI$"
+  ],
+  "operator_label": "Operator of record (WOGCC)",
+  "status_label": "WOGCC status code",
+  "at_risk": {
+    "status": [
+      "^SI$",
+      "^TA$"
+    ],
+    "require_operator": true,
+    "definition": "WOGCC status SI (shut in) or TA (temporarily abandoned), with an operator named."
+  },
+  "verification_note": "Not cross-checked yet: the state file is the only operator source found so far. The WSGS copy of WOGCC data is dated January 3, 2025.",
+  "notes": "Status codes used: PO producing oil, PG producing gas, AI active injection, SI shut in, TA temporarily abandoned, PA plugged and abandoned."
+}

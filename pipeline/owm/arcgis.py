@@ -21,7 +21,7 @@ def _get(url: str, params: dict, tries: int = 4) -> dict:
     q = url + "?" + urllib.parse.urlencode(params)
     for i in range(tries):
         try:
-            req = urllib.request.Request(q, headers={"User-Agent": "orphaned-well-map/1.0"})
+            req = urllib.request.Request(q, headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) orphaned-well-map/1.0"})
             with urllib.request.urlopen(req, timeout=180) as r:
                 d = json.load(r)
             if "error" in d:

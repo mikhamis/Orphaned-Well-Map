@@ -1,22 +1,14 @@
 # name<TAB>url — fetched by .github/workflows/fetch-data.yml on GitHub runners into the draft release "source-data".
 # "arcgis:<layer url>" pages through an ArcGIS REST layer into a gzipped CSV (owm.arcgis).
-# Round 2 for the remaining states.
-IL_wells.zip	https://clearinghouse.isgs.illinois.edu/sites/clearinghouse.isgs/files/Clearinghouse/data/ISGS/Geology/zips/IL_WELLS_Borings_Location_Pt.zip
-IL_status.xlsx	https://clearinghouse.isgs.illinois.edu/sites/clearinghouse.isgs/files/Clearinghouse/data/ISGS/Geology/data/ISGS_Well_Status.xlsx
-MT_wells.zip	https://bogfiles.dnrc.mt.gov/GISData/WellSurface/Wells.zip
-MT_completewelllist.zip	https://bogfiles.dnrc.mt.gov/Reporting/Wells/MT_CompleteWellList.zip
-ND_wells.zip	https://gis.dmr.nd.gov/downloads/oilgas/shapefile/OGD_Wells.zip
+# Round 3 for the remaining states.
 NM_allwells.zip	https://octane.nmt.edu/gotech/Petroleum_Data/allwells_zip/AllWells.zip
-NM_active.csv.gz	arcgis:https://nhnm-gisweb.unm.edu/arcgis/rest/services/NMEDB/ActiveOilandGasWells/MapServer/3
-UT_wells.zip	https://oilgas.ogm.utah.gov/pub/Database/Wells.zip
-UT_wells_readme.pdf	https://oilgas.ogm.utah.gov/pub/database_download_read/1-Well_Data_Download_ReadMe.pdf
-CA_wells.csv.gz	arcgis:https://gis.conservation.ca.gov/server/rest/services/WellSTAR/Wells/MapServer/0
-AL_wells.csv.gz	arcgis:https://gis.ogb.state.al.us/arcgis/rest/services/OGB/OGBOnlineMap/MapServer/0
-WY_wells.csv.gz	arcgis:https://portal.wsgs.wyo.gov/ags/rest/services/OilGas/Data_layers/MapServer/12
-IN_service.json	https://gisdata.in.gov/server/rest/services/Hosted/OilAndGasWells/FeatureServer?f=json
-IN_wells.csv.gz	arcgis:https://gisdata.in.gov/server/rest/services/Hosted/OilAndGasWells/FeatureServer/0
-AR_aogc.zip	https://www.aogc.state.ar.us/WellData/Files/AOGC.zip
-WV_tagis_services.json	https://tagis.dep.wv.gov/arcgis/rest/services?f=json
-MI_item.json	https://www.arcgis.com/sharing/rest/content/items/b45234f636b74285b665979728a623ff?f=json
-AZ_experience.json	https://www.arcgis.com/sharing/rest/content/items/9d103d0d3c334c0dad0e3e62e2623726/data?f=json
-TN_wells_retry.json	https://tdeconline.tn.gov/arcgis/rest/services/Oil_and_Gas2/MapServer/0?f=json
+AR_wells.csv.gz	arcgis:https://gis.arkansas.gov/arcgis/rest/services/FEATURESERVICES/Utilities/FeatureServer/5
+MI_wells.csv.gz	arcgis:https://gisagocss.state.mi.us/arcgis/rest/services/OpenData/geology/MapServer/3
+AZ_wells.csv.gz	arcgis:https://utility.arcgis.com/usrsvcs/servers/6c01eae404a44e95a9aad050effe93cd/rest/services/OIL_AND_GAS_WELLS_AGOL/FeatureServer/0
+TN_wells.csv.gz	arcgis:https://tdeconline.tn.gov/arcgis/rest/services/Oil_and_Gas2/MapServer/0
+WV_enterprise.json	https://tagis.dep.wv.gov/arcgis/rest/services/WVDEP_enterprise?f=json
+AK_services.json	https://maps.commerce.alaska.gov/server/rest/services/AOGCC?f=json
+AK_data.html	https://commerce.alaska.gov/web/aogcc/Data
+LA_sonris_services.json	https://sonris-gis.dnr.la.gov/arcgis/rest/services?f=json
+LA_dotd_sonris.json	https://giswebnew.dotd.la.gov/arcgis/rest/services/LTRC/SONRIS/MapServer?f=json
+MS_downloads.html	https://www.ogb.state.ms.us/downloads.php

@@ -1,0 +1,34 @@
+{
+  "state": "CO",
+  "verified": false,
+  "source": {
+    "name": "Colorado ECMC, Wells (API spots) map service",
+    "arcgis": "https://gisdnr.state.co.us/arcgis/rest/services/ECMC_Public/ECMC_Wells/MapServer/0",
+    "docs_url": "https://ecmc.colorado.gov/data-maps-reports/downloadable-data-documents"
+  },
+  "columns": {
+    "api": "API",
+    "operator": "Operator",
+    "status": "wellstat",
+    "lat": "Y",
+    "lon": "X",
+    "well_name": "WellName"
+  },
+  "active_status": [
+    "^PR$",
+    "^AC$",
+    "^IJ$"
+  ],
+  "operator_label": "Operator of record (ECMC)",
+  "status_label": "ECMC status code",
+  "at_risk": {
+    "status": [
+      "^SI$",
+      "^TA$"
+    ],
+    "require_operator": true,
+    "definition": "ECMC status SI (shut in) or TA (temporarily abandoned), with an operator named."
+  },
+  "verification_note": "Not cross-checked yet. All 1,302 USGS Colorado wells (from ECMC's Orphan Well Program) match by API number.",
+  "notes": "Status codes: PR producing, AC active, IJ injecting, SI shut in, TA temporarily abandoned, PA plugged and abandoned, AL abandoned location, AP approved permit, EP expired permit. API is county + well; prefix 05 is added."
+}

@@ -363,7 +363,9 @@
     } else {
       const how = d.m === "api" ? "Matched on API number."
         : d.m === "id" ? "Matched on the state's well ID (permit number)."
-        : `Matched by location: the nearest state record, ${d.md} m away. Treat this as a lead, not a confirmed match.`;
+        : (s.location_match || {}).name_match
+          ? `Matched by location and lease name: a state well ${d.md} m away on a lease with the same name. This identifies the lease, not necessarily this exact well.`
+          : `Matched by location: the nearest state record, ${d.md} m away. Treat this as a lead, not a confirmed match.`;
       opHtml = `
         <div class="op">${d.opp ? `<span class="muted">${esc(d.op || "Blank")}</span>` : esc(d.op)}</div>
         ${d.opp ? `<p class="note">The state record lists no real operator.</p>` : ""}

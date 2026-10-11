@@ -1,0 +1,32 @@
+{
+  "state": "MT",
+  "verified": false,
+  "source": {
+    "name": "Montana Board of Oil and Gas Conservation, well surface locations",
+    "url": null,
+    "download": "https://bogfiles.dnrc.mt.gov/GISData/WellSurface/Wells.zip",
+    "docs_url": "https://bogwebfiles.dnrc.mt.gov/GISData/"
+  },
+  "columns": {
+    "api": "API_WellNo",
+    "operator": "CoName",
+    "status": "Status",
+    "lat": "Y",
+    "lon": "X",
+    "well_name": "Well_Nm"
+  },
+  "active_status": [
+    "^Producing$",
+    "^Active Injection$"
+  ],
+  "operator_label": "Operator of record (MBOGC)",
+  "at_risk": {
+    "status": [
+      "^Shut In$",
+      "^Temporarily Abandoned$"
+    ],
+    "require_operator": true,
+    "definition": "MBOGC status Shut In or Temporarily Abandoned, with an operator named."
+  },
+  "verification_note": "Not cross-checked yet: the state file is the only operator source found so far."
+}

@@ -11,6 +11,7 @@
 """
 from __future__ import annotations
 
+import re
 from collections import Counter
 from dataclasses import dataclass
 
@@ -27,7 +28,17 @@ class JoinParams:
     disagree_m: float = 1000.0  # USGS vs state coordinates; flagged on the site
 
 
-def join_state(orphans: list[OrphanWell], records: list[StateWell], p: JoinParams) -> dict:
+def _name_tokens(s: str) -> set[str]:
+    return {t for t in re.findall(r"[a-z]{3,}", (s or "").lower())} - {"well", "unit", "the", "and", "lease", "est", "etal"}
+
+
+def join_state(orphans: list[OrphanWell], records: list[StateWell], p: JoinParams,
+               loc_cfg: dict | None = None) -> dict:
+    """loc_cfg (state config "location_match"): {"tolerance_m": 300, "name_match": true}
+    widens the location fallback but then requires the USGS well name to share a word
+    with the state record's lease or well name."""
+    loc_tol = (loc_cfg or {}).get("tolerance_m", p.loc_tolerance_m)
+    name_match = bool((loc_cfg or {}).get("name_match"))
     by_api = latest_by_api(records)
     by_id = latest_by_api(records, key="alt_id")
 
@@ -54,7 +65,11 @@ def join_state(orphans: list[OrphanWell], records: list[StateWell], p: JoinParam
         elif wid and wid in by_id:
             rec, method = by_id[wid], "id"
         else:
-            hits = loc_idx.within(w.lon, w.lat, p.loc_tolerance_m)
+            hits = loc_idx.within(w.lon, w.lat, loc_tol)
+            if name_match:
+                wt = _name_tokens(w.name)
+                hits = [(d, i) for d, i in hits
+                        if wt & (_name_tokens(loc_recs[i].lease) | _name_tokens(loc_recs[i].well_name))]
             if hits:
                 dist, i = hits[0]
                 rec, method = loc_recs[i], "location"

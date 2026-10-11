@@ -56,6 +56,13 @@ def fetch(cfg: dict, cache_dir: Path, local_file: Path | None = None) -> Path | 
     if local_file:
         return Path(local_file)
     src = cfg.get("source") or {}
+    if src.get("arcgis"):
+        from .arcgis import download
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        dest = cache_dir / f"{cfg['state'].upper()}_arcgis.csv.gz"
+        if not dest.exists():
+            download(src["arcgis"], str(dest))
+        return dest
     url = src.get("url")
     if not url:
         return None
@@ -86,8 +93,8 @@ def fetch(cfg: dict, cache_dir: Path, local_file: Path | None = None) -> Path | 
 
 def load_records(cfg: dict, path: Path) -> tuple[list[StateWell], dict]:
     cols = cfg["columns"]
-    if not cols.get("operator") or not (cols.get("api") or cols.get("id")):
-        raise SystemExit(f"{cfg['state']}: columns.operator and columns.api or columns.id are required")
+    if not (cols.get("api") or cols.get("id")):
+        raise SystemExit(f"{cfg['state']}: columns.api or columns.id is required")
     src = cfg.get("source") or {}
     active_res = [re.compile(p, re.I) for p in cfg.get("active_status", [])]
     active_where = cfg.get("active_where") or []

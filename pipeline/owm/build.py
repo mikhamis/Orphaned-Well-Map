@@ -89,6 +89,7 @@ def build(args) -> dict:
                         status_label=cfg.get("status_label") or "State status",
                         verification=cfg.get("verification"),
                         verification_note=cfg.get("verification_note"),
+                        location_match=cfg.get("location_match"),
                         nearby=bool(cfg.get("active_status")),
                         source=(cfg.get("source") or {}).get("name"),
                         source_url=(cfg.get("source") or {}).get("docs_url") or (cfg.get("source") or {}).get("url"))
@@ -100,7 +101,7 @@ def build(args) -> dict:
                 info["error"] = f"fetch failed: {type(e).__name__}"
             if path:
                 records, rstats = st_mod.load_records(cfg, path)
-                jstats = join_state(orphans, records, params)
+                jstats = join_state(orphans, records, params, cfg.get("location_match"))
                 info["configured"] = True
                 info["stats"] = {**rstats, **jstats}
                 risk = atrisk.select(cfg, records, orphans)
